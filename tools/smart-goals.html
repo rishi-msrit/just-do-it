@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMART Goals — Just Do It</title>
+  <meta name="description" content="Structure vague ambitions into Specific, Measurable, Achievable, Relevant, and Time-bound SMART goal statements.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>SMART Goals</h1>
+        <span class="tag tag-goals">Goals</span>
+      </div>
+      <p class="subtitle">Convert broad aspirations into structured, trackable, and realistic statements of intent.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="smart-goals-form">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Vague Goal -->
+          <div class="input-group">
+            <label for="vague-input">Initial Vague Goal <span>(Optional starting point, e.g., "I want to get better at ML")</span></label>
+            <input type="text" id="vague-input" placeholder="e.g. I want to learn to code or improve my public speaking">
+          </div>
+
+          <!-- Specific -->
+          <div class="input-group">
+            <label for="specific-input">Specific <span>(What exactly do you want to accomplish?)</span></label>
+            <input type="text" id="specific-input" placeholder="e.g. Learn the fundamentals of Rust programming and build a CLI tool" required>
+          </div>
+
+          <!-- Measurable -->
+          <div class="input-group">
+            <label for="measurable-input">Measurable <span>(How will you track progress and define completion?)</span></label>
+            <input type="text" id="measurable-input" placeholder="e.g. Coding for 1 hour daily and completing 5 CLI test projects" required>
+          </div>
+
+          <!-- Achievable -->
+          <div class="input-group">
+            <label for="achievable-input">Achievable <span>(How is this realistic given your current skills/time?)</span></label>
+            <input type="text" id="achievable-input" placeholder="e.g. I already know Python and JavaScript, so understanding programming structures is straightforward" required>
+          </div>
+
+          <!-- Relevant -->
+          <div class="input-group">
+            <label for="relevant-input">Relevant <span>(Why does this goal matter to you right now?)</span></label>
+            <input type="text" id="relevant-input" placeholder="e.g. It helps prepare for my systems engineering module next term" required>
+          </div>
+
+          <!-- Time-bound -->
+          <div class="input-group">
+            <label for="time-input">Time-bound <span>(What is the exact target date or timeframe?)</span></label>
+            <input type="text" id="time-input" placeholder="e.g. by October 15th" required>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my SMART Goal →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="smart-result-section">
+      <div class="result-header">
+        <h2>Your Structured SMART Goal</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">SMART Goal Statement</h1>
+          <div id="res-vague-container" style="margin-top: 0.5rem; font-size: 0.95rem; font-style: italic; color: var(--text-secondary); display: none;">
+            Starting from vague ambition: "<span id="res-vague"></span>"
+          </div>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- Compiled Goal Statement -->
+        <div class="smart-card-summary">
+          "I will <span id="res-statement-specific" style="font-weight: bold; border-bottom: 1px dotted var(--accent);"></span> 
+          by <span id="res-statement-time" style="font-weight: bold; border-bottom: 1px dotted var(--accent);"></span>, 
+          measured by <span id="res-statement-measurable" style="font-weight: bold; border-bottom: 1px dotted var(--accent);"></span>, 
+          because <span id="res-statement-relevant" style="font-weight: bold; border-bottom: 1px dotted var(--accent);"></span>. 
+          This is achievable because <span id="res-statement-achievable" style="font-weight: bold; border-bottom: 1px dotted var(--accent);"></span>."
+        </div>
+
+        <!-- Daily reminder nudge -->
+        <div style="margin-top: 1.5rem; text-align: center;">
+          <p style="font-size: 0.9rem; font-style: italic; color: var(--text-secondary); margin: 0;">
+            Write this sentence somewhere you will see it daily.
+          </p>
+        </div>
+
+        <!-- Breakdown Grid -->
+        <div class="smart-card-breakdown">
+          
+          <div class="smart-pill">
+            <div class="smart-pill-letter">S</div>
+            <div class="smart-pill-title">Specific</div>
+            <div class="smart-pill-content" id="res-specific"></div>
+          </div>
+
+          <div class="smart-pill">
+            <div class="smart-pill-letter">M</div>
+            <div class="smart-pill-title">Measurable</div>
+            <div class="smart-pill-content" id="res-measurable"></div>
+          </div>
+
+          <div class="smart-pill">
+            <div class="smart-pill-letter">A</div>
+            <div class="smart-pill-title">Achievable</div>
+            <div class="smart-pill-content" id="res-achievable"></div>
+          </div>
+
+          <div class="smart-pill">
+            <div class="smart-pill-letter">R</div>
+            <div class="smart-pill-title">Relevant</div>
+            <div class="smart-pill-content" id="res-relevant"></div>
+          </div>
+
+          <div class="smart-pill">
+            <div class="smart-pill-letter">T</div>
+            <div class="smart-pill-title">Time-bound</div>
+            <div class="smart-pill-content" id="res-time"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>SMART Goals</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>Introduced by George T. Doran in 1981, SMART Goals are a structural framework designed to take vague, fuzzy aspirations and turn them into concrete, trackable commitments. By forcing yourself to articulate exactly what, how, when, and why you will do something, you dramatically increase the likelihood of execution.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The SMART Breakdown</h3>
+        <p>To write a solid goal, fill out each letter deliberately:</p>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Specific</strong>: Focus on a narrow, clear action. Avoid vague words like "improve," "get better," or "more." Instead of "Learn code," write "Learn Rust syntax and build a command-line tool."</li>
+          <li><strong>Measurable</strong>: Choose a metric that proves completion. How will you know you succeeded? (e.g., "spending 1 hour daily," "reading 3 chapters," "writing 5 CLI tools").</li>
+          <li><strong>Achievable</strong>: Be honest about your limits. Given your current schedule, skills, and energy levels, is this realistic? How does it bridge from what you already know?</li>
+          <li><strong>Relevant</strong>: Align the goal with your larger life or career objectives. Why does this goal matter to you <em>today</em>?</li>
+          <li><strong>Time-bound</strong>: Set a concrete deadline or regular cadence. Without a target date (e.g., "by October 15th"), tasks stretch out indefinitely.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example A (Software Engineering)</strong>:<br>
+          • <em>Vague</em>: I want to get better at systems programming.<br>
+          • <em>SMART</em>: I will learn Rust fundamentals and build a CLI tool (Specific) by October 15th (Time-bound), measured by coding 1 hour daily and completing 5 CLI test projects (Measurable) because it helps prepare for my systems engineering module next term (Relevant). This is achievable because I already know Python and JavaScript (Achievable).
+        </blockquote>
+        <blockquote>
+          <strong>Example B (Personal Fitness)</strong>:<br>
+          • <em>Vague</em>: I want to get fit.<br>
+          • <em>SMART</em>: I will run a 5k distance (Specific) by December 1st (Time-bound), measured by following a Couch-to-5K app program 3 days a week (Measurable), because I want to improve my cardiovascular health and run a local charity race (Relevant). This is achievable because I am starting at a 2k baseline and have 12 weeks to build endurance (Achievable).
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('smart-goals-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const vague = document.getElementById('vague-input').value.trim();
+      const s = document.getElementById('specific-input').value.trim();
+      const m = document.getElementById('measurable-input').value.trim();
+      const a = document.getElementById('achievable-input').value.trim();
+      const r = document.getElementById('relevant-input').value.trim();
+      const t = document.getElementById('time-input').value.trim();
+
+      if (vague) {
+        document.getElementById('res-vague').textContent = vague;
+        document.getElementById('res-vague-container').style.display = 'block';
+      } else {
+        document.getElementById('res-vague-container').style.display = 'none';
+      }
+
+      document.getElementById('res-statement-specific').textContent = s;
+      document.getElementById('res-statement-measurable').textContent = m;
+      document.getElementById('res-statement-achievable').textContent = a;
+      document.getElementById('res-statement-relevant').textContent = r;
+      document.getElementById('res-statement-time').textContent = t;
+
+      document.getElementById('res-specific').textContent = s;
+      document.getElementById('res-measurable').textContent = m;
+      document.getElementById('res-achievable').textContent = a;
+      document.getElementById('res-relevant').textContent = r;
+      document.getElementById('res-time').textContent = t;
+
+      // SMART Completeness & Vagueness Check
+      const vagueWords = ['better', 'more', 'improve', 'some', 'try', 'maybe', 'soon', 'later'];
+      const fields = [
+        { val: s, pill: document.getElementById('res-specific').parentNode },
+        { val: m, pill: document.getElementById('res-measurable').parentNode },
+        { val: a, pill: document.getElementById('res-achievable').parentNode },
+        { val: r, pill: document.getElementById('res-relevant').parentNode },
+        { val: t, pill: document.getElementById('res-time').parentNode }
+      ];
+
+      fields.forEach(f => {
+        f.pill.style.border = '';
+        f.pill.querySelectorAll('.smart-warning-note').forEach(el => el.remove());
+
+        const foundWord = vagueWords.find(word => f.val.toLowerCase().includes(word));
+        if (foundWord) {
+          f.pill.style.border = '2px solid #B07E7A';
+          const note = document.createElement('div');
+          note.className = 'smart-warning-note';
+          note.style.cssText = 'font-size: 0.8rem; color: #B07E7A; margin-top: 0.5rem; font-style: italic; line-height: 1.3; font-weight: 500; text-align: left;';
+          note.innerHTML = `⚠️ This answer contains vague language ("${foundWord}"). SMART goals lose power when measurability is unclear. Can you make this more specific?`;
+          f.pill.appendChild(note);
+        }
+      });
+
+      // Time-bound validation
+      const timePill = document.getElementById('res-time').parentNode;
+      const hasNumber = /\d/.test(t);
+      const dateWords = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'jan', 'feb', 'mar', 'apr', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'tomorrow', 'today', 'week', 'month', 'year'];
+      const hasDateLike = dateWords.some(w => t.toLowerCase().includes(w));
+      if (!hasNumber && !hasDateLike) {
+        timePill.style.border = '2px solid #B07E7A';
+        let note = timePill.querySelector('.smart-warning-note');
+        if (!note) {
+          note = document.createElement('div');
+          note.className = 'smart-warning-note';
+          note.style.cssText = 'font-size: 0.8rem; color: #B07E7A; margin-top: 0.5rem; font-style: italic; line-height: 1.3; font-weight: 500; text-align: left;';
+          timePill.appendChild(note);
+        } else {
+          note.innerHTML += "<br>";
+        }
+        note.innerHTML += `⚠️ A time-bound goal needs a specific date or deadline, not a general timeframe.`;
+      }
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('smart-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

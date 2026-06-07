@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>80/20 Rule (Pareto) — Just Do It</title>
+  <meta name="description" content="Calculate your leverage ratio using the 80/20 Rule. Pinpoint the top 20% of activities yielding 80% of your results.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .pareto-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>80/20 Rule (Pareto Principle)</h1>
+        <span class="tag tag-prioritization">Prioritization</span>
+      </div>
+      <p class="subtitle">Identify high-leverage activities by analyzing the return on investment for your time and energy.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="pareto-form">
+        <p style="margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.95rem;">
+          List your activities. Estimate what percentage of your total <strong>Time</strong> you spend on each, and what percentage of your total <strong>Results / Value</strong> it produces.
+        </p>
+
+        <div style="margin-bottom: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; font-weight: bold;">
+          <div>Activity / Task</div>
+          <div>Time Spent (%)</div>
+          <div>Results Produced (%)</div>
+        </div>
+
+        <div id="pareto-items-container">
+          <div class="pareto-row">
+            <input type="text" placeholder="e.g. Preparing exam summaries" class="pareto-name" required>
+            <input type="number" value="20" min="1" max="100" class="pareto-time" required>
+            <input type="number" value="70" min="0" max="100" class="pareto-results" required>
+          </div>
+          <div class="pareto-row">
+            <input type="text" placeholder="e.g. Attending optional lectures" class="pareto-name">
+            <input type="number" value="40" min="1" max="100" class="pareto-time">
+            <input type="number" value="10" min="0" max="100" class="pareto-results">
+          </div>
+          <div class="pareto-row">
+            <input type="text" placeholder="e.g. Doing coding assignments" class="pareto-name">
+            <input type="number" value="25" min="1" max="100" class="pareto-time">
+            <input type="number" value="15" min="0" max="100" class="pareto-results">
+          </div>
+        </div>
+
+        <button type="button" class="btn" id="btn-add-pareto" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Activity Row</button>
+        <br>
+        <button type="submit" class="btn btn-primary">Analyze 80/20 Leverage →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="pareto-result-section">
+      <div class="result-header">
+        <h2>Your 80/20 Leverage Analysis</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">80/20 Rule (Pareto)</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <p style="margin-bottom: 1.5rem; font-size: 0.95rem;">
+          Sorted by <strong>Leverage Ratio</strong> (Results / Time). The top highlighted items represent your highest-leverage actions.
+        </p>
+
+        <!-- Pure CSS Horizontal Bar Chart Container -->
+        <div id="pareto-chart-container" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;"></div>
+
+        <!-- Summary Nudge -->
+        <div id="pareto-summary-card" class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>80/20 Rule (Pareto Principle)</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The Pareto Principle, formulated by Italian economist Vilfredo Pareto in 1896, states that roughly 80% of consequences come from 20% of the causes. In work and personal life, it means that 80% of your progress, output, or income is driven by just 20% of your activities. The goal of this tool is to calculate your <strong>Leverage Ratio</strong> (Results produced divided by Time spent) for each activity, identifying where you are highly leveraged and where you are caught in low-value busywork.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Leverage Ratio Breakdown</h3>
+        <p>For each activity, estimate your inputs and outputs. The tool will sort them descending by leverage ratio:</p>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>High Leverage (Your 20%)</strong>: Activities where the results significantly exceed the time spent (Ratio &gt; 1.5). These are your highest-impact moves. You should protect, double-down on, and prioritize these.</li>
+          <li><strong>Low Leverage (Consider Cutting)</strong>: Activities where the time spent significantly exceeds the results (Ratio &lt; 0.7). This is busywork or administrative friction. You should seek to delegate, automate, or eliminate these.</li>
+          <li><strong>Balanced (0.7 to 1.5)</strong>: Standard, linear activities where effort matches returns. Maintain these at a baseline level.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example A (Sales & Business Clients)</strong>:<br>
+          • <em>Client A</em>: Represents 10% of your weekly client calls, but generates 70% of your monthly recurring revenue (Leverage Ratio: 7.0) -> <strong>Your 20%</strong>. Protect this client at all costs.<br>
+          • <em>Client B</em>: Represents 60% of your weekly customer support emails, but only represents 5% of monthly revenue (Leverage Ratio: 0.08) -> <strong>Consider Cutting</strong>.
+        </blockquote>
+        <blockquote>
+          <strong>Example B (Exam Preparation)</strong>:<br>
+          • <em>Active Recall</em>: Doing mock practice exams takes 20% of your study week but accounts for 85% of your final grades (Leverage Ratio: 4.25) -> <strong>Your 20%</strong>.<br>
+          • <em>Passive Reading</em>: Highlighting the textbook takes 70% of your week but accounts for only 10% of final grade retention (Leverage Ratio: 0.14) -> <strong>Consider Cutting</strong>.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    const container = document.getElementById('pareto-items-container');
+    const btnAdd = document.getElementById('btn-add-pareto');
+
+    btnAdd.addEventListener('click', () => {
+      const rows = container.querySelectorAll('.pareto-row');
+      if (rows.length >= 10) {
+        alert('Maximum of 10 rows allowed.');
+        return;
+      }
+      const row = document.createElement('div');
+      row.className = 'pareto-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Enter activity..." class="pareto-name" required>
+        <input type="number" value="10" min="1" max="100" class="pareto-time" required>
+        <input type="number" value="10" min="0" max="100" class="pareto-results" required>
+      `;
+      container.appendChild(row);
+    });
+
+    document.getElementById('pareto-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const rows = container.querySelectorAll('.pareto-row');
+      const items = [];
+
+      rows.forEach(row => {
+        const name = row.querySelector('.pareto-name').value.trim();
+        const time = parseFloat(row.querySelector('.pareto-time').value) || 1;
+        const results = parseFloat(row.querySelector('.pareto-results').value) || 0;
+
+        if (name) {
+          items.push({ name, time, results, ratio: results / time });
+        }
+      });
+
+      // Sort by ratio desc
+      items.sort((a, b) => b.ratio - a.ratio);
+
+      // Find which top items account for 80% of results
+      let cumulativeResult = 0;
+      let paretoItems = [];
+      for (let item of items) {
+        cumulativeResult += item.results;
+        paretoItems.push(item);
+        if (cumulativeResult >= 80) break;
+      }
+
+      const bottomItems = items.filter(item => !paretoItems.includes(item));
+
+      const chartContainer = document.getElementById('pareto-chart-container');
+      chartContainer.innerHTML = '';
+
+      items.forEach((item, index) => {
+        const isPareto = paretoItems.includes(item);
+        let highlightClass = '';
+        let badgeClass = 'tag-prioritization';
+        let badgeText = 'Low Leverage';
+        
+        if (isPareto) {
+          highlightClass = 'pareto-highlight-high';
+          badgeClass = 'tag-career'; // Soft green badge
+          badgeText = 'Your 20%';
+        }
+
+        const card = document.createElement('div');
+        card.className = `pareto-chart-card ${highlightClass}`;
+        card.style.cssText = 'padding: 1.25rem; border: 1px solid var(--border); border-radius: var(--border-radius); background-color: var(--white); position: relative;';
+        
+        if (isPareto) {
+          card.style.backgroundColor = 'rgba(226, 192, 146, 0.1)';
+          card.style.borderColor = 'var(--accent)';
+        } else {
+          card.style.backgroundColor = 'rgba(176, 126, 122, 0.05)';
+          card.style.borderColor = '#B07E7A';
+        }
+
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; gap: 1rem;">
+            <h4 style="font-family: var(--font-body); font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin: 0;">${item.name}</h4>
+            <span class="tag ${badgeClass}" style="flex-shrink: 0;">${badgeText}</span>
+          </div>
+          
+          <div class="pareto-bar-row" style="margin-bottom: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.15rem;">
+              <span>Time Spent</span>
+              <span>${item.time}%</span>
+            </div>
+            <div style="height: 10px; background-color: var(--bg-card); border-radius: 5px; overflow: hidden; width: 100%;">
+              <div style="height: 100%; width: ${item.time}%; background-color: #5A7E9E; border-radius: 5px;"></div>
+            </div>
+          </div>
+
+          <div class="pareto-bar-row">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.15rem;">
+              <span>Results Produced</span>
+              <span>${item.results}%</span>
+            </div>
+            <div style="height: 10px; background-color: var(--bg-card); border-radius: 5px; overflow: hidden; width: 100%;">
+              <div style="height: 100%; width: ${item.results}%; background-color: var(--accent); border-radius: 5px;"></div>
+            </div>
+          </div>
+        `;
+        chartContainer.appendChild(card);
+      });
+
+      // summary text
+      const summaryCard = document.getElementById('pareto-summary-card');
+      if (paretoItems.length > 0) {
+        const paretoNames = paretoItems.map(item => `"${item.name}"`).join(', ');
+        const paretoResultsSum = paretoItems.reduce((sum, item) => sum + item.results, 0);
+        const paretoTimeSum = paretoItems.reduce((sum, item) => sum + item.time, 0);
+
+        let summaryHtml = `
+          <p style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+            ${paretoNames} account for ${paretoResultsSum}% of your results but only ${paretoTimeSum}% of your time. This is your 20%.
+          </p>
+        `;
+
+        if (bottomItems.length > 0) {
+          const bottomNames = bottomItems.map(item => `"${item.name}"`).join(', ');
+          const bottomResultsSum = bottomItems.reduce((sum, item) => sum + item.results, 0);
+          const bottomTimeSum = bottomItems.reduce((sum, item) => sum + item.time, 0);
+          
+          summaryHtml += `
+            <p style="font-size: 0.95rem; color: #B07E7A; margin: 0; border-top: 1px dashed var(--border); padding-top: 0.75rem; margin-top: 0.75rem;">
+              ⚠️ <strong>Low Leverage:</strong> ${bottomNames} consume ${bottomTimeSum}% of your time but produce only ${bottomResultsSum}% of results.
+            </p>
+          `;
+        }
+
+        summaryCard.innerHTML = summaryHtml;
+      } else {
+        summaryCard.innerHTML = `<p style="color: var(--text-secondary); font-style: italic; margin: 0;">No activities added.</p>`;
+      }
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('pareto-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

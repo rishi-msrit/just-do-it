@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ikigai — Just Do It</title>
+  <meta name="description" content="Find your intersection of passion, skill, societal needs, and career opportunity with this interactive Ikigai diagram.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Specific print modifications for overlap visibility */
+    @media print {
+      .ikigai-circle.love { background-color: rgba(186, 126, 122, 0.2) !important; }
+      .ikigai-circle.good { background-color: rgba(120, 133, 111, 0.2) !important; }
+      .ikigai-circle.needs { background-color: rgba(111, 128, 133, 0.2) !important; }
+      .ikigai-circle.paid { background-color: rgba(176, 152, 122, 0.2) !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Ikigai</h1>
+        <span class="tag tag-career">Career</span>
+      </div>
+      <p class="subtitle">Discover your "reason for being" by aligning your passions, skills, social value, and financial viability.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="ikigai-form">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          
+          <div class="input-group">
+            <label for="love-input">What You Love <span>(Passions, things you enjoy)</span></label>
+            <textarea id="love-input" placeholder="e.g. Building software, mentoring juniors, writing long-form guides, learning historical timelines..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="good-input">What You're Good At <span>(Skills, strengths, talents)</span></label>
+            <textarea id="good-input" placeholder="e.g. Rapid prototyping in Javascript, public speaking, systems design, technical debugging..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="needs-input">What the World Needs <span>(Societal value, problems to solve)</span></label>
+            <textarea id="needs-input" placeholder="e.g. Accessibility in tech, simple and calm educational software, mental health tooling..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="paid-input">What You Can Be Paid For <span>(Career path, market demand)</span></label>
+            <textarea id="paid-input" placeholder="e.g. Frontend developer, instructional designer, technical writer, developer relations advocate..." required></textarea>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my Ikigai →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="ikigai-result-section">
+      <div class="result-header">
+        <h2>Your Ikigai Diagram</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">Ikigai Analysis</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- SVG Venn Diagram — proper overlapping circles with zone labels in correct intersections -->
+        <div class="ikigai-svg-wrapper">
+          <svg viewBox="0 0 640 630" xmlns="http://www.w3.org/2000/svg" class="ikigai-svg" role="img" aria-label="Ikigai Venn Diagram with four overlapping circles">
+          <defs>
+            <style>
+              .ikigai-circle-svg { stroke-width: 1.5; fill-opacity: 0.5; }
+              .love-circle  { fill: #FDDAC5; stroke: #E2A684; }
+              .good-circle  { fill: #D4EEDE; stroke: #82B395; }
+              .needs-circle { fill: #D1E9FC; stroke: #85AFD2; }
+              .paid-circle  { fill: #E6DBFC; stroke: #A791D1; }
+            </style>
+          </defs>
+
+            <!-- Four circles in diamond arrangement: Top=Love, Left=Good, Right=Needs, Bottom=Paid -->
+            <circle cx="320" cy="185" r="145" class="ikigai-circle-svg love-circle" fill="#FDDAC5" stroke="#E2A684" stroke-width="1.5" fill-opacity="0.5"/>
+            <circle cx="195" cy="310" r="145" class="ikigai-circle-svg good-circle" fill="#D4EEDE" stroke="#82B395" stroke-width="1.5" fill-opacity="0.5"/>
+            <circle cx="445" cy="310" r="145" class="ikigai-circle-svg needs-circle" fill="#D1E9FC" stroke="#85AFD2" stroke-width="1.5" fill-opacity="0.5"/>
+            <circle cx="320" cy="435" r="145" class="ikigai-circle-svg paid-circle" fill="#E6DBFC" stroke="#A791D1" stroke-width="1.5" fill-opacity="0.5"/>
+
+            <!-- Intersection zone labels -->
+            <text id="v-passion" x="244" y="245" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">PASSION</text>
+            <text id="v-mission" x="396" y="245" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">MISSION</text>
+            <text id="v-profession" x="244" y="383" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">PROFESSION</text>
+            <text id="v-vocation" x="396" y="383" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">VOCATION</text>
+
+            <!-- Centre medallion -->
+            <circle cx="320" cy="310" r="46" fill="white" stroke="#8B6F47" stroke-width="2.5" class="ikigai-center-circle"/>
+            <text x="320" y="294" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" font-weight="700" letter-spacing="1.5" fill="#8B6F47" class="ikigai-center-sub">YOUR</text>
+            <text x="320" y="312" text-anchor="middle" font-family="Playfair Display, serif" font-size="13" font-weight="700" font-style="italic" fill="#8B6F47" class="ikigai-center-main">Ikigai</text>
+            <text id="v-ikigai" x="320" y="330" text-anchor="middle" fill="#8B6F47" font-family="DM Sans, sans-serif" font-size="8.5" font-weight="700"></text>
+
+            <!-- Outer circle labels -->
+            <text x="320" y="24" text-anchor="middle" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">WHAT YOU LOVE</text>
+            <text x="22" y="310" text-anchor="middle" transform="rotate(-90,22,310)" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">GOOD AT</text>
+            <text x="618" y="310" text-anchor="middle" transform="rotate(90,618,310)" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">WORLD NEEDS</text>
+            <text x="320" y="622" text-anchor="middle" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">PAID FOR</text>
+          </svg>
+        </div>
+
+        <!-- User text in readable cards below diagram, colour-coded to their circle -->
+        <div class="ikigai-content-grid">
+          <div class="ikigai-content-card love-card">
+            <div class="ikigai-content-label">What You Love</div>
+            <p id="res-love"></p>
+          </div>
+          <div class="ikigai-content-card good-card">
+            <div class="ikigai-content-label">What You're Good At</div>
+            <p id="res-good"></p>
+          </div>
+          <div class="ikigai-content-card needs-card">
+            <div class="ikigai-content-label">What the World Needs</div>
+            <p id="res-needs"></p>
+          </div>
+          <div class="ikigai-content-card paid-card">
+            <div class="ikigai-content-label">What You Can Be Paid For</div>
+            <p id="res-paid"></p>
+          </div>
+        </div>
+
+        <!-- Ikigai Insights Box -->
+        <div id="ikigai-insight-box" class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Ikigai (生き甲斐)</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>Ikigai is a Japanese concept meaning "a reason for being"—essentially, the thing that makes you want to jump out of bed in the morning. Originating from Okinawa (a region famous for longevity), this framework helps you locate your career sweet spot. It is modeled as a Venn diagram of four overlapping circles. While listing your thoughts in each circle is the first step, the true power of the model lies in mapping the intersections.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Intersection Zones</h3>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Love ∩ Good At = Passion</strong>: Brings satisfaction and excitement, but you might struggle to make a living unless you find a market.</li>
+          <li><strong>Good At ∩ Paid For = Profession</strong>: Keeps you comfortable and financially secure, but can feel dry, clinical, or empty if you don't care about the work.</li>
+          <li><strong>Paid For ∩ World Needs = Vocation</strong>: A useful job that pays the bills, but you might feel a constant, nagging desire for personal growth or self-expression.</li>
+          <li><strong>World Needs ∩ Love = Mission</strong>: Brings immense fulfillment and purpose, but without pay, you risk burning out or struggling financially.</li>
+          <li><strong>The Center = Ikigai</strong>: A rare alignment of all four circles. Achieving this means you are doing work you love, that you excel at, that sustains you financially, and that contributes positively to the world.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example A (Developer Advocate)</strong>:<br>
+          • <em>Love</em>: Teaching others, coding minor experiments, traveling.<br>
+          • <em>Good at</em>: Technical writing, public speaking, API prototyping.<br>
+          • <em>World Needs</em>: Clean, understandable developer documentation and open-source tooling libraries.<br>
+          • <em>Paid for</em>: A Developer Relations Advocate role at a cloud hosting provider.<br>
+          • <em>Ikigai Alignment</em>: Building tutorials that developers love and getting paid by the host.
+        </blockquote>
+        <blockquote>
+          <strong>Example B (Sustainable Farmer)</strong>:<br>
+          • <em>Love</em>: Working outdoors, organic gardening, quiet environments.<br>
+          • <em>Good at</em>: Soil biology, crop rotation planning, composting techniques.<br>
+          • <em>World Needs</em>: Pesticide-free local produce, restoring agricultural soil health.<br>
+          • <em>Paid for</em>: Selling organic vegetable crates to local weekly subscribers.<br>
+          • <em>Ikigai Alignment</em>: Running a micro-farm supplying the community.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('ikigai-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const inputLove = document.getElementById('love-input').value;
+      const inputGood = document.getElementById('good-input').value;
+      const inputNeeds = document.getElementById('needs-input').value;
+      const inputPaid = document.getElementById('paid-input').value;
+
+      document.getElementById('res-love').textContent = inputLove;
+      document.getElementById('res-good').textContent = inputGood;
+      document.getElementById('res-needs').textContent = inputNeeds;
+      document.getElementById('res-paid').textContent = inputPaid;
+
+      // Logic functions
+      function parseList(str) {
+        if (!str) return [];
+        // Standardize separators (commas, semicolons, slashes, bullet characters, dashes)
+        let cleaned = str
+          .replace(/;\s*/g, '\n')
+          .replace(/\/\s*/g, '\n')
+          .replace(/•\s*/g, '\n')
+          .replace(/\-\s*/g, '\n');
+        
+        // Handle inline lists like "1. coding 2. design" or "1) coding 2) design"
+        cleaned = cleaned.replace(/\b\d+[\.\)]\s*/g, '\n');
+
+        return cleaned.split(/[\n,]+/)
+          .map(s => {
+            let item = s.trim();
+            // Remove leading bullet remnants or digits
+            item = item.replace(/^[\s\-\*•\d\.\)]+/, '');
+            // Remove trailing spaces or trailing punctuation
+            item = item.replace(/[\.\,\s]+$/, '');
+            return item.trim();
+          })
+          .filter(Boolean);
+      }
+
+      function normalizeWord(word) {
+        // Lowercase and strip all non-alphanumeric characters and whitespace
+        let clean = word.toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+        // Remove common suffixes
+        if (clean.endsWith('ing')) clean = clean.slice(0, -3);
+        else if (clean.endsWith('ed')) clean = clean.slice(0, -2);
+        else if (clean.endsWith('er')) clean = clean.slice(0, -2);
+        else if (clean.endsWith('es')) clean = clean.slice(0, -2);
+        else if (clean.endsWith('s') && !clean.endsWith('ss')) clean = clean.slice(0, -1);
+        else if (clean.endsWith('e') && clean.length > 4) clean = clean.slice(0, -1);
+
+        // Remove final double consonant (e.g. runn -> run)
+        if (clean.length > 3 && clean[clean.length - 1] === clean[clean.length - 2]) {
+          clean = clean.slice(0, -1);
+        }
+        return clean;
+      }
+
+      function levenshtein(a, b) {
+        const matrix = [];
+        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+          for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+              matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+              matrix[i][j] = Math.min(
+                matrix[i - 1][j - 1] + 1,
+                Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+              );
+            }
+          }
+        }
+        return matrix[b.length][a.length];
+      }
+
+      function getNormalizedWords(phrase) {
+        if (!phrase) return [];
+        return phrase.toLowerCase()
+          .split(/\s+/)
+          .map(w => w.replace(/[^a-z0-9]/g, ''))
+          .filter(Boolean)
+          .map(normalizeWord)
+          .filter(Boolean);
+      }
+
+      function isMatch(itemA, itemB) {
+        if (!itemA || !itemB) return false;
+        
+        // 1. Check exact match after stripping all spacing and punctuation
+        const cleanA = itemA.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const cleanB = itemB.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (cleanA === cleanB) return true;
+
+        // 2. Check normalized version (with suffix stemming)
+        const normA = normalizeWord(itemA);
+        const normB = normalizeWord(itemB);
+        if (normA === normB) return true;
+
+        // 3. Substring check for concatenated/compound words (e.g., "musiccoading" vs "coading")
+        if (normA.length >= 3 && normB.length >= 3) {
+          if (normA.includes(normB) || normB.includes(normA)) return true;
+        }
+
+        // 4. Word-by-word structural similarity check
+        const wordsA = getNormalizedWords(itemA);
+        const wordsB = getNormalizedWords(itemB);
+        if (wordsA.length === 0 || wordsB.length === 0) return false;
+        if (Math.abs(wordsA.length - wordsB.length) > 1) return false;
+
+        let matchCount = 0;
+        const usedB = new Array(wordsB.length).fill(false);
+
+        for (let i = 0; i < wordsA.length; i++) {
+          const wA = wordsA[i];
+          let found = false;
+          for (let j = 0; j < wordsB.length; j++) {
+            if (usedB[j]) continue;
+            const wB = wordsB[j];
+            if (wA === wB) {
+              found = true;
+              usedB[j] = true;
+              break;
+            }
+            if (wA.length >= 3 && wB.length >= 3) {
+              const dist = levenshtein(wA, wB);
+              const threshold = Math.max(wA.length, wB.length) >= 7 ? 2 : 1;
+              if (dist <= threshold) {
+                found = true;
+                usedB[j] = true;
+                break;
+              }
+            }
+          }
+          if (found) matchCount++;
+        }
+
+        const totalWords = Math.max(wordsA.length, wordsB.length);
+        if (totalWords === 1) {
+          return matchCount === 1;
+        } else {
+          return matchCount >= (totalWords - 1);
+        }
+      }
+
+      function formatOverlap(arr, fallback) {
+        if (arr.length === 0) return fallback;
+        const joined = arr.join(', ');
+        return joined.length > 20 ? joined.substring(0, 17) + '...' : joined;
+      }
+
+      const love = parseList(inputLove);
+      const good = parseList(inputGood);
+      const needs = parseList(inputNeeds);
+      const paid = parseList(inputPaid);
+
+      // Create list of unique items, preserving original capitalization and form
+      const uniqueItems = [];
+      [...love, ...good, ...needs, ...paid].forEach(item => {
+        if (!uniqueItems.some(x => isMatch(x, item))) {
+          uniqueItems.push(item);
+        }
+      });
+
+      // Calculate details for each unique item
+      const itemDetails = uniqueItems.map(item => {
+        const inLove = love.some(x => isMatch(x, item));
+        const inGood = good.some(x => isMatch(x, item));
+        const inNeeds = needs.some(x => isMatch(x, item));
+        const inPaid = paid.some(x => isMatch(x, item));
+        
+        const circles = [];
+        if (inLove) circles.push("Love");
+        if (inGood) circles.push("Good At");
+        if (inNeeds) circles.push("World Needs");
+        if (inPaid) circles.push("Paid For");
+        
+        return {
+          name: item,
+          circles: circles,
+          count: circles.length
+        };
+      });
+
+      const ikigai = itemDetails.filter(d => d.count === 4).map(d => d.name);
+
+      const passion = itemDetails.filter(d => 
+        d.circles.includes("Love") && 
+        d.circles.includes("Good At") && 
+        d.count < 4
+      ).map(d => d.name);
+
+      const mission = itemDetails.filter(d => 
+        d.circles.includes("Love") && 
+        d.circles.includes("World Needs") && 
+        d.count < 4
+      ).map(d => d.name);
+
+      const profession = itemDetails.filter(d => 
+        d.circles.includes("Good At") && 
+        d.circles.includes("Paid For") && 
+        d.count < 4
+      ).map(d => d.name);
+
+      const vocation = itemDetails.filter(d => 
+        d.circles.includes("World Needs") && 
+        d.circles.includes("Paid For") && 
+        d.count < 4
+      ).map(d => d.name);
+
+      // Update diagram text
+      document.getElementById('v-passion').textContent = formatOverlap(passion, 'PASSION');
+      document.getElementById('v-mission').textContent = formatOverlap(mission, 'MISSION');
+      document.getElementById('v-profession').textContent = formatOverlap(profession, 'PROFESSION');
+      document.getElementById('v-vocation').textContent = formatOverlap(vocation, 'VOCATION');
+      document.getElementById('v-ikigai').textContent = formatOverlap(ikigai, '');
+
+      const insightBox = document.getElementById('ikigai-insight-box');
+      
+      // Separate priorities
+      const rank1 = itemDetails.filter(d => d.count === 4);
+      const rank2 = itemDetails.filter(d => d.count === 3);
+      const rank3 = itemDetails.filter(d => d.count === 2);
+
+      let priorityHtml = '';
+      if (rank1.length > 0) {
+        priorityHtml += `
+          <div style="margin-bottom: 1.5rem;">
+            <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #8B6F47; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🏆 Priority 1: Core Ikigai (Perfect 4/4 Alignment)</span>
+            </h4>
+            <ul style="padding-left: 1.25rem; line-height: 1.5; color: var(--text-primary); margin: 0;">
+              ${rank1.map(item => `
+                <li style="margin-bottom: 0.4rem;">
+                  <strong>${item.name}</strong> — aligns perfectly with what you love, what you're good at, what the world needs, and what you can be paid for. <em>Double down here!</em>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      }
+      if (rank2.length > 0) {
+        priorityHtml += `
+          <div style="margin-bottom: 1.5rem;">
+            <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #B07E7A; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+              <span>⚡ Priority 2: High-Potential Paths (3/4 Overlap)</span>
+            </h4>
+            <ul style="padding-left: 1.25rem; line-height: 1.5; color: var(--text-primary); margin: 0;">
+              ${rank2.map(item => {
+                const missing = ["Love", "Good At", "World Needs", "Paid For"].filter(c => !item.circles.includes(c));
+                let suggestion = '';
+                if (missing.includes("Love")) suggestion = "find a way to make it more engaging or personally meaningful";
+                else if (missing.includes("Good At")) suggestion = "invest in building your skills or get training";
+                else if (missing.includes("World Needs")) suggestion = "align it with a pressing social problem or need";
+                else if (missing.includes("Paid For")) suggestion = "find a business model, client base, or job description that pays for this";
+                
+                return `
+                  <li style="margin-bottom: 0.4rem;">
+                    <strong>${item.name}</strong> — missing <span style="color: #B07E7A; font-weight: bold;">${missing.join(', ')}</span>. To unlock full Ikigai, you need to ${suggestion}.
+                  </li>
+                `;
+              }).join('')}
+            </ul>
+          </div>
+        `;
+      }
+      if (rank3.length > 0) {
+        priorityHtml += `
+          <div>
+            <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #78856F; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🌱 Priority 3: Strategic Opportunities (2/4 Overlap)</span>
+            </h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0 0 0.5rem 0;">
+              These are foundational elements (passions, skills, or careers) that intersect in key areas:
+            </p>
+            <ul style="padding-left: 1.25rem; line-height: 1.5; color: var(--text-primary); margin: 0;">
+              ${rank3.map(item => `
+                <li style="margin-bottom: 0.4rem;">
+                  <strong>${item.name}</strong> — connects your <em>${item.circles.join(' & ')}</em>.
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      if (rank1.length === 0 && rank2.length === 0 && rank3.length === 0) {
+        insightBox.innerHTML = `
+          <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-primary);">Ikigai Analysis</h3>
+          <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0;">
+            No overlaps found yet. Try listing multiple items in each section to see intersections.
+          </p>
+        `;
+      } else {
+        insightBox.innerHTML = `
+          <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">📋 Your Ikigai Priority List</h3>
+          ${priorityHtml}
+        `;
+      }
+      insightBox.style.display = 'block';
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('ikigai-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

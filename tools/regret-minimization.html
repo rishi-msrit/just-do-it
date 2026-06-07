@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regret Minimization — Just Do It</title>
+  <meta name="description" content="Project yourself into the future to minimize long-term regret when making difficult personal or career choices.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Regret Minimization Framework</h1>
+        <span class="tag tag-decisions">Decisions</span>
+      </div>
+      <p class="subtitle">Think outside the emotional noise of the present by evaluating your choices through the eyes of your future self.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="regret-form">
+        
+        <!-- Decision statement -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="decision-input">What decision are you facing?</label>
+          <input type="text" id="decision-input" placeholder="e.g. Quitting a stable corporate job to start an indie software startup" required>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <div class="input-group">
+            <label for="q1-input">1. If you choose YES, and it works — how do you feel in 10 years?</label>
+            <textarea id="q1-input" placeholder="e.g. Incredibly proud, financially free, having built something of my own..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="q2-input">2. If you choose YES, and it fails — how do you feel in 10 years?</label>
+            <textarea id="q2-input" placeholder="e.g. Disappointed about the failed effort, but glad I tried. I will have learned skills and can always get another engineering job..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="q3-input">3. If you choose NO — how do you feel in 10 years?</label>
+            <textarea id="q3-input" placeholder="e.g. Safe, but with a lingering, nagging regret. Wondering 'what if' every single day..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="reflection-input">Final Reflection: Which path will you regret NOT taking?</label>
+            <textarea id="reflection-input" placeholder="e.g. I would deeply regret not taking the risk to start the startup. Even if it fails, I will not regret trying." required></textarea>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my Regret Minimization Card →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="regret-result-section">
+      <div class="result-header">
+        <h2>Your Regret Minimization Analysis</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area regret-card">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">Regret Minimization: <span id="res-decision" style="font-style: italic;"></span></h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- Timeline Scenario Graphic -->
+        <div class="timeline-visual" style="margin: 3rem 0; display: flex; flex-direction: column; gap: 1rem; position: relative;">
+          <!-- Top Row (Above Timeline) -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+            <div style="padding: 1rem; background-color: rgba(120, 133, 111, 0.08); border: 1px solid #78856F; border-radius: var(--border-radius); text-align: left;">
+              <strong style="display: block; font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; color: #78856F; margin-bottom: 0.25rem;">If YES works:</strong>
+              <span id="res-q1" style="font-size: 0.85rem; line-height: 1.4; display: block;"></span>
+            </div>
+            <div></div> <!-- Spacer -->
+            <div style="padding: 1rem; background-color: rgba(176, 126, 122, 0.08); border: 1px solid #B07E7A; border-radius: var(--border-radius); text-align: left;">
+              <strong style="display: block; font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; color: #B07E7A; margin-bottom: 0.25rem;">If choose NO:</strong>
+              <span id="res-q3" style="font-size: 0.85rem; line-height: 1.4; display: block;"></span>
+            </div>
+          </div>
+
+          <!-- Middle Row (Timeline Bar) -->
+          <div class="timeline-bar-row" style="position: relative; height: 30px; display: flex; align-items: center;">
+            <div style="height: 2px; background-color: var(--border); width: 100%; position: relative;">
+              <!-- Start Dot -->
+              <div style="position: absolute; left: 0; top: -6px; width: 14px; height: 14px; border-radius: 50%; background-color: var(--accent); border: 2px solid var(--white);">
+                <span style="position: absolute; top: 18px; left: 0; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); white-space: nowrap;">Today</span>
+              </div>
+              
+              <!-- End Dot -->
+              <div style="position: absolute; right: 0; top: -6px; width: 14px; height: 14px; border-radius: 50%; background-color: var(--text-primary); border: 2px solid var(--white);">
+                <span style="position: absolute; top: 18px; right: 0; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); white-space: nowrap;">Age 80</span>
+              </div>
+
+              <!-- Connecting Dots -->
+              <div style="position: absolute; left: 16.6%; top: -4px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-light);"></div>
+              <div style="position: absolute; left: 50%; top: -4px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-light);"></div>
+              <div style="position: absolute; left: 83.3%; top: -4px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-light);"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Row (Below Timeline) -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+            <div></div> <!-- Spacer -->
+            <div style="padding: 1rem; background-color: rgba(176, 152, 122, 0.08); border: 1px solid #B0987A; border-radius: var(--border-radius); text-align: left;">
+              <strong style="display: block; font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; color: #B0987A; margin-bottom: 0.25rem;">If YES fails:</strong>
+              <span id="res-q2" style="font-size: 0.85rem; line-height: 1.4; display: block;"></span>
+            </div>
+            <div></div> <!-- Spacer -->
+          </div>
+        </div>
+
+        <!-- Prominent Conclusion Box -->
+        <div class="regret-conclusion" style="margin-top: 2.5rem; border: 1px solid var(--border); border-radius: var(--border-radius); padding: 1.5rem; background-color: var(--bg-card); border-left: 5px solid var(--accent);">
+          <strong style="display: block; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.5rem;">Your 80-year-old self says:</strong>
+          <p id="res-reflection" style="font-family: var(--font-display); font-size: 1.35rem; font-weight: bold; color: var(--text-primary); margin: 0; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Regret Vector Insights Box -->
+        <div id="regret-insights-box" class="reflection-box" style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Regret Minimization Framework</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The Regret Minimization Framework is a cognitive model popularized by Amazon founder Jeff Bezos to make high-stakes, long-term decisions. When faced with a difficult choice, project yourself forward to age 80, looking back on your life. From this perspective, the temporary noise, fears, and embarrassments of the present fade away, exposing the only thing that truly lasts: minimizing the regrets of omission (what you <em>didn't</em> do).</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Type 1 vs. Type 2 Decisions</h3>
+        <p>Before applying this framework, assess the nature of your decision:</p>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Type 1 (Irreversible)</strong>: One-way doors. Once you step through, you cannot easily return (e.g., quitting a lifelong career path, selling a company, relocating family abroad). These decisions require deep, long-horizon reflection like Regret Minimization.</li>
+          <li><strong>Type 2 (Reversible)</strong>: Two-way doors. If the choice doesn't work out, you can easily walk back and try something else (e.g., launching a minor feature, changing code styles, pricing tests). Decide on these quickly; do not get bogged down in over-analysis.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>How to Fill out this Tool</h3>
+        <p>1. <strong>The Decision</strong>: Clearly state the binary choice you are facing (typically: "Should I do X?").</p>
+        <p>2. <strong>If YES works</strong>: Visualize the best-case outcome 10 years out. How does it change your trajectory?</p>
+        <p>3. <strong>If YES fails</strong>: Write out the worst-case scenario. Usually, you realize that failure is just a temporary setback, and the lessons learned are invaluable.</p>
+        <p>4. <strong>If you choose NO</strong>: Visualize the safety path where you stay where you are. At age 80, will you wonder "what if"?</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example A (Bezos's Amazon Decision)</strong>:<br>
+          "I knew that when I was 80, I would never regret trying this thing called the internet that I thought was going to be a huge deal. I knew that if I failed, I wouldn't regret that, but I knew the one thing I might regret is not ever having tried."
+        </blockquote>
+        <blockquote>
+          <strong>Example B (Career Pivot)</strong>:<br>
+          Choosing whether to take a creative role at a risky design agency or stay in a stable administrative office job. Staying is safe, but looking back from age 80, the creative risk is the only choice that feels alive.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('regret-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      document.getElementById('res-decision').textContent = document.getElementById('decision-input').value.trim();
+      document.getElementById('res-q1').textContent = document.getElementById('q1-input').value;
+      document.getElementById('res-q2').textContent = document.getElementById('q2-input').value;
+      document.getElementById('res-q3').textContent = document.getElementById('q3-input').value;
+      document.getElementById('res-reflection').textContent = document.getElementById('reflection-input').value;
+
+      // Regret Vector analysis
+      const q3Val = document.getElementById('q3-input').value.toLowerCase();
+      const regretWords = ['regret', 'wish', 'should have', 'missed', 'never tried', 'what if'];
+      const matchedRegret = regretWords.filter(word => q3Val.includes(word));
+
+      const insightsBox = document.getElementById('regret-insights-box');
+      let warningHtml = "";
+      if (matchedRegret.length > 0) {
+        const matchedStr = matchedRegret.map(w => `"${w}"`).join(', ');
+        warningHtml = `
+          <p style="margin: 0; color: #B07E7A;">
+            ⚠️ <strong>Regret Vector Signal:</strong> Your NO scenario answer contains regret-indicative language (${matchedStr}). This suggests the cost of inaction may be higher than the cost of failure.
+          </p>
+        `;
+      }
+
+      insightsBox.innerHTML = `
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.5rem; text-align: left;">Regret Vector Analysis</h3>
+        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem; text-align: left;">
+          ${warningHtml}
+          <p style="margin: 0; color: var(--text-secondary); ${warningHtml ? 'border-top: 1px dashed var(--border); padding-top: 0.75rem;' : ''}">
+            Regret Minimization is designed for big, irreversible decisions — career pivots, moving cities, starting something. If this is a small reversible decision, the answer is almost always: try it.
+          </p>
+        </div>
+      `;
+      insightsBox.style.display = 'block';
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('regret-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

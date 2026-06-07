@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impact vs Effort Matrix — Just Do It</title>
+  <meta name="description" content="Map your tasks or project milestones onto an Impact vs Effort Matrix to isolate quick wins and eliminate thankless work.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .item-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Impact vs Effort Matrix</h1>
+        <span class="tag tag-prioritization">Prioritization</span>
+      </div>
+      <p class="subtitle">Evaluate projects or tasks by their potential return vs the energy required to complete them.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="impact-effort-form">
+        <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; font-weight: bold;">
+          <div>Item Name / Task</div>
+          <div>Impact</div>
+          <div>Effort</div>
+        </div>
+
+        <div id="items-container">
+          <div class="item-row">
+            <input type="text" placeholder="e.g. Build prototype landing page" class="task-name-input" required>
+            <select class="task-impact-select">
+              <option value="High" selected>High</option>
+              <option value="Low">Low</option>
+            </select>
+            <select class="task-effort-select">
+              <option value="High">High</option>
+              <option value="Low" selected>Low</option>
+            </select>
+          </div>
+          <div class="item-row">
+            <input type="text" placeholder="e.g. Set up database cluster replication" class="task-name-input">
+            <select class="task-impact-select">
+              <option value="High" selected>High</option>
+              <option value="Low">Low</option>
+            </select>
+            <select class="task-effort-select">
+              <option value="High" selected>High</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="item-row">
+            <input type="text" placeholder="e.g. Fix minor padding issues in footer" class="task-name-input">
+            <select class="task-impact-select">
+              <option value="High">High</option>
+              <option value="Low" selected>Low</option>
+            </select>
+            <select class="task-effort-select">
+              <option value="High">High</option>
+              <option value="Low" selected>Low</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="btn" id="btn-add-item" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Task Row</button>
+        <br>
+        <button type="submit" class="btn btn-primary">Build my Impact vs Effort Matrix →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="impact-effort-result-section">
+      <div class="result-header">
+        <h2>Your Impact vs Effort Matrix</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">Impact vs Effort Matrix</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- 2x2 Matrix -->
+        <div class="impact-effort-grid">
+          
+          <div class="impact-effort-quadrant wins">
+            <h3>Quick Wins <span>High Impact, Low Effort</span></h3>
+            <div class="scatter-area" id="res-wins"></div>
+          </div>
+
+          <div class="impact-effort-quadrant bets">
+            <h3>Big Bets <span>High Impact, High Effort</span></h3>
+            <div class="scatter-area" id="res-bets"></div>
+          </div>
+
+          <div class="impact-effort-quadrant fillins">
+            <h3>Fill-ins <span>Low Impact, Low Effort</span></h3>
+            <div class="scatter-area" id="res-fillins"></div>
+          </div>
+
+          <div class="impact-effort-quadrant thankless">
+            <h3>Thankless Tasks <span>Low Impact, High Effort</span></h3>
+            <div class="scatter-area" id="res-thankless"></div>
+          </div>
+
+        </div>
+
+        <!-- Impact vs Effort Nudge -->
+        <!-- Impact-Effort Insights Box -->
+        <div id="ie-insights-box" class="reflection-box" style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Impact vs Effort Matrix</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The Impact vs Effort Matrix, also known as the Value vs Complexity matrix, is a 2×2 prioritization model frequently used in product development, project management, and personal organization. It helps you analyze tasks, goals, or product features by placing them along two axes: <strong>Impact</strong> (the business value, return, or reward) and <strong>Effort</strong> (the cost, time, and resources needed to execute). The goal is to maximize efficiency by focusing resources on high-return, low-cost activities.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Four Categories of Tasks</h3>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Quick Wins (High Impact, Low Effort)</strong>: High value, easy to implement. These are your goldmines. Doing these first creates immediate momentum and customer validation with minimal resources.</li>
+          <li><strong>Big Bets (High Impact, High Effort)</strong>: High-value opportunities that require major development, planning, and focus. Plan these carefully; break them down into smaller sub-tasks.</li>
+          <li><strong>Fill-ins (Low Impact, Low Effort)</strong>: Nice-to-haves that require little work. Work on these only when you have downtime or are waiting on blockages for major tasks.</li>
+          <li><strong>Thankless Tasks (Low Impact, High Effort)</strong>: Massive resource-sinks that produce very little value. Avoid these entirely, delete them from your backlog, or seek to automate/simplify them.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (SaaS Product Backlog)</strong>:<br>
+          • <em>Quick Win</em>: Adding a "Remember Me" checkbox to the login page (saves user frustration, takes 1 hour of dev time).<br>
+          • <em>Big Bet</em>: Re-writing the main payment billing system to support multi-currency subscriptions (massive market expansion, takes 2 months of dev time).<br>
+          • <em>Fill-in</em>: Changing the hover animation style of a footer social link (minimal value, takes 10 minutes of CSS tuning).<br>
+          • <em>Thankless Task</em>: Migrating the legacy database hosting platform to a new cloud provider for no performance gain (high risk of data loss, takes 3 weeks of DevOps work, zero customer benefit).
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    const itemsContainer = document.getElementById('items-container');
+    const btnAddItem = document.getElementById('btn-add-item');
+
+    btnAddItem.addEventListener('click', () => {
+      const rows = itemsContainer.querySelectorAll('.item-row');
+      if (rows.length >= 8) {
+        alert('You have reached the maximum number of items (8) for clean layout and PDF rendering.');
+        return;
+      }
+
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Enter task..." class="task-name-input" required>
+        <select class="task-impact-select">
+          <option value="High" selected>High</option>
+          <option value="Low">Low</option>
+        </select>
+        <select class="task-effort-select">
+          <option value="High">High</option>
+          <option value="Low" selected>Low</option>
+        </select>
+      `;
+      itemsContainer.appendChild(row);
+    });
+
+    document.getElementById('impact-effort-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const rows = itemsContainer.querySelectorAll('.item-row');
+      const wins = [];
+      const bets = [];
+      const fillins = [];
+      const thankless = [];
+
+      rows.forEach(row => {
+        const name = row.querySelector('.task-name-input').value.trim();
+        const impact = row.querySelector('.task-impact-select').value;
+        const effort = row.querySelector('.task-effort-select').value;
+
+        if (!name) return;
+
+        if (impact === 'High' && effort === 'Low') {
+          wins.push(name);
+        } else if (impact === 'High' && effort === 'High') {
+          bets.push(name);
+        } else if (impact === 'Low' && effort === 'Low') {
+          fillins.push(name);
+        } else if (impact === 'Low' && effort === 'High') {
+          thankless.push(name);
+        }
+      });
+
+      const positions = [
+        { top: '20%', left: '15%' },
+        { top: '50%', left: '50%' },
+        { top: '65%', left: '20%' },
+        { top: '30%', left: '60%' },
+        { top: '75%', left: '45%' },
+        { top: '45%', left: '10%' },
+        { top: '15%', left: '40%' },
+        { top: '60%', left: '70%' }
+      ];
+
+      const fillScatter = (id, list) => {
+        const area = document.getElementById(id);
+        area.innerHTML = '';
+        if (list.length === 0) {
+          area.innerHTML = '<span style="color: var(--text-secondary); font-style: italic; font-size: 0.85rem; padding: 1rem; display: block;">No tasks</span>';
+        } else {
+          list.forEach((item, index) => {
+            const chip = document.createElement('span');
+            chip.className = 'scatter-chip';
+            chip.textContent = item;
+            const pos = positions[index % positions.length];
+            chip.style.top = pos.top;
+            chip.style.left = pos.left;
+            area.appendChild(chip);
+          });
+        }
+      };
+
+      fillScatter('res-wins', wins);
+      fillScatter('res-bets', bets);
+      fillScatter('res-fillins', fillins);
+      fillScatter('res-thankless', thankless);
+
+      // Ranked Action List Strategy
+      const ordered = [];
+      wins.forEach(item => ordered.push({ name: item, cat: 'Quick Win' }));
+      bets.forEach(item => ordered.push({ name: item, cat: 'Big Bet' }));
+      fillins.forEach(item => ordered.push({ name: item, cat: 'Fill-in' }));
+      thankless.forEach(item => ordered.push({ name: item, cat: 'Thankless Task' }));
+
+      let priorityListHtml = '';
+      if (ordered.length === 0) {
+        priorityListHtml = '<p style="color: var(--text-secondary); font-style: italic;">No tasks to prioritize.</p>';
+      } else {
+        priorityListHtml = '<ol style="padding-left: 1.25rem; margin: 0.5rem 0; display: flex; flex-direction: column; gap: 0.25rem;">';
+        ordered.forEach((item, index) => {
+          priorityListHtml += `<li><strong>${item.name}</strong> <span class="tag tag-${
+            item.cat === 'Quick Win' ? 'goals' : item.cat === 'Big Bet' ? 'career' : item.cat === 'Fill-in' ? 'prioritization' : 'problem'
+          }" style="font-size: 0.75rem; padding: 0.1rem 0.4rem; margin-left: 0.5rem;">${item.cat}</span></li>`;
+        });
+        priorityListHtml += '</ol>';
+      }
+
+      const winsCountText = `You have <strong>${wins.length} Quick Wins</strong>. ${
+        wins.length > 0 ? "Start there — they build momentum with minimal cost." : "Try to identify or break down tasks to find Quick Wins."
+      }`;
+
+      const thanklessText = thankless.length > 0
+        ? `<p style="margin: 0; color: #B07E7A;">⚠️ <strong>Consider dropping:</strong> ${thankless.map(t => `"${t}"`).join(', ')}. High effort, low return.</p>`
+        : '<p style="margin: 0; color: var(--text-secondary);">✓ Nice job! You have no Thankless Tasks on your list.</p>';
+
+      const insightsBox = document.getElementById('ie-insights-box');
+      insightsBox.innerHTML = `
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.75rem; text-align: left;">Ranked Execution Strategy</h3>
+        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem; text-align: left;">
+          <p style="margin: 0; color: var(--text-primary);"><strong>Do in this order:</strong></p>
+          ${priorityListHtml}
+          <p style="margin: 0; color: var(--text-secondary); border-top: 1px dashed var(--border); padding-top: 0.75rem;">${winsCountText}</p>
+          ${thanklessText}
+        </div>
+      `;
+      insightsBox.style.display = 'block';
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('impact-effort-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

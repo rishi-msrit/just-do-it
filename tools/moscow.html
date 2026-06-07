@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoSCoW Prioritization — Just Do It</title>
+  <meta name="description" content="Categorize features, ideas, or study plans into Must, Should, Could, and Won't Haves using the MoSCoW Method.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>MoSCoW Method</h1>
+        <span class="tag tag-prioritization">Prioritization</span>
+      </div>
+      <p class="subtitle">Prioritize project scopes, deadlines, or lifestyle shifts by separating requirements into non-negotiable and optional lists.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="moscow-form">
+        <!-- Project Context Field -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="project-context">What is the project or decision? <span>(e.g. Launching a new personal portfolio website)</span></label>
+          <input type="text" id="project-context" placeholder="e.g. Launching my personal portfolio website" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          
+          <!-- Must Haves -->
+          <div class="input-group">
+            <label for="must-container">Must Have <span>(Non-negotiable requirements, critical for success)</span></label>
+            <div id="must-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Basic routing logic" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="must-container" data-placeholder="Add item..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Must Have</button>
+          </div>
+
+          <!-- Should Haves -->
+          <div class="input-group">
+            <label for="should-container">Should Have <span>(Important but not vital; has workarounds)</span></label>
+            <div id="should-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Password recovery system" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="should-container" data-placeholder="Add item..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Should Have</button>
+          </div>
+
+          <!-- Could Haves -->
+          <div class="input-group">
+            <label for="could-container">Could Have <span>(Nice to have; only if budget/time permits)</span></label>
+            <div id="could-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Dark mode themes" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="could-container" data-placeholder="Add item..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Could Have</button>
+          </div>
+
+          <!-- Won't Haves -->
+          <div class="input-group">
+            <label for="wont-container">Won't Have <span>(Explicitly deferred or excluded for this iteration)</span></label>
+            <div id="wont-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Multi-language translations support" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="wont-container" data-placeholder="Add item..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Won't Have</button>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my MoSCoW Prioritization →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="moscow-result-section">
+      <div class="result-header">
+        <h2>Your MoSCoW Priorities</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">MoSCoW Prioritization</h1>
+          <p id="res-project-context" style="font-size: 1.15rem; font-weight: 700; color: var(--accent); margin-top: 0.5rem;"></p>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- 4 Column MoSCoW Grid -->
+        <div class="moscow-grid">
+          
+          <div class="moscow-column must">
+            <h3 id="head-must">Must Have</h3>
+            <ul id="res-must"></ul>
+          </div>
+
+          <div class="moscow-column should">
+            <h3 id="head-should">Should Have</h3>
+            <ul id="res-should"></ul>
+          </div>
+
+          <div class="moscow-column could">
+            <h3 id="head-could">Could Have</h3>
+            <ul id="res-could"></ul>
+          </div>
+
+          <div class="moscow-column wont">
+            <h3 id="head-wont">Won't Have</h3>
+            <ul id="res-wont"></ul>
+          </div>
+
+        </div>
+
+        <!-- MoSCoW Insights Box -->
+        <div id="moscow-insights-box" class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>MoSCoW Prioritization Method</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The MoSCoW Method is a prioritization framework originally developed by Dai Clegg in 1994 for software development, now widely applied in project management, event planning, and product launches. It helps teams and stakeholders build a shared, realistic understanding of project scope by categorizing requirements into four distinct levels of urgency: Must have, Should have, Could have, and Won't have (for now).</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The 4 Scope Categories</h3>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Must Have (M)</strong>: Non-negotiable requirements. The project fails, cannot launch, or is illegal without these. (e.g., a credit card processor for an e-commerce app). Keep these under 60% of your total budget/time.</li>
+          <li><strong>Should Have (S)</strong>: Highly important but not critical for launch. These add massive value, but if they are delayed, the project can still function via temporary workarounds (e.g., password reset via email).</li>
+          <li><strong>Could Have (C)</strong>: Nice-to-have features that would improve user experience but can easily be cut if deadlines are threatened (e.g., custom UI dark theme toggle).</li>
+          <li><strong>Won't Have (W)</strong>: Explicitly out of scope for the current release. Listing these prevents "scope creep"—the tendency for projects to grow larger and larger during development, causing missed deadlines.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>Rule of Thumb</h3>
+        <p>Be brutally honest with your "Must Have" bucket. If you have more than 5-6 items in it, ask yourself: <em>If I launch without this, does the core product actually fail?</em> If not, move it to "Should Have."</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (Launching an E-Commerce Site)</strong>:<br>
+          • <em>Must Have</em>: Product catalog display, shopping cart, checkout payment processing, SSL security.<br>
+          • <em>Should Have</em>: Customer review section, order tracking dashboard, automated email receipts.<br>
+          • <em>Could Have</em>: Product recommendation algorithm, dark mode, social login (Google/FB).<br>
+          • <em>Won't Have</em>: Customer loyalty points store, group buying functionality, live video support chat.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('moscow-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const must = getDynamicListValues('must-container');
+      const should = getDynamicListValues('should-container');
+      const could = getDynamicListValues('could-container');
+      const wont = getDynamicListValues('wont-container');
+
+      const fillList = (id, items) => {
+        const ul = document.getElementById(id);
+        ul.innerHTML = '';
+        if (items.length === 0) {
+          ul.innerHTML = '<li style="color: var(--text-secondary); font-style: italic; list-style: none;">None listed</li>';
+        } else {
+          items.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+          });
+        }
+      };
+
+      fillList('res-must', must);
+      fillList('res-should', should);
+      fillList('res-could', could);
+      fillList('res-wont', wont);
+
+      // Set project context header
+      const contextVal = document.getElementById('project-context').value.trim();
+      document.getElementById('res-project-context').textContent = contextVal ? `Project: ${contextVal}` : '';
+
+      // Update header badges
+      document.getElementById('head-must').textContent = `Must Have · ${must.length} item${must.length === 1 ? '' : 's'}`;
+      document.getElementById('head-should').textContent = `Should Have · ${should.length} item${should.length === 1 ? '' : 's'}`;
+      document.getElementById('head-could').textContent = `Could Have · ${could.length} item${could.length === 1 ? '' : 's'}`;
+      document.getElementById('head-wont').textContent = `Won't Have · ${wont.length} item${wont.length === 1 ? '' : 's'}`;
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const totalCount = must.length + should.length + could.length + wont.length;
+      let overloadHtml = "";
+      if (must.length > 5) {
+        const beyond = must.slice(5).map(item => `"${item}"`).join(', ');
+        overloadHtml = `
+          <p style="margin: 0; color: #B07E7A;">
+            ⚠️ <strong>Must Have Overload:</strong> You have ${must.length} Must Haves. That is likely too many. A true Must Have means the project fails without it. Reconsider whether ${beyond} belong in Should Have.
+          </p>
+        `;
+      } else {
+        overloadHtml = `<p style="margin: 0; color: var(--text-secondary);">✓ Must Have count is focused and healthy (${must.length} items).</p>`;
+      }
+
+      const scopeSummaryText = `Your current scope: <strong>${must.length}</strong> non-negotiables, <strong>${should.length}</strong> important additions, <strong>${could.length}</strong> stretch goals, and <strong>${wont.length}</strong> explicitly excluded. Total tracked: <strong>${totalCount} items</strong>.`;
+
+      const insightsBox = document.getElementById('moscow-insights-box');
+      insightsBox.innerHTML = `
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.75rem; text-align: left;">MoSCoW Insights</h3>
+        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem; text-align: left;">
+          <p style="margin: 0; color: var(--text-primary);">${scopeSummaryText}</p>
+          ${overloadHtml}
+        </div>
+      `;
+      insightsBox.style.display = 'block';
+
+      const resSec = document.getElementById('moscow-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

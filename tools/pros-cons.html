@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pros & Cons — Just Do It</title>
+  <meta name="description" content="List and weigh the pros and cons of any choice to see the analytical balance point.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .proscons-entry-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+    .proscons-entry-row input[type="text"] {
+      flex-grow: 1;
+    }
+    .proscons-entry-row select {
+      width: 90px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Pros & Cons</h1>
+        <span class="tag tag-decisions">Decisions</span>
+      </div>
+      <p class="subtitle">Analyze arguments for and against a specific decision and weigh them by importance.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="pros-cons-form">
+        
+        <!-- Decision statement -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="decision-input">The Decision under evaluation</label>
+          <input type="text" id="decision-input" placeholder="e.g. Move to Chicago for the new dev engineer job" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          
+          <!-- Pros Column -->
+          <div class="input-group">
+            <label>Pros <span>(Positive arguments & weights)</span></label>
+            <div id="pros-list-container">
+              <div class="proscons-entry-row">
+                <input type="text" placeholder="e.g. Higher salary (+30%)" class="pro-text" required>
+                <select class="pro-weight" title="Weight (1-3)">
+                  <option value="1">Light</option>
+                  <option value="2">Medium</option>
+                  <option value="3" selected>Heavy</option>
+                </select>
+              </div>
+              <div class="proscons-entry-row">
+                <input type="text" placeholder="e.g. Close to cultural hubs" class="pro-text">
+                <select class="pro-weight" title="Weight (1-3)">
+                  <option value="1">Light</option>
+                  <option value="2" selected>Medium</option>
+                  <option value="3">Heavy</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" class="btn" id="btn-add-pro" style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Pro</button>
+          </div>
+
+          <!-- Cons Column -->
+          <div class="input-group">
+            <label>Cons <span>(Negative arguments & weights)</span></label>
+            <div id="cons-list-container">
+              <div class="proscons-entry-row">
+                <input type="text" placeholder="e.g. Cold winter climate" class="con-text" required>
+                <select class="con-weight" title="Weight (1-3)">
+                  <option value="1">Light</option>
+                  <option value="2" selected>Medium</option>
+                  <option value="3">Heavy</option>
+                </select>
+              </div>
+              <div class="proscons-entry-row">
+                <input type="text" placeholder="e.g. Moving expense costs" class="con-text">
+                <select class="con-weight" title="Weight (1-3)">
+                  <option value="1" selected>Light</option>
+                  <option value="2">Medium</option>
+                  <option value="3">Heavy</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" class="btn" id="btn-add-con" style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Con</button>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Compare Pros & Cons →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="pros-cons-result-section">
+      <div class="result-header">
+        <h2>Your Pros & Cons Comparison</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">Decision Audit: <span id="res-decision-statement" style="font-style: italic;"></span></h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- Pros vs Cons columns -->
+        <div class="pros-cons-grid">
+          
+          <div class="pros-cons-column pros">
+            <h3>Pros (Supporting)</h3>
+            <div id="res-pros-list"></div>
+            <div class="pros-cons-total" id="res-pros-total">Total Weight: 0</div>
+          </div>
+
+          <div class="pros-cons-column cons">
+            <h3>Cons (Opposing)</h3>
+            <div id="res-cons-list"></div>
+            <div class="pros-cons-total" id="res-cons-total">Total Weight: 0</div>
+          </div>
+
+        </div>
+
+        <!-- CSS Balance Scale -->
+        <div class="scale-visual-container" style="margin: 2.5rem 0; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.5rem;">Analytical Balance</div>
+          <div id="scale-beam-wrapper" style="position: relative; height: 30px; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 500px; margin: 0 auto; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: center center;">
+            <!-- Left Side (Pros) fill percentage bar -->
+            <div id="scale-left" style="height: 6px; flex-grow: 1; background-color: var(--border); border-top-left-radius: 3px; border-bottom-left-radius: 3px; display: flex; justify-content: flex-end; overflow: hidden;">
+              <div id="scale-left-fill" style="height: 100%; background-color: #78856F; width: 0%; transition: width 0.5s ease;"></div>
+            </div>
+            <!-- Pivot Center Node -->
+            <div class="scale-pivot" style="width: 16px; height: 16px; border-radius: 50%; background-color: var(--accent); border: 2px solid var(--white); z-index: 5; margin: 0 4px;"></div>
+            <!-- Right Side (Cons) fill percentage bar -->
+            <div id="scale-right" style="height: 6px; flex-grow: 1; background-color: var(--border); border-top-right-radius: 3px; border-bottom-right-radius: 3px; display: flex; justify-content: flex-start; overflow: hidden;">
+              <div id="scale-right-fill" style="height: 100%; background-color: #B07E7A; width: 0%; transition: width 0.5s ease;"></div>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; max-width: 500px; margin: 0.25rem auto 0; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
+            <span id="scale-left-label">Pros Weight: 0</span>
+            <span id="scale-right-label">Cons Weight: 0</span>
+          </div>
+        </div>
+
+        <div id="res-comparison-winner" class="pros-cons-winner" style="margin-bottom: 2rem;"></div>
+
+        <div class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
+          <p style="font-size: 0.95rem; font-style: italic; color: var(--text-secondary); margin: 0;">
+            If the result surprises you, that reaction is data. Your gut may be weighting things differently than your list.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Weighted Pros & Cons</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The Pros & Cons list is the oldest decision tool in history, famously written about by Benjamin Franklin in a 1772 letter where he called it <em>"Prudential Algebra."</em> While basic lists are easy to compile, they treat all points as equal (e.g., "leaving friends" counts the same as "better coffee shops"). This tool adds Franklin's missing element: <strong>weighting</strong>. By scoring each argument from 1 to 3 based on its true significance, this tool compiles a weighted balance sheet and tilts a CSS scale, helping you visually separate major dealbreakers from minor conveniences.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Weighting Guidelines</h3>
+        <p>Assign a weight to each entry based on its emotional, financial, or long-term significance:</p>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Weight 1 (Minor)</strong>: Nice-to-haves or minor inconveniences (e.g., "cooler weather," "must buy a parking pass").</li>
+          <li><strong>Weight 2 (Significant)</strong>: Strong factors that will noticeably affect your daily comfort or progress (e.g., "learning a new tech stack," "30-minute longer commute").</li>
+          <li><strong>Weight 3 (Critical)</strong>: Core dealbreakers or massive life-changers (e.g., "doubling my salary," "moving far away from close family").</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Gut Check Nudge</h3>
+        <p>Numbers are only half the story. Pay close attention to your immediate emotional reaction to the tilted scale. If the scale tilts toward "Cons" but you feel a wave of disappointment, your subconscious actually wants to choose "Yes." Don't ignore what the gut check reveals.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (Relocating for a Job Offer)</strong>:<br>
+          • <em>Pros</em>: 40% salary raise (Weight: 3) | Exciting tech project (Weight: 2) | Sunny coastal weather (Weight: 1).<br>
+            • Total Pros Weight: 3 + 2 + 1 = <strong>6</strong>.<br>
+          • <em>Cons</em>: Leaving my tight-knit local friend group (Weight: 3) | High cost of housing in the new city (Weight: 3).<br>
+            • Total Cons Weight: 3 + 3 = <strong>6</strong>.<br>
+          • <em>Verdict</em>: The scale is perfectly balanced at 6 vs 6, revealing the true gravity of the trade-off. It's not a clear "yes" just because of the salary.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    const prosContainer = document.getElementById('pros-list-container');
+    const consContainer = document.getElementById('cons-list-container');
+
+    const handleAddRow = (container, textClass, weightClass) => {
+      const count = container.children.length;
+      if (count >= 8) {
+        alert('Maximum 8 items allowed for clean layout.');
+        return;
+      }
+      const row = document.createElement('div');
+      row.className = 'proscons-entry-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Enter reason..." class="${textClass}" required>
+        <select class="${weightClass}">
+          <option value="1">Light</option>
+          <option value="2" selected>Medium</option>
+          <option value="3">Heavy</option>
+        </select>
+        <button type="button" class="btn-icon btn-remove-proscons" title="Remove">&times;</button>
+      `;
+      container.appendChild(row);
+    };
+
+    document.getElementById('btn-add-pro').addEventListener('click', () => {
+      handleAddRow(prosContainer, 'pro-text', 'pro-weight');
+    });
+
+    document.getElementById('btn-add-con').addEventListener('click', () => {
+      handleAddRow(consContainer, 'con-text', 'con-weight');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-remove-proscons')) {
+        e.target.parentNode.remove();
+      }
+    });
+
+    document.getElementById('pros-cons-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const decision = document.getElementById('decision-input').value.trim();
+
+      // Parse pros
+      const proRows = prosContainer.querySelectorAll('.proscons-entry-row');
+      const pros = [];
+      let totalProsWeight = 0;
+      proRows.forEach(row => {
+        const text = row.querySelector('.pro-text').value.trim();
+        const weight = parseInt(row.querySelector('.pro-weight').value) || 1;
+        if (text) {
+          pros.push({ text, weight });
+          totalProsWeight += weight;
+        }
+      });
+
+      // Parse cons
+      const conRows = consContainer.querySelectorAll('.proscons-entry-row');
+      const cons = [];
+      let totalConsWeight = 0;
+      conRows.forEach(row => {
+        const text = row.querySelector('.con-text').value.trim();
+        const weight = parseInt(row.querySelector('.con-weight').value) || 1;
+        if (text) {
+          cons.push({ text, weight });
+          totalConsWeight += weight;
+        }
+      });
+
+      // Populate results
+      document.getElementById('res-decision-statement').textContent = decision;
+
+      const fillResList = (resId, list) => {
+        const listDiv = document.getElementById(resId);
+        listDiv.innerHTML = '';
+        if (list.length === 0) {
+          listDiv.innerHTML = '<div style="color: var(--text-secondary); font-style: italic;">None listed</div>';
+        } else {
+          list.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'pros-cons-item';
+            div.innerHTML = `<span>${item.text}</span><span style="font-family: var(--font-mono); font-weight: bold;">+${item.weight}</span>`;
+            listDiv.appendChild(div);
+          });
+        }
+      };
+
+      fillResList('res-pros-list', pros);
+      fillResList('res-cons-list', cons);
+
+      document.getElementById('res-pros-total').textContent = `Total Weight: ${totalProsWeight}`;
+      document.getElementById('res-cons-total').textContent = `Total Weight: ${totalConsWeight}`;
+
+      // Update balance scale visual
+      const totalWeight = totalProsWeight + totalConsWeight;
+      const leftFill = document.getElementById('scale-left-fill');
+      const rightFill = document.getElementById('scale-right-fill');
+      const beam = document.getElementById('scale-beam-wrapper');
+      
+      document.getElementById('scale-left-label').textContent = `Pros Weight: ${totalProsWeight}`;
+      document.getElementById('scale-right-label').textContent = `Cons Weight: ${totalConsWeight}`;
+
+      if (totalWeight > 0) {
+        leftFill.style.width = `${(totalProsWeight / totalWeight) * 100}%`;
+        rightFill.style.width = `${(totalConsWeight / totalWeight) * 100}%`;
+      } else {
+        leftFill.style.width = '0%';
+        rightFill.style.width = '0%';
+      }
+
+      if (totalProsWeight > totalConsWeight) {
+        beam.style.transform = 'rotate(-5deg)';
+      } else if (totalConsWeight > totalProsWeight) {
+        beam.style.transform = 'rotate(5deg)';
+      } else {
+        beam.style.transform = 'rotate(0deg)';
+      }
+
+      // Winner summary text
+      const winnerDiv = document.getElementById('res-comparison-winner');
+      const verdict = totalProsWeight > totalConsWeight ? 'leans toward YES' : totalProsWeight < totalConsWeight ? 'leans toward NO' : 'is evenly balanced';
+      const scoreMsg = `Weighted score: Pros ${totalProsWeight} vs Cons ${totalConsWeight}. The decision ${verdict}.`;
+      
+      if (totalProsWeight > totalConsWeight) {
+        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: PROS win. The arguments for taking action carry more weighted significance.`;
+        winnerDiv.style.backgroundColor = 'rgba(120, 133, 111, 0.15)';
+        winnerDiv.style.color = '#4E6041';
+        winnerDiv.style.borderColor = '#78856F';
+      } else if (totalConsWeight > totalProsWeight) {
+        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: CONS win. The obstacles and concerns outweigh the positive drivers. Proceed with caution.`;
+        winnerDiv.style.backgroundColor = 'rgba(176, 126, 122, 0.15)';
+        winnerDiv.style.color = '#60414E';
+        winnerDiv.style.borderColor = '#B07E7A';
+      } else {
+        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: TIE. The arguments are balanced. Consider collecting more information or weighing the items again.`;
+        winnerDiv.style.backgroundColor = 'var(--bg-card)';
+        winnerDiv.style.color = 'var(--text-primary)';
+        winnerDiv.style.borderColor = 'var(--border)';
+      }
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('pros-cons-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

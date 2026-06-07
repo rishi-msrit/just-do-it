@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eisenhower Matrix — Just Do It</title>
+  <meta name="description" content="Organize your tasks by urgency and importance to manage your daily schedule and delegate efficiently.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Eisenhower Matrix</h1>
+        <span class="tag tag-prioritization">Prioritization</span>
+      </div>
+      <p class="subtitle">Categorize tasks by urgency and importance to prioritize effectively and avoid burnout.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="eisenhower-form">
+        <p style="margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.95rem;">Enter your tasks (one per line) in their respective quadrants below:</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          
+          <!-- Q1: Urgent & Important -->
+          <div class="input-group">
+            <label for="q1-input">Q1: Urgent & Important <span>(Do First)</span></label>
+            <textarea id="q1-input" placeholder="e.g. Turn in thesis draft by tonight&#10;Call plumber for leaky pipes"></textarea>
+          </div>
+
+          <!-- Q2: Not Urgent but Important -->
+          <div class="input-group">
+            <label for="q2-input">Q2: Important, Not Urgent <span>(Schedule/Plan)</span></label>
+            <textarea id="q2-input" placeholder="e.g. Exercise 45 mins&#10;Outline chapter 3 of book draft&#10;Weekly review"></textarea>
+          </div>
+
+          <!-- Q3: Urgent, Not Important -->
+          <div class="input-group">
+            <label for="q3-input">Q3: Urgent, Not Important <span>(Delegate)</span></label>
+            <textarea id="q3-input" placeholder="e.g. Reposting social updates&#10;Booking flights for holiday trip"></textarea>
+          </div>
+
+          <!-- Q4: Not Urgent & Not Important -->
+          <div class="input-group">
+            <label for="q4-input">Q4: Not Urgent & Not Important <span>(Eliminate)</span></label>
+            <textarea id="q4-input" placeholder="e.g. Scrolling social media feed&#10;Organizing folder structure for the 4th time"></textarea>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my Eisenhower Matrix →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="eisenhower-result-section">
+      <div class="result-header">
+        <h2>Your Eisenhower Matrix</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">Eisenhower Matrix</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- 2x2 Eisenhower Grid -->
+        <div class="eisenhower-grid">
+          
+          <div class="eisenhower-quadrant q1">
+            <h3>DO <span>Urgent & Important (Q1)</span></h3>
+            <ul id="res-q1"></ul>
+          </div>
+
+          <div class="eisenhower-quadrant q2">
+            <h3>SCHEDULE <span>Important, Not Urgent (Q2)</span></h3>
+            <ul id="res-q2"></ul>
+          </div>
+
+          <div class="eisenhower-quadrant q3">
+            <h3>DELEGATE <span>Urgent, Not Important (Q3)</span></h3>
+            <ul id="res-q3"></ul>
+          </div>
+
+          <div class="eisenhower-quadrant q4">
+            <h3>ELIMINATE <span>Not Urgent & Not Important (Q4)</span></h3>
+            <ul id="res-q4"></ul>
+          </div>
+
+        </div>
+
+        <!-- Eisenhower Summary and Nudge -->
+        <div class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+          <p id="eisenhower-count-summary" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;"></p>
+          <div id="eisenhower-insights" style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem;"></div>
+          <p class="nudge-text" style="font-size: 0.95rem; font-style: italic; color: var(--text-secondary); margin: 0; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+            Nudge: If Q1 is overloaded, your Q2 habits are likely broken. Focus on proactive Q2 planning to reduce future Q1 crises.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Eisenhower Matrix</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The Eisenhower Matrix is a task prioritization tool based on a famous quote by U.S. President Dwight D. Eisenhower: <em>"I have two kinds of problems, the urgent and the important. The urgent are not important, and the important are never urgent."</em> It helps you escape the "urgency trap" by dividing your tasks into a 2×2 grid based on two key axes: <strong>Urgency</strong> (how soon it demands reaction) and <strong>Importance</strong> (how much it contributes to your long-term values, growth, and goals).</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Four Quadrants</h3>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Q1: DO FIRST (Urgent & Important)</strong>: Crises, tight deadlines, server failures, or family emergencies. These require immediate, defensive action. If you spend all day here, you will burn out.</li>
+          <li><strong>Q2: SCHEDULE (Important, Not Urgent)</strong>: Strategic planning, studying, skill development, relationship building, and health. This is the <strong>growth quadrant</strong>. Proactive focus here reduces the number of future Q1 crises.</li>
+          <li><strong>Q3: DELEGATE (Urgent, Not Important)</strong>: Phone interruptions, most emails, meetings with no agenda, or tasks others could do. These demand immediate attention but add little value to your goals. Limit these or delegate them.</li>
+          <li><strong>Q4: ELIMINATE (Not Urgent & Not Important)</strong>: Excessive social media browsing, sorting old files, time-wasting habits, or mindless entertainment. These are distractions; eliminate them to free up time.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Strategy of Q2 Focus</h3>
+        <p>If you feel constantly overwhelmed, your Q1 is overloaded because your Q2 habits are broken. When you fail to schedule Q2 activities (like regular health check-ups or code maintenance), they eventually degrade and explode into urgent Q1 crises (like heart problems or production crashes). Focus on proactive planning to regain control.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (Software Engineer's Tasks)</strong>:<br>
+          • <em>Q1 (Do)</em>: Fix database connection leak crashed the checkout page.<br>
+          • <em>Q2 (Schedule)</em>: Write integration tests for the authentication module due next month.<br>
+          • <em>Q3 (Delegate)</em>: RSVP to 3 team meetings; set up automated build logs reports.<br>
+          • <em>Q4 (Eliminate)</em>: Re-organize my desktop wallpaper collection.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('eisenhower-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const counts = { q1: 0, q2: 0, q3: 0, q4: 0 };
+      
+      const fillQuadrant = (inputId, resId, key) => {
+        const text = document.getElementById(inputId).value;
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        counts[key] = lines.length;
+        const ul = document.getElementById(resId);
+        ul.innerHTML = '';
+        if (lines.length === 0) {
+          ul.innerHTML = '<li style="color: var(--text-secondary); font-style: italic; list-style: none;">No tasks</li>';
+        } else {
+          lines.forEach(line => {
+            const li = document.createElement('li');
+            li.textContent = line;
+            ul.appendChild(li);
+          });
+        }
+      };
+
+      fillQuadrant('q1-input', 'res-q1', 'q1');
+      fillQuadrant('q2-input', 'res-q2', 'q2');
+      fillQuadrant('q3-input', 'res-q3', 'q3');
+      fillQuadrant('q4-input', 'res-q4', 'q4');
+
+      document.getElementById('eisenhower-count-summary').innerHTML = 
+        `You have <strong style="color: #B07E7A;">${counts.q1} tasks</strong> demanding immediate action and <strong style="color: #78856F;">${counts.q2} tasks</strong> worth scheduling for long-term growth.`;
+
+      // Overload Warning
+      let warningHtml = "";
+      if (counts.q1 > 3) {
+        warningHtml = `<p style="margin: 0; color: #B07E7A;">⚠️ <strong>Warning:</strong> ${counts.q1} urgent+important tasks suggests a reactive pattern. Investing in Q2 (Schedule) prevents Q1 overload.</p>`;
+      } else {
+        warningHtml = `<p style="margin: 0; color: var(--text-secondary);">✓ Q1 (Do First) is in a manageable state (${counts.q1} tasks).</p>`;
+      }
+
+      // Elimination count
+      const eliminationText = `<p style="margin: 0; color: var(--text-secondary);">✓ You can potentially eliminate <strong>${counts.q4} tasks</strong> entirely from Q4 (Eliminate).</p>`;
+
+      // Time recommendation
+      const qNames = { q1: "Q1 (Do First)", q2: "Q2 (Schedule)", q3: "Q3 (Delegate)", q4: "Q4 (Eliminate)" };
+      let heaviest = 'q1';
+      let maxCount = counts.q1;
+      if (counts.q2 > maxCount) { heaviest = 'q2'; maxCount = counts.q2; }
+      if (counts.q3 > maxCount) { heaviest = 'q3'; maxCount = counts.q3; }
+      if (counts.q4 > maxCount) { heaviest = 'q4'; maxCount = counts.q4; }
+      const skewText = (counts.q1 === 0 && counts.q2 === 0 && counts.q3 === 0 && counts.q4 === 0)
+        ? "none (balanced)"
+        : qNames[heaviest];
+
+      const recommendationText = `<p style="margin: 0; color: var(--text-secondary);">⏱ <strong>Recommendation:</strong> Ideal time split: 20% Q1, 60-70% Q2, minimize Q3 and Q4. Your current distribution skews toward <strong>${skewText}</strong>.</p>`;
+
+      const insightsEl = document.getElementById('eisenhower-insights');
+      insightsEl.innerHTML = `
+        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+          <p style="margin: 0; color: var(--text-primary);"><strong>Quadrant Counts:</strong> Q1: ${counts.q1} | Q2: ${counts.q2} | Q3: ${counts.q3} | Q4: ${counts.q4}</p>
+          ${warningHtml}
+          ${eliminationText}
+          ${recommendationText}
+        </div>
+      `;
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('eisenhower-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

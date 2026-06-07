@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5 Whys — Just Do It</title>
+  <meta name="description" content="Use the 5 Whys framework to dig deep below symptoms and discover the root cause of any problem.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .prompt-box {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      background-color: var(--bg-card);
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 0.5rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>5 Whys Root Cause Analysis</h1>
+        <span class="tag tag-problem">Problem Solving</span>
+      </div>
+      <p class="subtitle">Dig below surface level symptoms by asking "Why" five times in succession to uncover the systemic cause of a failure.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="whys-form">
+        
+        <!-- Problem Statement -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="problem-input">Define the initial symptom / problem statement</label>
+          <input type="text" id="problem-input" placeholder="e.g. We missed the shipping deadline for the website launch" required>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Why 1 -->
+          <div class="input-group" id="why1-group">
+            <label for="why1-input">Why 1: Why did the problem happen?</label>
+            <input type="text" id="why1-input" placeholder="e.g. Because the build failed at the last minute" required>
+          </div>
+
+          <!-- Why 2 -->
+          <div class="input-group" id="why2-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+            <label for="why2-input">Why 2: Why did that happen?</label>
+            <div id="prompt-why2" class="prompt-box"></div>
+            <input type="text" id="why2-input" placeholder="e.g. Because the server storage ran completely out of disk space">
+          </div>
+
+          <!-- Why 3 -->
+          <div class="input-group" id="why3-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+            <label for="why3-input">Why 3: Why did that happen?</label>
+            <div id="prompt-why3" class="prompt-box"></div>
+            <input type="text" id="why3-input" placeholder="e.g. Because the log files were never set to archive or auto-delete">
+          </div>
+
+          <!-- Why 4 -->
+          <div class="input-group" id="why4-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+            <label for="why4-input">Why 4: Why did that happen?</label>
+            <div id="prompt-why4" class="prompt-box"></div>
+            <input type="text" id="why4-input" placeholder="e.g. Because the server config file was written manually, skipping standard configurations">
+          </div>
+
+          <!-- Why 5 -->
+          <div class="input-group" id="why5-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+            <label for="why5-input">Why 5: Why did that happen? (Root Cause)</label>
+            <div id="prompt-why5" class="prompt-box"></div>
+            <input type="text" id="why5-input" placeholder="e.g. Because we don't have an infrastructure-as-code automation policy">
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my 5 Whys Chain →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="whys-result-section">
+      <div class="result-header">
+        <h2>Your 5 Whys Chain</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">5 Whys Analysis</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- Flowchart Chain -->
+        <div class="whys-chain">
+          
+          <div class="whys-node">
+            <div class="whys-node-label">Symptom</div>
+            <div class="whys-node-text" id="res-problem"></div>
+          </div>
+
+          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+          <div class="whys-node">
+            <div class="whys-node-label">Why 1</div>
+            <div class="whys-node-text" id="res-why1"></div>
+          </div>
+
+          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+          <div class="whys-node">
+            <div class="whys-node-label">Why 2</div>
+            <div class="whys-node-text" id="res-why2"></div>
+          </div>
+
+          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+          <div class="whys-node">
+            <div class="whys-node-label">Why 3</div>
+            <div class="whys-node-text" id="res-why3"></div>
+          </div>
+
+          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+          <div class="whys-node">
+            <div class="whys-node-label">Why 4</div>
+            <div class="whys-node-text" id="res-why4"></div>
+          </div>
+
+          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+          <div class="whys-node root-cause">
+            <div class="whys-node-label">Root Cause (Why 5)</div>
+            <div class="whys-node-text" id="res-why5"></div>
+          </div>
+
+        </div>
+
+        <!-- Root Cause Nudge -->
+        <div style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
+          <p id="res-root-cause-box" style="font-size: 1.05rem; color: var(--text-primary); margin: 0; line-height: 1.6; font-weight: 500;"></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>5 Whys Root Cause Analysis</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>Developed by Sakichi Toyoda, the founder of Toyota, the 5 Whys is an iterative interrogative technique used to explore the cause-and-effect relationships underlying a particular problem. The primary goal of the technique is to determine the root cause of a defect or problem by repeating the question "Why?" five times. Each answer forms the basis of the next question, peeling back layers of symptoms to reveal the systemic issue below.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>How to run a 5 Whys Audit</h3>
+        <p>1. <strong>Define the Symptom</strong>: Start by writing down the specific problem exactly as it happened. Keep it fact-based.</p>
+        <p>2. <strong>Trace the Chain</strong>: Ask "Why did this happen?" and write down the immediate direct cause. Repeat this process. Do not skip steps; make sure the logical connection from one node to the next is direct and undeniable.</p>
+        <p>3. <strong>Systemic over Human</strong>: Avoid stopping at "human error" (e.g., "John forgot to check"). John forgot to check because there was no checklist, or the workflow allowed single-point failures. Look for system and process failures.</p>
+        <p>4. <strong>Determine the Stop Point</strong>: Stop when you hit a process failure that you have the power to change or fix. That is your root cause.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example A (System Outage)</strong>:<br>
+          • <em>Symptom</em>: The database crashed and took down the site.<br>
+          • <em>Why 1</em>: The disk drive filled up completely.<br>
+          • <em>Why 2</em>: Large temp files were not being deleted.<br>
+          • <em>Why 3</em>: The cron script that clears temp files failed.<br>
+          • <em>Why 4</em>: The script relied on a legacy database driver that was removed.<br>
+          • <em>Why 5 (Root Cause)</em>: We do not have a dependency management policy for system integrations.
+        </blockquote>
+        <blockquote>
+          <strong>Example B (Personal Habit)</strong>:<br>
+          • <em>Symptom</em>: I missed my dentist appointment.<br>
+          • <em>Why 1</em>: I woke up an hour late.<br>
+          • <em>Why 2</em>: My phone battery died overnight, so my alarm didn't ring.<br>
+          • <em>Why 3</em>: I forgot to plug my phone in before sleeping.<br>
+          • <em>Why 4</em>: My charger is in the living room and I fell asleep reading in bed.<br>
+          • <em>Why 5 (Root Cause)</em>: I do not have a consistent bedtime routine or a secondary alarm system.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    // Inputs & Groups definitions for sequential reveal
+    const inputs = [
+      document.getElementById('why1-input'),
+      document.getElementById('why2-input'),
+      document.getElementById('why3-input'),
+      document.getElementById('why4-input'),
+      document.getElementById('why5-input')
+    ];
+    
+    const groups = [
+      document.getElementById('why2-group'),
+      document.getElementById('why3-group'),
+      document.getElementById('why4-group'),
+      document.getElementById('why5-group')
+    ];
+
+    // Reveal next group when current input has content
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        const text = input.value.trim();
+        if (index < 4) {
+          const nextGroup = groups[index];
+          const nextInput = inputs[index + 1];
+          if (text) {
+            nextGroup.style.display = 'block';
+            setTimeout(() => {
+              nextGroup.style.opacity = '1';
+            }, 10);
+            nextInput.setAttribute('required', 'required');
+          } else {
+            // Hide all subsequent inputs and clear them
+            for (let i = index; i < 4; i++) {
+              groups[i].style.opacity = '0';
+              groups[i].style.display = 'none';
+              inputs[i + 1].value = '';
+              inputs[i + 1].removeAttribute('required');
+              // Clear prompt values too
+              const promptEl = document.getElementById(`prompt-why${i + 2}`);
+              if (promptEl) {
+                promptEl.textContent = '';
+                promptEl.style.display = 'none';
+              }
+            }
+          }
+        }
+      });
+    });
+
+    // Propagate inputs to prompts
+    const handleInputProp = (inputId, targetPromptId) => {
+      const input = document.getElementById(inputId);
+      const prompt = document.getElementById(targetPromptId);
+
+      input.addEventListener('input', () => {
+        const text = input.value.trim();
+        if (text) {
+          prompt.textContent = `Because ${text}... why?`;
+          prompt.style.display = 'block';
+        } else {
+          prompt.textContent = '';
+          prompt.style.display = 'none';
+        }
+      });
+    };
+
+    handleInputProp('why1-input', 'prompt-why2');
+    handleInputProp('why2-input', 'prompt-why3');
+    handleInputProp('why3-input', 'prompt-why4');
+    handleInputProp('why4-input', 'prompt-why5');
+
+    // Trigger initial reveal checks for autosave recovery
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        inputs.forEach(input => {
+          if (input.value.trim()) {
+            input.dispatchEvent(new Event('input'));
+          }
+        });
+      }, 100);
+    });
+
+    document.getElementById('whys-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const prob = document.getElementById('problem-input').value.trim();
+      const w1 = document.getElementById('why1-input').value.trim();
+      const w2 = document.getElementById('why2-input').value.trim();
+      const w3 = document.getElementById('why3-input').value.trim();
+      const w4 = document.getElementById('why4-input').value.trim();
+      const w5 = document.getElementById('why5-input').value.trim();
+
+      document.getElementById('res-problem').textContent = prob;
+      document.getElementById('res-why1').textContent = w1;
+      document.getElementById('res-why2').textContent = w2;
+      document.getElementById('res-why3').textContent = w3;
+      document.getElementById('res-why4').textContent = w4;
+      document.getElementById('res-why5').textContent = w5;
+
+      document.getElementById('res-surface-problem').textContent = prob;
+      
+      const rootCause = w5 || w4 || w3 || w2 || w1;
+      document.getElementById('res-root-cause-box').innerHTML = 
+        `Your surface problem was: <strong>${prob}</strong>. The root cause is: <strong style="color: var(--accent);">${rootCause}</strong>. Solutions that only address the surface will not fix this.`;
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('whys-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Matrix — Just Do It</title>
+  <meta name="description" content="Systematically compare multiple ideas or career options by scoring them against weighted decision criteria.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .matrix-setup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .setup-list-item {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+    .setup-list-item input[type="text"] {
+      flex-grow: 2;
+    }
+    .setup-list-item input[type="number"] {
+      width: 80px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Decision Matrix</h1>
+        <span class="tag tag-decisions">Decisions</span>
+      </div>
+      <p class="subtitle">Systematically evaluate multiple choices against weighted parameters to find the mathematically optimal decision.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <!-- Step 1: Define Options & Criteria -->
+      <div class="matrix-setup-grid">
+        
+        <div>
+          <h3>1. Define your Options (Choices)</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">List up to 5 alternatives you are choosing between.</p>
+          <div id="options-setup-container">
+            <div class="setup-list-item">
+              <input type="text" value="Option A" class="opt-input" placeholder="e.g. Internship Offer A" required>
+            </div>
+            <div class="setup-list-item">
+              <input type="text" value="Option B" class="opt-input" placeholder="e.g. Graduate School Offer">
+            </div>
+          </div>
+          <button type="button" class="btn" id="btn-add-option" style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Option</button>
+        </div>
+
+        <div>
+          <h3>2. Define your Criteria & Weights</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">List up to 5 criteria to evaluate against. Assign weight (1 = low importance, 5 = critical).</p>
+          <div id="criteria-setup-container">
+            <div class="setup-list-item">
+              <input type="text" value="Learning Potential" class="crit-name-input" placeholder="e.g. Compensation" required>
+              <input type="number" value="5" min="1" max="5" class="crit-weight-input" title="Weight (1-5)" required>
+            </div>
+            <div class="setup-list-item">
+              <input type="text" value="Financial Return" class="crit-name-input" placeholder="e.g. Work-life Balance">
+              <input type="number" value="3" min="1" max="5" class="crit-weight-input" title="Weight (1-5)">
+            </div>
+          </div>
+          <button type="button" class="btn" id="btn-add-criterion" style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Criterion</button>
+        </div>
+
+      </div>
+
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <button type="button" class="btn btn-primary" id="btn-load-matrix-grid">Generate Score Inputs →</button>
+      </div>
+
+      <!-- Step 2: Input Scores Grid -->
+      <form id="matrix-scores-form" style="display: none; border-top: 1px dashed var(--border); padding-top: 2rem;">
+        <h3>3. Score each Option (1 to 5)</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Score how well each option meets each criterion (1 = poor, 5 = excellent).</p>
+        
+        <div class="matrix-table-container">
+          <table class="matrix-table" id="scores-input-table">
+            <thead>
+              <tr id="scores-table-header"></tr>
+            </thead>
+            <tbody id="scores-table-body"></tbody>
+          </table>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my Decision Matrix →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="matrix-result-section">
+      <div class="result-header">
+        <h2>Your Evaluated Decision Matrix</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">Decision Matrix</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <div class="matrix-table-container">
+          <table class="matrix-table" id="res-matrix-table">
+            <thead>
+              <tr id="res-table-header"></tr>
+            </thead>
+            <tbody id="res-table-body"></tbody>
+          </table>
+        </div>
+
+        <div id="res-matrix-winner" class="pros-cons-winner"></div>
+        <div class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
+          <p id="res-matrix-nudge" style="font-size: 0.95rem; font-style: italic; color: var(--text-secondary); margin: 0;"></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Weighted Decision Matrix</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The Weighted Decision Matrix—sometimes called a Pugh Matrix—is a structured decision-making tool used to compare multiple competitive alternatives against several criteria of varying importance. By assigning an objective weight of importance to each criterion and scoring each option individually, this model translates complex, multi-variable dilemmas into a clear, weighted total score, removing emotional bias or present-bias impulses from your final selection.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Matrix Parameters</h3>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Options (Rows)</strong>: The candidate choices you are deciding between (e.g., "Apartment A," "Apartment B"). You can compare up to 5 options.</li>
+          <li><strong>Criteria (Columns)</strong>: The factors that define success or comfort for this decision (e.g., "Rent cost," "Commute distance," "Room layout").</li>
+          <li><strong>Weight (1–5 Scale)</strong>: How much does this specific criterion matter to you? A weight of <strong>5</strong> indicates a vital non-negotiable factor; a weight of <strong>1</strong> is merely a pleasant extra.</li>
+          <li><strong>Score (1–5 Scale)</strong>: How well does each option perform for that criterion? A score of <strong>5</strong> is excellent performance; a score of <strong>1</strong> is poor.</li>
+          <li><strong>Weighted Score & Total</strong>: The matrix multiplies each cell score by its column weight. The final column sums these products. The highest total represents your optimal logical choice.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>A Watchout for Bias</h3>
+        <p>A common pitfall is <strong>reverse-engineering</strong>—altering the weights or scores after the math is done to force your favorite option to win. If the winner surprises you, ask: <em>Did I weight the criteria honestly, or does my gut prefer another choice despite the logical data?</em> Sometimes, a surprising result reveals your true emotional preference.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (Choosing an Internship Offer)</strong>:<br>
+          • <em>Criteria Weights</em>: Monthly Pay (Weight: 3), Learning Potential (Weight: 5), Commute Ease (Weight: 2).<br>
+          • <em>Offer A (Startup)</em>: Pay Score: 2 (low pay) | Learning Score: 5 (massive growth) | Commute Score: 3 (medium).<br>
+            • Weighted Total: (2×3) + (5×5) + (3×2) = 6 + 25 + 6 = <strong>37</strong>.<br>
+          • <em>Offer B (Corporate)</em>: Pay Score: 5 (high pay) | Learning Score: 2 (repetitive tasks) | Commute Score: 5 (close by).<br>
+            • Weighted Total: (5×3) + (2×5) + (5×2) = 15 + 10 + 10 = <strong>35</strong>.<br>
+          • <em>Verdict</em>: Although corporate pays better, the startup wins logically due to your high learning priority.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    const optionsContainer = document.getElementById('options-setup-container');
+    const criteriaContainer = document.getElementById('criteria-setup-container');
+    const btnAddOption = document.getElementById('btn-add-option');
+    const btnAddCriterion = document.getElementById('btn-add-criterion');
+
+    btnAddOption.addEventListener('click', () => {
+      const count = optionsContainer.children.length;
+      if (count >= 5) {
+        alert('Maximum of 5 options allowed.');
+        return;
+      }
+      const item = document.createElement('div');
+      item.className = 'setup-list-item';
+      item.innerHTML = `
+        <input type="text" value="Option ${String.fromCharCode(65 + count)}" class="opt-input" required>
+        <button type="button" class="btn-icon btn-remove-setup" title="Remove">&times;</button>
+      `;
+      optionsContainer.appendChild(item);
+    });
+
+    btnAddCriterion.addEventListener('click', () => {
+      const count = criteriaContainer.children.length;
+      if (count >= 5) {
+        alert('Maximum of 5 criteria allowed.');
+        return;
+      }
+      const item = document.createElement('div');
+      item.className = 'setup-list-item';
+      item.innerHTML = `
+        <input type="text" value="Criterion ${count + 1}" class="crit-name-input" required>
+        <input type="number" value="3" min="1" max="5" class="crit-weight-input" title="Weight (1-5)" required>
+        <button type="button" class="btn-icon btn-remove-setup" title="Remove">&times;</button>
+      `;
+      criteriaContainer.appendChild(item);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-remove-setup')) {
+        e.target.parentNode.remove();
+      }
+    });
+
+    // Generate score inputs table
+    let activeOptions = [];
+    let activeCriteria = [];
+
+    document.getElementById('btn-load-matrix-grid').addEventListener('click', () => {
+      activeOptions = Array.from(optionsContainer.querySelectorAll('.opt-input')).map(input => input.value.trim()).filter(Boolean);
+      activeCriteria = Array.from(criteriaContainer.querySelectorAll('.setup-list-item')).map(row => {
+        return {
+          name: row.querySelector('.crit-name-input').value.trim(),
+          weight: parseInt(row.querySelector('.crit-weight-input').value) || 1
+        };
+      }).filter(c => c.name);
+
+      if (activeOptions.length === 0 || activeCriteria.length === 0) {
+        alert('Please define at least one option and one criterion.');
+        return;
+      }
+
+      // Generate Table Headers
+      const headerRow = document.getElementById('scores-table-header');
+      headerRow.innerHTML = '<th>Options</th>';
+      activeCriteria.forEach(c => {
+        const th = document.createElement('th');
+        th.innerHTML = `${c.name} <br><span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: normal; color: var(--text-secondary);">Weight: ${c.weight}</span>`;
+        headerRow.appendChild(th);
+      });
+
+      // Generate Table Body
+      const tbody = document.getElementById('scores-table-body');
+      tbody.innerHTML = '';
+      activeOptions.forEach((opt, optIndex) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="left-align" style="font-weight: 700;">${opt}</td>`;
+        activeCriteria.forEach((crit, critIndex) => {
+          const td = document.createElement('td');
+          td.innerHTML = `
+            <select class="score-select" data-option="${optIndex}" data-criterion="${critIndex}" style="width: 70px;">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          `;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('matrix-scores-form').style.display = 'block';
+      document.getElementById('matrix-scores-form').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Submit matrix form
+    document.getElementById('matrix-scores-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Read scores
+      const selects = this.querySelectorAll('.score-select');
+      const scores = {}; // key: optionIndex-criterionIndex
+      selects.forEach(select => {
+        const optIdx = select.getAttribute('data-option');
+        const critIdx = select.getAttribute('data-criterion');
+        scores[`${optIdx}-${critIdx}`] = parseInt(select.value) || 1;
+      });
+
+      // Calculate totals
+      const totals = activeOptions.map((opt, optIndex) => {
+        let sum = 0;
+        activeCriteria.forEach((crit, critIndex) => {
+          const score = scores[`${optIndex}-${critIndex}`] || 0;
+          sum += score * crit.weight;
+        });
+        return { optionName: opt, totalScore: sum, optIndex };
+      });
+
+      // Sort totals by totalScore descending
+      const sortedTotals = [...totals].sort((a, b) => b.totalScore - a.totalScore);
+      const topTotal = sortedTotals[0];
+      const secondTotal = sortedTotals[1];
+      const winningIndex = topTotal.optIndex;
+      const highestVal = topTotal.totalScore;
+
+      // Generate Result table header
+      const resHeaderRow = document.getElementById('res-table-header');
+      resHeaderRow.innerHTML = '<th>Option</th>';
+      activeCriteria.forEach(c => {
+        const th = document.createElement('th');
+        th.innerHTML = `${c.name} <br><span style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: normal; color: var(--text-secondary);">w:${c.weight}</span>`;
+        resHeaderRow.appendChild(th);
+      });
+      resHeaderRow.innerHTML += '<th>Total Score</th>';
+
+      // Generate Result table body
+      const resBody = document.getElementById('res-table-body');
+      resBody.innerHTML = '';
+      sortedTotals.forEach((t, index) => {
+        const optIndex = t.optIndex;
+        const opt = t.optionName;
+        const isWinner = index === 0;
+        const tr = document.createElement('tr');
+        if (isWinner) {
+          tr.style.backgroundColor = 'rgba(226, 192, 146, 0.15)';
+          tr.style.outline = '2px solid var(--accent)';
+        }
+
+        tr.innerHTML = `
+          <td class="left-align" style="${isWinner ? 'font-weight: 700;' : ''}">
+            ${opt} 
+            ${isWinner ? '<span class="tag tag-goals" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; margin-left: 0.5rem; background-color: var(--accent); color: #000; font-weight: 700;">Winner</span>' : ''}
+          </td>
+        `;
+        
+        activeCriteria.forEach((crit, critIndex) => {
+          const score = scores[`${optIndex}-${critIndex}`] || 0;
+          const cellVal = score * crit.weight;
+          tr.innerHTML += `<td>${cellVal} <span style="font-size:0.75rem; color: var(--text-secondary);">(${score}&times;${crit.weight})</span></td>`;
+        });
+
+        tr.innerHTML += `<td style="font-weight: bold;">${t.totalScore}</td>`;
+        resBody.appendChild(tr);
+      });
+
+      // Set winner text
+      let resultText = "";
+      if (sortedTotals.length > 1) {
+        const delta = topTotal.totalScore - secondTotal.totalScore;
+        resultText = `Based on your criteria and weights, "${topTotal.optionName}" is the strongest choice with a score of <strong>${topTotal.totalScore}</strong>. "${secondTotal.optionName}" scored <strong>${secondTotal.totalScore}</strong>, a difference of <strong>${delta}</strong>.`;
+      } else {
+        resultText = `Based on your criteria and weights, "${topTotal.optionName}" is the strongest choice with a score of <strong>${topTotal.totalScore}</strong>.`;
+      }
+
+      document.getElementById('res-matrix-winner').innerHTML = `<strong>Optimal Choice:</strong> ${resultText}`;
+      
+      document.getElementById('res-matrix-nudge').innerHTML = `
+        <strong>Bias Check:</strong> Did you set the weights before or after scoring? If after, your weights may have been unconsciously adjusted to favor a preferred option. If "${topTotal.optionName}" surprises you, your gut may be telling you something the matrix is not.
+      `;
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('matrix-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

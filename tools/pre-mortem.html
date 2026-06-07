@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-Mortem Analysis — Just Do It</title>
+  <meta name="description" content="Work backward from a hypothetical future failure to build preventative countermeasures into your current planning.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .premortem-pair-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Pre-Mortem Analysis</h1>
+        <span class="tag tag-decisions">Decisions</span>
+      </div>
+      <p class="subtitle">Assume your project has failed completely in the future, figure out why, and plan preventions now.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="pre-mortem-form">
+        
+        <!-- Goal/Project statement -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="project-input">Describe your Plan or Project Goal</label>
+          <input type="text" id="project-input" placeholder="e.g. Applying for a competitive ML research fellowship" required>
+        </div>
+
+        <h3 style="margin-bottom: 0.5rem;">Identify Failures & Preventions</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+          Imagine it is 6 months from now and the project has failed catastrophically. List potential failure reasons and what you can do TODAY to prevent them.
+        </p>
+
+        <div style="margin-bottom: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-weight: bold;">
+          <div>Failure Reason</div>
+          <div>Countermeasure / Prevention Action</div>
+        </div>
+
+        <div id="premortem-pairs-container">
+          <div class="premortem-pair-row">
+            <input type="text" placeholder="e.g. Missed the recommendation letter deadline" class="fail-input" required>
+            <input type="text" placeholder="e.g. Request letters 6 weeks early, send reminders" class="prev-input">
+          </div>
+          <div class="premortem-pair-row">
+            <input type="text" placeholder="e.g. Research proposal was too generic" class="fail-input">
+            <input type="text" placeholder="e.g. Get reviews from 2 postdocs in the field" class="prev-input">
+          </div>
+        </div>
+
+        <button type="button" class="btn" id="btn-add-premortem" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Failure/Prevention Row</button>
+        <br>
+        <button type="submit" class="btn btn-primary">Build my Pre-Mortem →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="pre-mortem-result-section">
+      <div class="result-header">
+        <h2>Your Pre-Mortem Prevention Strategy</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">Pre-Mortem: <span id="res-project-statement" style="font-style: italic;"></span></h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <p style="margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6;">
+          By identifying future bottlenecks before they happen, you can incorporate the prevention actions below directly into your project timeline.
+        </p>
+
+        <!-- Two-column Pre-Mortem Table -->
+        <table class="premortem-table">
+          <thead>
+            <tr>
+              <th style="width: 50%;">Anticipated Failure Mode</th>
+              <th style="width: 50%;">Countermeasure (To Do Now)</th>
+            </tr>
+          </thead>
+          <tbody id="premortem-res-body"></tbody>
+        </table>
+
+        <!-- Pre-Mortem Risk Count Summary -->
+        <div class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
+          <p id="pre-mortem-summary-count" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;"></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Pre-Mortem Analysis</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>A Pre-Mortem, developed by research psychologist Gary Klein, is the hypothetical dissection of a project <em>before</em> it has even launched. Unlike a standard "post-mortem" (which reviews a disaster after the damage is done), a pre-mortem begins by assuming the project has failed catastrophically in the future. By placing yourself in this imaginary future, you trigger hindsight bias in your brain, which makes identifying risks much easier and bypasses the social pressure to remain silent about potential issues during the optimistic kickoff phase.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Why it Works: Breaking Groupthink</h3>
+        <p>During initial project kickoffs, team members are often reluctant to voice reservations because they don't want to sound unsupportive or negative. A pre-mortem flips this social dynamic: it challenges the team to be as creative as possible in finding ways the project could fail. In this framework, the person who surfaces the most realistic failure modes is seen as the most helpful contributor.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>How to Fill out this Tool</h3>
+        <p>1. <strong>Define the Goal</strong>: State the project name and launch deadline.</p>
+        <p>2. <strong>List Failure Modes</strong>: Brainstorm every possible scenario that could lead to total disaster (e.g., "the API credentials expired," "the key engineer left the company").</p>
+        <p>3. <strong>Design Prevention Actions</strong>: For every failure mode, write an actionable safeguard you can take <strong>today</strong> to prevent it. Any failure mode without a prevention plan will be highlighted in yellow as a critical risk item.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (Submitting a Critical Fellowship Application)</strong>:<br>
+          • <em>Failure Mode</em>: The recommendation letters from my professors were not uploaded in time, leading to immediate disqualification.<br>
+          • <em>Prevention Action (Today)</em>: Request the letters 6 weeks before the deadline, and set up a weekly check-in schedule to follow up.<br><br>
+          • <em>Failure Mode</em>: The server crashed on the submission website during the final hour, preventing application submission.<br>
+          • <em>Prevention Action (Today)</em>: Set an internal hard deadline to submit the completed application 48 hours before the official cutoff.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    const container = document.getElementById('premortem-pairs-container');
+    const btnAdd = document.getElementById('btn-add-premortem');
+
+    btnAdd.addEventListener('click', () => {
+      const rows = container.querySelectorAll('.premortem-pair-row');
+      if (rows.length >= 8) {
+        alert('Maximum of 8 items allowed for clean layout.');
+        return;
+      }
+      const row = document.createElement('div');
+      row.className = 'premortem-pair-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Enter failure..." class="fail-input" required>
+        <input type="text" placeholder="Enter prevention..." class="prev-input">
+        <button type="button" class="btn-icon btn-remove-premortem" title="Remove">&times;</button>
+      `;
+      container.appendChild(row);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-remove-premortem')) {
+        e.target.parentNode.remove();
+      }
+    });
+
+    document.getElementById('pre-mortem-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const project = document.getElementById('project-input').value.trim();
+      const rows = container.querySelectorAll('.premortem-pair-row');
+      const pairs = [];
+
+      rows.forEach(row => {
+        const fail = row.querySelector('.fail-input').value.trim();
+        const prev = row.querySelector('.prev-input').value.trim();
+        if (fail) {
+          pairs.push({ fail, prev });
+        }
+      });
+
+      document.getElementById('res-project-statement').textContent = project;
+
+      const tbody = document.getElementById('premortem-res-body');
+      tbody.innerHTML = '';
+
+      let totalRisks = pairs.length;
+      let withPreventions = 0;
+
+      if (pairs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; font-style:italic;">No items listed</td></tr>';
+      } else {
+        pairs.forEach(p => {
+          const tr = document.createElement('tr');
+          let hasPrev = p.prev !== '';
+          if (hasPrev) {
+            withPreventions++;
+          } else {
+            tr.style.backgroundColor = 'rgba(176, 126, 122, 0.08)'; // Soft red warning
+            tr.style.borderLeft = '3px solid #B07E7A';
+          }
+
+          tr.innerHTML = `
+            <td><strong>${p.fail}</strong></td>
+            <td>${hasPrev ? p.prev : '<span style="color: #B07E7A; font-style: italic; font-weight: 500;">No prevention plan defined today!</span>'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      const withoutPreventions = totalRisks - withPreventions;
+      const readiness = totalRisks > 0 ? Math.round((withPreventions / totalRisks) * 100) : 0;
+
+      document.getElementById('pre-mortem-summary-count').innerHTML = 
+        `You identified <strong>${totalRisks}</strong> ways this could fail. <strong>${withPreventions}</strong> have prevention plans. <strong>${withoutPreventions}</strong> are unaddressed — these are your blind spots.<br>` +
+        `<span style="display: block; margin-top: 0.75rem; font-size: 1.1rem; font-weight: 700; color: ${readiness >= 80 ? '#78856F' : '#B07E7A'}; font-family: var(--font-display);">` +
+        `Pre-Mortem Readiness: ${readiness}%. ${readiness >= 80 ? 'Ready to proceed.' : 'Aim for above 80% before starting.'}</span>`;
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('pre-mortem-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

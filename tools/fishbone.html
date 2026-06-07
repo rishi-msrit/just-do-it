@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fishbone Diagram — Just Do It</title>
+  <meta name="description" content="Build an interactive cause-and-effect Ishikawa Fishbone Diagram to trace the inputs of a systemic problem.">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .category-group {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--border-radius);
+      padding: 1.25rem;
+    }
+    .category-group h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .category-group h3 input {
+      font-size: 1rem;
+      padding: 0.25rem 0.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Fishbone Diagram (Ishikawa)</h1>
+        <span class="tag tag-problem">Problem Solving</span>
+      </div>
+      <p class="subtitle">Perform a systematic cause-and-effect analysis by mapping contributing forces to a central problem.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="fishbone-form">
+        
+        <!-- Problem Statement -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="problem-input">Define the Problem / Effect <span>(The fish head)</span></label>
+          <input type="text" id="problem-input" placeholder="e.g. Website crashed during peak traffic hour" required>
+        </div>
+
+        <h3 style="margin-bottom: 1rem;">Map Contributing Causes</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+          Categorize the root causes. You can rename the categories below if desired. Add up to 4 bullet points per category.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Category 1: People -->
+          <div class="category-group">
+            <h3><input type="text" value="People" id="cat1-name" style="background: none; border: 1px dashed var(--border); width: 100%;"></h3>
+            <div id="cat1-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. On-call engineer was asleep" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="cat1-container" data-placeholder="Add cause..." style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.3rem 0.6rem;">+ Add Cause</button>
+          </div>
+
+          <!-- Category 2: Process -->
+          <div class="category-group">
+            <h3><input type="text" value="Process" id="cat2-name" style="background: none; border: 1px dashed var(--border); width: 100%;"></h3>
+            <div id="cat2-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. No automated load alerts configured" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="cat2-container" data-placeholder="Add cause..." style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.3rem 0.6rem;">+ Add Cause</button>
+          </div>
+
+          <!-- Category 3: Equipment -->
+          <div class="category-group">
+            <h3><input type="text" value="Equipment" id="cat3-name" style="background: none; border: 1px dashed var(--border); width: 100%;"></h3>
+            <div id="cat3-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Single database instance bottleneck" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="cat3-container" data-placeholder="Add cause..." style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.3rem 0.6rem;">+ Add Cause</button>
+          </div>
+
+          <!-- Category 4: Environment -->
+          <div class="category-group">
+            <h3><input type="text" value="Environment" id="cat4-name" style="background: none; border: 1px dashed var(--border); width: 100%;"></h3>
+            <div id="cat4-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Unexpected spikes from marketing campaign" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="cat4-container" data-placeholder="Add cause..." style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.3rem 0.6rem;">+ Add Cause</button>
+          </div>
+
+          <!-- Category 5: Materials -->
+          <div class="category-group">
+            <h3><input type="text" value="Materials" id="cat5-name" style="background: none; border: 1px dashed var(--border); width: 100%;"></h3>
+            <div id="cat5-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Legacy codebase runs inefficient queries" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="cat5-container" data-placeholder="Add cause..." style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.3rem 0.6rem;">+ Add Cause</button>
+          </div>
+
+          <!-- Category 6: Management -->
+          <div class="category-group">
+            <h3><input type="text" value="Management" id="cat6-name" style="background: none; border: 1px dashed var(--border); width: 100%;"></h3>
+            <div id="cat6-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Technical debt was ignored for months" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="cat6-container" data-placeholder="Add cause..." style="margin-top: 0.5rem; font-size: 0.75rem; padding: 0.3rem 0.6rem;">+ Add Cause</button>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my Fishbone Diagram →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="fishbone-result-section">
+      <div class="result-header">
+        <h2>Your Cause-and-Effect Fishbone Diagram</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">Fishbone Diagram</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- Horizontal scrollable diagram -->
+        <div class="fishbone-diagram-container">
+          <div class="fishbone-wrapper">
+            
+            <!-- Central Spine -->
+            <div class="fishbone-spine"></div>
+
+            <!-- Top Bones (Cats 1, 2, 3) -->
+            <div class="fishbone-bone top bone-1">
+              <div class="fishbone-bone-label" id="res-cat1-label">People</div>
+              <div class="fishbone-bone-content">
+                <ul id="res-cat1-list"></ul>
+              </div>
+            </div>
+
+            <div class="fishbone-bone top bone-2">
+              <div class="fishbone-bone-label" id="res-cat2-label">Process</div>
+              <div class="fishbone-bone-content">
+                <ul id="res-cat2-list"></ul>
+              </div>
+            </div>
+
+            <div class="fishbone-bone top bone-3">
+              <div class="fishbone-bone-label" id="res-cat3-label">Equipment</div>
+              <div class="fishbone-bone-content">
+                <ul id="res-cat3-list"></ul>
+              </div>
+            </div>
+
+            <!-- Bottom Bones (Cats 4, 5, 6) -->
+            <div class="fishbone-bone bottom bone-4">
+              <div class="fishbone-bone-label" id="res-cat4-label">Environment</div>
+              <div class="fishbone-bone-content">
+                <ul id="res-cat4-list"></ul>
+              </div>
+            </div>
+
+            <div class="fishbone-bone bottom bone-5">
+              <div class="fishbone-bone-label" id="res-cat5-label">Materials</div>
+              <div class="fishbone-bone-content">
+                <ul id="res-cat5-list"></ul>
+              </div>
+            </div>
+
+            <div class="fishbone-bone bottom bone-6">
+              <div class="fishbone-bone-label" id="res-cat6-label">Management</div>
+              <div class="fishbone-bone-content">
+                <ul id="res-cat6-list"></ul>
+              </div>
+            </div>
+
+            <!-- Fish Head -->
+            <div class="fishbone-head-box">
+              <div class="fishbone-head-title" id="res-head-effect">Problem Statement</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Fishbone Insights Box -->
+        <div id="fishbone-insights-box" class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Fishbone Diagram (Ishikawa)</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>The Fishbone Diagram, also known as the Ishikawa Diagram or Cause-and-Effect Diagram, was popularized by Japanese quality control pioneer Kaoru Ishikawa in the 1960s. It is a visualization tool used to systematically identify, categorize, and investigate the various potential causes behind a complex systemic problem (the "Effect"). The visual layout resembles a fish skeleton: the head points to the problem, the spine forms the main horizontal path, and the diagonal bones branch off to represent categories of contributing causes, preventing teams from locking onto a single assumption.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Traditional "6 Ms" of Root Cause</h3>
+        <p>In manufacturing and industrial engineering, causes are traditionally sorted into six categories. You can rename these inputs to suit software development, marketing, or personal choices:</p>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>People (Manpower)</strong>: Human inputs, training, fatigue, communication gaps, or lack of clarity.</li>
+          <li><strong>Process (Methods)</strong>: Procedures, workflows, instructions, hand-offs, or outdated documentation.</li>
+          <li><strong>Equipment (Machines)</strong>: Computers, servers, tools, hardware bottlenecks, or failing instruments.</li>
+          <li><strong>Materials</strong>: Data quality, raw assets, code libraries, or third-party dependencies.</li>
+          <li><strong>Environment (Mother Nature)</strong>: Workspace conditions, team culture, market pressures, noise, or timing.</li>
+          <li><strong>Management (Measurements)</strong>: Decisions, key metrics, KPIs, budget constraints, or poor project tracking.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>How to Fill out this Tool</h3>
+        <p>1. <strong>The Effect</strong>: Start by entering the core symptom at the "fish head" (e.g., "Website checkout failure rate spiked 15%").</p>
+        <p>2. <strong>List Causes</strong>: Brainstorm possible factors and list them under their respective category bones. Double-check that causes are actionable facts rather than vague blame.</p>
+        <p>3. <strong>Analyze</strong>: Look at the completed diagram. Which bone has the most cards? This visual clustering highlight areas of process weakness that demand immediate attention.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (High Customer Wait Times)</strong>:<br>
+          • <em>People</em>: Staff not trained on new system; scheduling misalignment.<br>
+          • <em>Process</em>: Refund approvals require three levels of management signatures.<br>
+          • <em>Equipment</em>: POS registers freeze during card transactions.<br>
+          • <em>Environment</em>: Peak lunch hours overlap with staff shift handovers.<br>
+          • <em>Materials</em>: Inaccurate inventory logs require staff to check backrooms manually.<br>
+          • <em>Management</em>: Focus is placed on checkout speed instead of overall queue management.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('fishbone-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const effect = document.getElementById('problem-input').value.trim();
+      document.getElementById('res-head-effect').textContent = effect;
+
+      const fillCat = (catId, labelId, inputId, resListId) => {
+        const name = document.getElementById(inputId).value.trim();
+        document.getElementById(labelId).textContent = name;
+
+        const items = getDynamicListValues(catId);
+        const ul = document.getElementById(resListId);
+        ul.innerHTML = '';
+        if (items.length === 0) {
+          ul.innerHTML = '<li style="color: var(--text-secondary); font-style: italic;">None</li>';
+        } else {
+          items.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+          });
+        }
+      };
+
+      fillCat('cat1-container', 'res-cat1-label', 'cat1-name', 'res-cat1-list');
+      fillCat('cat2-container', 'res-cat2-label', 'cat2-name', 'res-cat2-list');
+      fillCat('cat3-container', 'res-cat3-label', 'cat3-name', 'res-cat3-list');
+      fillCat('cat4-container', 'res-cat4-label', 'cat4-name', 'res-cat4-list');
+      fillCat('cat5-container', 'res-cat5-label', 'cat5-name', 'res-cat5-list');
+      fillCat('cat6-container', 'res-cat6-label', 'cat6-name', 'res-cat6-list');
+
+      // Calculations & Insights
+      const categories = [
+        { name: document.getElementById('cat1-name').value.trim() || 'People', key: 'cat1-container' },
+        { name: document.getElementById('cat2-name').value.trim() || 'Process', key: 'cat2-container' },
+        { name: document.getElementById('cat3-name').value.trim() || 'Equipment', key: 'cat3-container' },
+        { name: document.getElementById('cat4-name').value.trim() || 'Environment', key: 'cat4-container' },
+        { name: document.getElementById('cat5-name').value.trim() || 'Materials', key: 'cat5-container' },
+        { name: document.getElementById('cat6-name').value.trim() || 'Management', key: 'cat6-container' }
+      ];
+
+      let totalCauses = 0;
+      const counts = categories.map(cat => {
+        const items = getDynamicListValues(cat.key);
+        totalCauses += items.length;
+        return { name: cat.name, count: items.length };
+      });
+
+      const sortedCounts = [...counts].sort((a, b) => b.count - a.count);
+      const heaviest = sortedCounts[0];
+
+      const tbodyHtml = counts.map(c => `
+        <tr>
+          <td style="padding: 0.5rem; border: 1px solid var(--border); font-weight: 700;">${c.name}</td>
+          <td style="padding: 0.5rem; border: 1px solid var(--border); text-align: center; font-family: var(--font-mono);">${c.count}</td>
+        </tr>
+      `).join('');
+
+      let heaviestText = "";
+      if (totalCauses > 0 && heaviest.count > 0) {
+        heaviestText = `
+          <p style="margin: 0; color: var(--text-primary);">
+            Most of your identified causes fall under <strong>${heaviest.name}</strong> (<strong>${heaviest.count}</strong> causes). This is likely where your investigation should focus first.
+          </p>
+          <p style="margin: 0.5rem 0 0; color: var(--text-secondary);">
+            You mapped <strong>${totalCauses}</strong> potential causes. A focused root cause analysis should now drill into <strong>${heaviest.name}</strong> using the 5 Whys method.
+          </p>
+        `;
+      } else {
+        heaviestText = `<p style="margin: 0; color: var(--text-secondary);">No causes mapped yet.</p>`;
+      }
+
+      const insightsBox = document.getElementById('fishbone-insights-box');
+      insightsBox.innerHTML = `
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.75rem; text-align: left;">Fishbone Cause Distribution</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; text-align: left;">
+          <div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+              <thead>
+                <tr style="background-color: var(--bg-card);">
+                  <th style="padding: 0.5rem; border: 1px solid var(--border); text-align: left;">Category</th>
+                  <th style="padding: 0.5rem; border: 1px solid var(--border); text-align: center; width: 80px;">Causes</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tbodyHtml}
+              </tbody>
+            </table>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            ${heaviestText}
+            <div style="margin-top: 0.5rem;">
+              <a href="five-whys.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; padding: 0.5rem 1rem; text-decoration: none;">
+                Drill deeper with 5 Whys →
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+      insightsBox.style.display = 'block';
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('fishbone-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

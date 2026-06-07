@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First Principles — Just Do It</title>
+  <meta name="description" content="Deconstruct complex challenges into fundamental truths and rebuild a custom solution from scratch using First Principles thinking.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>First Principles Thinking</h1>
+        <span class="tag tag-problem">Problem Solving</span>
+      </div>
+      <p class="subtitle">Strip away analogies and standard rules of thumb to reconstruct solutions based on fundamental, undeniable facts.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="principles-form">
+        
+        <!-- Problem or Goal -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="goal-input">1. What is the problem or goal you are analyzing?</label>
+          <input type="text" id="goal-input" placeholder="e.g. Reduce the cost of space flight to reach orbit" required>
+        </div>
+
+        <!-- Assumptions -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="assumptions-container">2. What assumptions are you making about it? <span>(Check the ones that aren't necessarily true to challenge them)</span></label>
+          <div id="assumptions-container">
+            <div class="dynamic-list-row">
+              <input type="text" placeholder="e.g. Rockets must be expendable and single-use" class="dynamic-input-field">
+              <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; margin-left: 0.5rem; white-space: nowrap;">
+                <input type="checkbox" class="challenge-checkbox"> Challenged
+              </label>
+            </div>
+            <div class="dynamic-list-row">
+              <input type="text" placeholder="e.g. Cobalt is too rare and expensive to manufacture batteries at scale" class="dynamic-input-field">
+              <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; margin-left: 0.5rem; white-space: nowrap;">
+                <input type="checkbox" class="challenge-checkbox"> Challenged
+              </label>
+            </div>
+          </div>
+          <button type="button" class="btn btn-add-row" data-container="assumptions-container" data-placeholder="Add assumption..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Assumption</button>
+        </div>
+
+        <!-- Fundamental Truths -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="truths-container">3. What do you know for certain is physically/factually true about this situation? <span>(Fundamental truths)</span></label>
+          <div id="truths-container">
+            <div class="dynamic-list-row">
+              <input type="text" placeholder="e.g. Raw materials for a rocket cost 2% of the total price of a new rocket" class="dynamic-input-field" required>
+            </div>
+          </div>
+          <button type="button" class="btn btn-add-row" data-container="truths-container" data-placeholder="Add fundamental fact..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Fact</button>
+        </div>
+
+        <!-- Rebuilt Solution -->
+        <div class="input-group" style="margin-bottom: 2rem;">
+          <label for="rebuild-input">4. Rebuild: what solution can you construct using ONLY these truths?</label>
+          <textarea id="rebuild-input" placeholder="e.g. We can build reusable rockets by focusing engineering on vertical landing and recovery, reducing cost by 100x." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-large">Analyze with First Principles →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="principles-result-section">
+      <div class="result-header">
+        <h2>Your First Principles Reconstruction</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">First Principles Analysis</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Problem or Goal: <strong id="res-goal" style="color: var(--text-primary);"></strong>
+          </p>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- 3-Panel Step Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+          
+          <div class="principles-step" style="border-left: 4px solid var(--text-secondary);">
+            <div class="principles-step-label">Panel 1: Assumptions & Status Quo</div>
+            <ul id="res-assumptions" style="font-size: 0.95rem; line-height: 1.6; margin-top: 0.5rem; list-style: none; padding-left: 0;"></ul>
+          </div>
+
+          <div class="principles-step" style="border-left: 4px solid var(--accent-light);">
+            <div class="principles-step-label">Panel 2: Fundamental Bedrock Truths</div>
+            <ul id="res-truths" style="font-size: 0.95rem; line-height: 1.6; margin-top: 0.5rem; list-style: none; padding-left: 0;"></ul>
+          </div>
+
+          <div class="principles-step" style="border-left: 4px solid var(--accent); background-color: var(--bg-card);">
+            <div class="principles-step-label">Panel 3: Rebuilt Solution</div>
+            <p id="res-rebuild" style="font-size: 1.15rem; font-family: var(--font-display); font-weight: bold; white-space: pre-wrap; margin-top: 0.5rem; line-height: 1.5;"></p>
+          </div>
+
+        </div>
+
+        <!-- First Principles Insights Box -->
+        <div id="principles-insights-box" class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>First Principles Thinking</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>First Principles Thinking—associated with Aristotle and popularized by Elon Musk—is the act of boiling a challenge down to its most basic, foundational truths that you know are factually and physically true, and then building a custom solution up from scratch. This contrasts with "reasoning by analogy," which is copying what others do with minor tweaks, inherited beliefs, or rules of thumb.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>How to think in First Principles</h3>
+        <p>1. <strong>Identify and Define the Goal</strong>: Clearly write down what you are trying to build or solve.</p>
+        <p>2. <strong>List Your Current Assumptions</strong>: Write down the beliefs or rules of thumb you hold about the problem. Check the ones that are merely standard conventions rather than absolute physical laws (e.g., "batteries are expensive," "we must rent an office").</p>
+        <p>3. <strong>Deconstruct to Bedrock Truths</strong>: Identify the foundational components. What are the raw materials, human behaviors, or basic costs that are physically or mathematically inarguable? (e.g., raw metals exchange prices, basic web hosting fees).</p>
+        <p>4. <strong>Rebuild from the Bedrock</strong>: Using only the truths you listed in step 3, design a new path that bypasses the challenged assumptions.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example A (SpaceX Rocket Costs)</strong>:<br>
+          • <em>Assumption</em>: Buying a rocket is too expensive ($65M). I can't start a space company.<br>
+          • <em>Bedrock Truths</em>: Rockets are made of carbon fiber, titanium, aerospace-grade aluminum, and fuel. The raw materials cost only 2% of the retail rocket price.<br>
+          • <em>Rebuilt Solution</em>: SpaceX decided to buy raw materials directly and build the rockets themselves, reducing manufacturing costs by 90% and implementing reusability.
+        </blockquote>
+        <blockquote>
+          <strong>Example B (Creating a Coffee Brand)</strong>:<br>
+          • <em>Assumption</em>: Starting a coffee brand requires renting a storefront, buying a $15k espresso machine, and hiring baristas ($100k startup cost).<br>
+          • <em>Bedrock Truths</em>: People buy coffee beans to drink at home. You can roast beans in small batches, build a simple Shopify store, and ship direct-to-consumer.<br>
+          • <em>Rebuilt Solution</em>: Start an online-only subscription coffee brand from a residential kitchen with zero storefront overhead.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    function getAssumptionsValues() {
+      const container = document.getElementById('assumptions-container');
+      if (!container) return [];
+      const rows = container.querySelectorAll('.dynamic-list-row');
+      const results = [];
+      rows.forEach(row => {
+        const input = row.querySelector('.dynamic-input-field');
+        const text = input ? input.value.trim() : '';
+        const chk = row.querySelector('.challenge-checkbox');
+        const checked = chk ? chk.checked : false;
+        if (text) {
+          results.push({ text, checked });
+        }
+      });
+      return results;
+    }
+
+    document.getElementById('principles-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const goal = document.getElementById('goal-input').value.trim();
+      const assumptions = getAssumptionsValues();
+      const truths = getDynamicListValues('truths-container');
+      const rebuild = document.getElementById('rebuild-input').value.trim();
+
+      document.getElementById('res-goal').textContent = goal;
+      document.getElementById('res-rebuild').textContent = rebuild;
+
+      // Fill assumptions
+      const ulAssumptions = document.getElementById('res-assumptions');
+      ulAssumptions.innerHTML = '';
+      if (assumptions.length === 0) {
+        ulAssumptions.innerHTML = '<li style="color: var(--text-secondary); font-style: italic;">None listed</li>';
+      } else {
+        assumptions.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item.text;
+          li.style.padding = '0.3rem 0';
+          if (item.checked) {
+            li.style.textDecoration = 'line-through';
+            li.style.color = 'var(--text-secondary)';
+            li.innerHTML += ' <span style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--accent); margin-left: 0.35rem; font-weight: bold;">[Challenged]</span>';
+          }
+          ulAssumptions.appendChild(li);
+        });
+      }
+
+      // Fill truths
+      const ulTruths = document.getElementById('res-truths');
+      ulTruths.innerHTML = '';
+      if (truths.length === 0) {
+        ulTruths.innerHTML = '<li style="color: var(--text-secondary); font-style: italic;">None listed</li>';
+      } else {
+        truths.forEach(truth => {
+          const li = document.createElement('li');
+          li.textContent = truth;
+          li.style.padding = '0.3rem 0';
+          ulTruths.appendChild(li);
+        });
+      }
+
+      // Calculations & Insights
+      const totalAssumptions = assumptions.length;
+      const challengedCount = assumptions.filter(a => a.checked).length;
+      const unchallenged = assumptions.filter(a => !a.checked).map(a => `"${a.text}"`);
+      const pct = totalAssumptions > 0 ? Math.round((challengedCount / totalAssumptions) * 100) : 0;
+
+      let unchallengedHtml = "";
+      if (unchallenged.length > 0) {
+        unchallengedHtml = `<p style="margin: 0.5rem 0 0; color: #B07E7A;">⚠️ <strong>Unchallenged assumptions:</strong> ${unchallenged.join(', ')}. Are you certain these are true?</p>`;
+      } else {
+        unchallengedHtml = `<p style="margin: 0.5rem 0 0; color: #78856F;">✓ You challenged all listed assumptions!</p>`;
+      }
+
+      const insightsBox = document.getElementById('principles-insights-box');
+      insightsBox.innerHTML = `
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.75rem; text-align: left;">First Principles Reduction Analysis</h3>
+        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+          <p style="margin: 0; color: var(--text-primary);">
+            You challenged <strong>${challengedCount}</strong> of <strong>${totalAssumptions}</strong> assumptions (<strong>${pct}%</strong>). First Principles thinking is most powerful when you challenge everything, including the ones that feel obvious.
+          </p>
+          ${unchallengedHtml}
+          <p style="margin: 0.75rem 0 0; color: var(--text-secondary); border-top: 1px dashed var(--border); padding-top: 0.75rem; font-style: italic;">
+            How different is your rebuilt solution from your original approach? If it looks similar, you may not have gone deep enough on the fundamentals.
+          </p>
+        </div>
+      `;
+      insightsBox.style.display = 'block';
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('principles-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

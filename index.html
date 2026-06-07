@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Just Do It — Personal Reflection & Decision-Making Toolkit</title>
+  <meta name="description" content="A clean, no-BS notebook of 18 established frameworks and tools for personal decision-making, task prioritization, problem-solving, and self-reflection.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="#library">Library</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>What are you trying to figure out?</h1>
+      <p class="subtitle">Choose what you're struggling with and we'll suggest the right tools.</p>
+    </section>
+
+    <!-- Struggle Selector -->
+    <section class="struggles-section">
+      <div class="struggles-grid">
+        <!-- 1. Choosing a Direction -->
+        <div class="struggle-tile" data-struggle="struggle-direction" id="tile-direction">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 5.6-5.6 2 2-5.6 5.6-2z"/></svg>
+          <h3>Choosing a direction</h3>
+        </div>
+        <!-- 2. Too many tasks -->
+        <div class="struggle-tile" data-struggle="struggle-tasks" id="tile-tasks">
+          <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6m-6 4h6"/></svg>
+          <h3>Too many tasks, don't know where to start</h3>
+        </div>
+        <!-- 3. Stuck on a decision -->
+        <div class="struggle-tile" data-struggle="struggle-decision" id="tile-decision">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18M6 7h12M4 14l2-4 2 4H4zm12 0l2-4 2 4h-4z"/></svg>
+          <h3>Stuck on a decision</h3>
+        </div>
+        <!-- 4. Understanding a problem -->
+        <div class="struggle-tile" data-struggle="struggle-problem" id="tile-problem">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <h3>Trying to understand a problem</h3>
+        </div>
+        <!-- 5. Setting goals -->
+        <div class="struggle-tile" data-struggle="struggle-goals" id="tile-goals">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <h3>Setting goals that actually stick</h3>
+        </div>
+        <!-- 6. Understanding myself -->
+        <div class="struggle-tile" data-struggle="struggle-self" id="tile-self">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <h3>Understanding myself better</h3>
+        </div>
+      </div>
+
+      <!-- Suggested Tools (Populated by JS) -->
+      <div class="suggestions-panel">
+        <h3 id="selected-struggle-heading" class="suggestions-header">Suggested Tools</h3>
+        <div class="suggestions-grid"></div>
+      </div>
+    </section>
+
+    <!-- Library Section -->
+    <section class="library-section" id="library">
+      <h2>Or browse all 18 tools</h2>
+      <div class="library-grid">
+        
+        <!-- SWOT -->
+        <a href="tools/swot.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>SWOT Analysis</h3>
+            <span class="tag tag-career">Career</span>
+          </div>
+          <p>Map your Strengths, Weaknesses, Opportunities, and Threats to make informed plans.</p>
+        </a>
+
+        <!-- Ikigai -->
+        <a href="tools/ikigai.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Ikigai</h3>
+            <span class="tag tag-career">Career</span>
+          </div>
+          <p>Find the intersection of what you love, what you are good at, what the world needs, and what you get paid for.</p>
+        </a>
+
+        <!-- Personal Inventory -->
+        <a href="tools/personal-inventory.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Personal Inventory</h3>
+            <span class="tag tag-goals">Goals</span>
+          </div>
+          <p>Audit your resources, constraints, values, skills, and interests to align your lifestyle.</p>
+        </a>
+
+        <!-- Johari Window -->
+        <a href="tools/johari-window.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Johari Window</h3>
+            <span class="tag tag-problem">Problem Solving</span>
+          </div>
+          <p>Improve self-awareness and relationships by analyzing public vs private parts of your character.</p>
+        </a>
+
+        <!-- Eisenhower -->
+        <a href="tools/eisenhower.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Eisenhower Matrix</h3>
+            <span class="tag tag-prioritization">Prioritization</span>
+          </div>
+          <p>Prioritize your actions by categorizing them into four quadrants of urgency and importance.</p>
+        </a>
+
+        <!-- Impact vs Effort -->
+        <a href="tools/impact-effort.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Impact vs Effort</h3>
+            <span class="tag tag-prioritization">Prioritization</span>
+          </div>
+          <p>Filter high-value tasks from thankless chores by plotting tasks against impact and energy required.</p>
+        </a>
+
+        <!-- MoSCoW -->
+        <a href="tools/moscow.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>MoSCoW Method</h3>
+            <span class="tag tag-prioritization">Prioritization</span>
+          </div>
+          <p>Divide requirements or tasks into Must Haves, Should Haves, Could Haves, and Won't Haves.</p>
+        </a>
+
+        <!-- Pareto -->
+        <a href="tools/pareto.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>80/20 Rule (Pareto)</h3>
+            <span class="tag tag-prioritization">Prioritization</span>
+          </div>
+          <p>Focus on the critical 20% of inputs that produce 80% of your outputs or results.</p>
+        </a>
+
+        <!-- RICE -->
+        <a href="tools/rice.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>RICE Scoring</h3>
+            <span class="tag tag-prioritization">Prioritization</span>
+          </div>
+          <p>Score feature proposals or goals objectively using Reach, Impact, Confidence, and Effort.</p>
+        </a>
+
+        <!-- Decision Matrix -->
+        <a href="tools/decision-matrix.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Decision Matrix</h3>
+            <span class="tag tag-decisions">Decisions</span>
+          </div>
+          <p>Score multiple conflicting options by assigning weighted importance values to key criteria.</p>
+        </a>
+
+        <!-- Pros & Cons -->
+        <a href="tools/pros-cons.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Pros & Cons</h3>
+            <span class="tag tag-decisions">Decisions</span>
+          </div>
+          <p>Systematically weigh arguments for and against a course of action with custom weights.</p>
+        </a>
+
+        <!-- Pre-Mortem -->
+        <a href="tools/pre-mortem.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Pre-Mortem</h3>
+            <span class="tag tag-decisions">Decisions</span>
+          </div>
+          <p>Work backward from a hypothetical future failure to build preventative countermeasures today.</p>
+        </a>
+
+        <!-- Regret Minimization -->
+        <a href="tools/regret-minimization.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Regret Minimization</h3>
+            <span class="tag tag-decisions">Decisions</span>
+          </div>
+          <p>Make decisions by imagining your 80-year-old self and picking what minimizes long-term regret.</p>
+        </a>
+
+        <!-- 5 Whys -->
+        <a href="tools/five-whys.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>5 Whys</h3>
+            <span class="tag tag-problem">Problem Solving</span>
+          </div>
+          <p>Trace an issue to its roots by repeatedly asking "Why?" five consecutive times.</p>
+        </a>
+
+        <!-- First Principles -->
+        <a href="tools/first-principles.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>First Principles</h3>
+            <span class="tag tag-problem">Problem Solving</span>
+          </div>
+          <p>Deconstruct standard assumptions down to physical facts and build new solutions from scratch.</p>
+        </a>
+
+        <!-- Fishbone Diagram -->
+        <a href="tools/fishbone.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>Fishbone Diagram</h3>
+            <span class="tag tag-problem">Problem Solving</span>
+          </div>
+          <p>Map the cause-and-effect relationship of an issue across six operational categories.</p>
+        </a>
+
+        <!-- SMART Goals -->
+        <a href="tools/smart-goals.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>SMART Goals</h3>
+            <span class="tag tag-goals">Goals</span>
+          </div>
+          <p>Refine vague targets into Specific, Measurable, Achievable, Relevant, and Time-bound statements.</p>
+        </a>
+
+        <!-- WOOP -->
+        <a href="tools/woop.html" class="library-tile">
+          <div class="library-tile-header">
+            <h3>WOOP Goal Setter</h3>
+            <span class="tag tag-goals">Goals</span>
+          </div>
+          <p>Combine positive dreaming (Wish, Outcome) with practical planning (Obstacle, Plan).</p>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

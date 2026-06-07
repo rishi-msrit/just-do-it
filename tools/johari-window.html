@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Johari Window — Just Do It</title>
+  <meta name="description" content="Map your Johari Window quadrants to understand self-awareness and how others perceive you.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Johari Window</h1>
+        <span class="tag tag-problem">Problem Solving</span>
+      </div>
+      <p class="subtitle">Examine the boundary between what is known to you versus what is known to others.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="johari-form">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          
+          <!-- Open Arena -->
+          <div class="input-group">
+            <label for="open-input">Open / Arena <span>(Known to self & known to others)</span></label>
+            <textarea id="open-input" placeholder="e.g. Talkative, organized, impatient, punctual, passionate about tech..." required></textarea>
+          </div>
+
+          <!-- Blind Spot -->
+          <div class="input-group">
+            <label for="blind-input">Blind Spot <span>(Unknown to self, known to others. Ask a trusted friend or mentor what they observe about you that you might not see, and write it here)</span></label>
+            <textarea id="blind-input" placeholder="e.g. Interrupting others when excited, micromanaging small details..." required></textarea>
+          </div>
+
+          <!-- Hidden Facade -->
+          <div class="input-group">
+            <label for="hidden-input">Hidden / Facade <span>(Known to self, unknown to others)</span></label>
+            <textarea id="hidden-input" placeholder="e.g. Impostor syndrome, social anxiety in large meetings, wishing to switch careers..." required></textarea>
+          </div>
+
+          <!-- Unknown -->
+          <div class="input-group">
+            <label for="unknown-input">Unknown <span>(Unknown to self & unknown to others - hidden potential)</span></label>
+            <textarea id="unknown-input" placeholder="e.g. Ability to lead under pressure (untested), artistic capabilities..." required></textarea>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my Johari Window →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="johari-result-section">
+      <div class="result-header">
+        <h2>Your Johari Window</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <!-- Control Sliders for Johari Window Dimensions -->
+      <div class="johari-sliders no-print" style="margin-bottom: 2rem; background-color: var(--bg-card); padding: 1.5rem; border-radius: var(--border-radius); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 1rem;">
+        <h4 style="font-family: var(--font-body); font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem;">Visual Exploration: Adjust dimensions</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          <div>
+            <label for="slider-disclosure" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+              <span>Self-Disclosure (Grows Open / Shrinks Hidden)</span>
+              <span id="val-disclosure" style="font-family: var(--font-mono); color: var(--accent);">50%</span>
+            </label>
+            <input type="range" id="slider-disclosure" min="20" max="80" value="50" style="width: 100%; cursor: pointer;">
+          </div>
+          <div>
+            <label for="slider-feedback" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+              <span>Invite Feedback (Grows Open / Shrinks Blind Spot)</span>
+              <span id="val-feedback" style="font-family: var(--font-mono); color: var(--accent);">50%</span>
+            </label>
+            <input type="range" id="slider-feedback" min="20" max="80" value="50" style="width: 100%; cursor: pointer;">
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">Johari Window</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- 2x2 Johari Grid -->
+        <div class="johari-grid">
+          
+          <div class="johari-quadrant" style="border-top: 4px solid #78856F;">
+            <h3>Open Arena <span>Known to Self & Others</span></h3>
+            <p id="res-open" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+          </div>
+
+          <div class="johari-quadrant" style="border-top: 4px solid #B07E7A;">
+            <h3>Blind Spot <span>Known to Others, Unknown to Self</span></h3>
+            <p id="res-blind" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+          </div>
+
+          <div class="johari-quadrant" style="border-top: 4px solid #6F8085;">
+            <h3>Hidden / Facade <span>Known to Self, Unknown to Others</span></h3>
+            <p id="res-hidden" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+          </div>
+
+          <div class="johari-quadrant" style="border-top: 4px solid var(--text-secondary);">
+            <h3>Unknown <span>Unknown to Self & Others</span></h3>
+            <p id="res-unknown" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+          </div>
+
+        </div>
+
+        <!-- Johari Insights Box -->
+        <div id="johari-insights-box" class="reflection-box" style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Johari Window</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>Created by psychologists Joseph Luft and Harrington Ingham in 1955 (combining their names "Jo" and "Hari"), the Johari Window is a cognitive model used to improve self-awareness, personal growth, and team communication. It divides your personality traits and behaviors into a 2×2 grid based on two variables: whether the traits are known or unknown to you, and whether they are known or unknown to the people around you.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The Four Panes of the Window</h3>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Open Area (Known to Self & Others)</strong>: The space of public interaction, shared facts, and open communication. The larger this pane is, the healthier and more productive your relationships are.</li>
+          <li><strong>Blind Spot (Unknown to Self, Known to Others)</strong>: What others observe about you that you are unaware of (e.g., you talk too fast when nervous, or you tend to interrupt people when excited). Inviting honest feedback is the only way to shrink this quadrant.</li>
+          <li><strong>Hidden Area / Facade (Known to Self, Unknown to Others)</strong>: Things you know about yourself but choose to keep secret from others (e.g., a fear of public speaking, or a desire to switch careers). Sharing these with trusted peers helps build trust and connection.</li>
+          <li><strong>Unknown Area (Unknown to Self & Others)</strong>: Latent talents, untried skills, or unconscious behaviors that have not yet been tested by experience. Stepping out of your comfort zone is how you discover what lies here.</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>How to Grow Self-Awareness</h3>
+        <p>Self-improvement is defined by <strong>expanding your Open Area</strong>. You accomplish this in two ways:</p>
+        <p>1. <strong>Invite Feedback</strong>: Ask peers or mentors what they observe about you. This shifts items from your Blind Spot into the Open Area.</p>
+        <p>2. <strong>Practice Self-Disclosure</strong>: Share your fears, hopes, or background stories. This shifts items from the Hidden Area into the Open Area.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Example</h3>
+        <blockquote>
+          <strong>Example (Software Team Lead)</strong>:<br>
+          • <em>Open</em>: Everyone knows you are an expert in architecture design and love coffee.<br>
+          • <em>Blind Spot</em>: Mentors point out that you sound defensive when juniors challenge your code during pull reviews.<br>
+          • <em>Hidden</em>: You feel immense imposter syndrome about managing budget sheets.<br>
+          • <em>Unknown</em>: You have never managed an active crisis—discovering you are calm under fire when the production database fails.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    const sliderDisclosure = document.getElementById('slider-disclosure');
+    const sliderFeedback = document.getElementById('slider-feedback');
+    const valDisclosure = document.getElementById('val-disclosure');
+    const valFeedback = document.getElementById('val-feedback');
+    const johariGrid = document.querySelector('.johari-grid');
+
+    const updateJohariGrid = () => {
+      const disc = sliderDisclosure.value;
+      const feed = sliderFeedback.value;
+      
+      valDisclosure.textContent = `${disc}%`;
+      valFeedback.textContent = `${feed}%`;
+
+      johariGrid.style.setProperty('--johari-rows', `${disc}fr ${100 - disc}fr`);
+      johariGrid.style.setProperty('--johari-cols', `${feed}fr ${100 - feed}fr`);
+    };
+
+    if (sliderDisclosure && sliderFeedback) {
+      sliderDisclosure.addEventListener('input', updateJohariGrid);
+      sliderFeedback.addEventListener('input', updateJohariGrid);
+    }
+
+    document.getElementById('johari-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const openVal = document.getElementById('open-input').value;
+      const blindVal = document.getElementById('blind-input').value;
+      const hiddenVal = document.getElementById('hidden-input').value;
+      const unknownVal = document.getElementById('unknown-input').value;
+
+      document.getElementById('res-open').textContent = openVal;
+      document.getElementById('res-blind').textContent = blindVal;
+      document.getElementById('res-hidden').textContent = hiddenVal;
+      document.getElementById('res-unknown').textContent = unknownVal;
+
+      // Logic calculations
+      function parseList(str) {
+        if (!str) return [];
+        // Standardize separators
+        let cleaned = str
+          .replace(/;\s*/g, '\n')
+          .replace(/\/\s*/g, '\n')
+          .replace(/•\s*/g, '\n')
+          .replace(/\-\s*/g, '\n');
+        
+        cleaned = cleaned.replace(/\b\d+[\.\)]\s*/g, '\n');
+
+        return cleaned.split(/[\n,]+/)
+          .map(s => {
+            let item = s.trim();
+            item = item.replace(/^[\s\-\*•\d\.\)]+/, '');
+            item = item.replace(/[\.\,\s]+$/, '');
+            return item.trim();
+          })
+          .filter(Boolean);
+      }
+
+      const openItems = parseList(openVal);
+      const blindItems = parseList(blindVal);
+      const hiddenItems = parseList(hiddenVal);
+      const unknownItems = parseList(unknownVal);
+
+      const total = openItems.length + blindItems.length + hiddenItems.length + unknownItems.length;
+      let openPct = 25, blindPct = 25, hiddenPct = 25, unknownPct = 25;
+      if (total > 0) {
+        openPct = Math.round((openItems.length / total) * 100);
+        blindPct = Math.round((blindItems.length / total) * 100);
+        hiddenPct = Math.round((hiddenItems.length / total) * 100);
+        unknownPct = 100 - (openPct + blindPct + hiddenPct);
+      }
+
+      const insightsBox = document.getElementById('johari-insights-box');
+      insightsBox.innerHTML = `
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.5rem;">Self-Awareness Insights</h3>
+        <p style="font-size: 1rem; font-weight: 600; margin: 0;">Self-Awareness Score (Open Area %): <span style="color: var(--accent);">${total > 0 ? Math.round((openItems.length / total) * 100) : 0}%</span></p>
+        
+        <div style="display: flex; height: 28px; border-radius: var(--border-radius); overflow: hidden; margin: 1.25rem 0; font-size: 0.8rem; font-family: var(--font-mono); font-weight: 700; color: #fff;">
+          <div style="width: ${openPct}%; background-color: #78856F; display: flex; align-items: center; justify-content: center; min-width: ${openPct > 0 ? '40px' : '0'};">Open (${openPct}%)</div>
+          <div style="width: ${blindPct}%; background-color: #B07E7A; display: flex; align-items: center; justify-content: center; min-width: ${blindPct > 0 ? '40px' : '0'};">Blind (${blindPct}%)</div>
+          <div style="width: ${hiddenPct}%; background-color: #6F8085; display: flex; align-items: center; justify-content: center; min-width: ${hiddenPct > 0 ? '40px' : '0'};">Hidden (${hiddenPct}%)</div>
+          <div style="width: ${unknownPct}%; background-color: #9CA3AF; display: flex; align-items: center; justify-content: center; min-width: ${unknownPct > 0 ? '40px' : '0'};">Unknown (${unknownPct}%)</div>
+        </div>
+
+        <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+          Your Open Area is <strong>${total > 0 ? Math.round((openItems.length / total) * 100) : 0}%</strong> of your total window. High performers typically have a large Open Area and small Blind Spot. Your Blind Spot has <strong>${blindItems.length}</strong> items — consider asking trusted people to help reduce this.
+        </p>
+      `;
+      insightsBox.style.display = 'block';
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('johari-result-section');
+      resSec.classList.add('show');
+      
+      // Initialize layout on submit
+      updateJohariGrid();
+      
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

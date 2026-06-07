@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Inventory — Just Do It</title>
+  <meta name="description" content="Map your skills, interests, values, resources, and constraints to create an honest snapshot of your personal starting conditions.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>Personal Inventory</h1>
+        <span class="tag tag-goals">Goals</span>
+      </div>
+      <p class="subtitle">Take a clear-eyed look at your current assets, limits, and core motivators before starting a new chapter.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="inventory-form">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Skills -->
+          <div class="input-group">
+            <label for="skills-container">Skills <span>(What can you build/do today?)</span></label>
+            <div id="skills-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Statistical analysis, technical writing, UI design" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="skills-container" data-placeholder="Add skill..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Skill</button>
+          </div>
+
+          <!-- Interests -->
+          <div class="input-group">
+            <label for="interests-container">Interests <span>(What do you read/learn about in your free time?)</span></label>
+            <div id="interests-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Decentralized protocols, photography, architecture histories" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="interests-container" data-placeholder="Add interest..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Interest</button>
+          </div>
+
+          <!-- Values -->
+          <div class="input-group">
+            <label for="values-container">Values <span>(What are your non-negotiables?)</span></label>
+            <div id="values-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. High degree of autonomy, intellectual honesty, location independence" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="values-container" data-placeholder="Add value..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Value</button>
+          </div>
+
+          <!-- Resources -->
+          <div class="input-group">
+            <label for="resources-container">Resources <span>(Assets, savings, networks, tools you own)</span></label>
+            <div id="resources-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. 6 months savings, subscription to developer tools, mentor network" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="resources-container" data-placeholder="Add resource..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Resource</button>
+          </div>
+
+          <!-- Constraints -->
+          <div class="input-group">
+            <label for="constraints-container">Constraints <span>(Time limits, health, obligations, location locks)</span></label>
+            <div id="constraints-container">
+              <div class="dynamic-list-row">
+                <input type="text" placeholder="e.g. Must finish classes by December, family care hours on weekends" class="dynamic-input-field">
+              </div>
+            </div>
+            <button type="button" class="btn btn-add-row" data-container="constraints-container" data-placeholder="Add constraint..." style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">+ Add Constraint</button>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my Personal Inventory →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="inventory-result-section">
+      <div class="result-header">
+        <h2>Your Personal Inventory</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 2rem; font-family: var(--font-display);">Personal Inventory</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <!-- Dashboard Inventory Rows -->
+        <div class="inventory-dashboard">
+          
+          <div class="inventory-row">
+            <div class="inventory-label">Skills</div>
+            <div class="inventory-chips" id="res-skills"></div>
+          </div>
+
+          <div class="inventory-row">
+            <div class="inventory-label">Interests</div>
+            <div class="inventory-chips" id="res-interests"></div>
+          </div>
+
+          <div class="inventory-row">
+            <div class="inventory-label">Values</div>
+            <div class="inventory-chips" id="res-values"></div>
+          </div>
+
+          <div class="inventory-row">
+            <div class="inventory-label">Resources</div>
+            <div class="inventory-chips" id="res-resources"></div>
+          </div>
+
+          <div class="inventory-row">
+            <div class="inventory-label">Constraints</div>
+            <div class="inventory-chips" id="res-constraints"></div>
+          </div>
+
+        </div>
+
+        <!-- Inventory Insights Box -->
+        <div id="inventory-insights-box" class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
+
+        <!-- Reflection Box -->
+        <div class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+          <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.75rem;">Synthesis Reflection</h3>
+          <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            What pattern do you notice? Where do your Skills and Interests overlap? What Constraint is most urgent to address?
+          </p>
+          <textarea id="res-reflection-note" placeholder="Write your thoughts and synthesis notes here..." style="width: 100%; min-height: 100px; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--border-radius); background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); font-size: 0.95rem;"></textarea>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Personal Inventory</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>A Personal Inventory is a structured self-audit framework designed to help you map where you stand in life across five key dimensions. By visually organizing your internal assets (Skills, Interests, Values) and external realities (Resources, Constraints) as a horizontal dashboard, you can audit your capacity for new projects and ensure your goals align with reality rather than wishful thinking.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The 5 Core Dimensions</h3>
+        <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Skills (Internal)</strong>: Things you can execute competently today (e.g., Python coding, accounting, public speaking, copy editing).</li>
+          <li><strong>Interests (Internal)</strong>: Subjects, problems, or hobbies that naturally capture your curiosity and energize you (e.g., electronic music, urban farming, space exploration).</li>
+          <li><strong>Values (Internal)</strong>: Core ethical boundaries, principles, or lifestyles that you value most (e.g., creative autonomy, remote schedule flexibility, financial safety, community focus).</li>
+          <li><strong>Resources (External)</strong>: Tangible assets or networks you can leverage (e.g., 6 months of living expenses saved, a powerful desktop workstation, supportive mentors).</li>
+          <li><strong>Constraints (External)</strong>: Real-world limitations, bottlenecks, or obligations (e.g., must remain in current city, only have 5 hours free per week, high monthly rent).</li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <h3>How to Fill out this Tool</h3>
+        <p>1. <strong>Populate</strong>: Add 3-5 tags under each of the five buckets. Be completely honest—do not list skills you wish you had, only those you possess today.</p>
+        <p>2. <strong>Synthesize</strong>: Review the resulting dashboard. Look for intersections between your Skills and Interests. Are your goals aligned with your core Values? Are your Constraints going to block your current resource allocation?</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example (Evaluating a Freelance Pivot)</strong>:<br>
+          • <em>Skills</em>: Technical writing, API documentation, basic SEO.<br>
+          • <em>Interests</em>: Indiedev, developer tools, blogging.<br>
+          • <em>Values</em>: High autonomy, work-from-anywhere, low meetings.<br>
+          • <em>Resources</em>: $10k savings, high-speed home office setup, strong LinkedIn network.<br>
+          • <em>Constraints</em>: Visa requirements tie me to a registered business, high health insurance cost.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('inventory-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const skills = getDynamicListValues('skills-container');
+      const interests = getDynamicListValues('interests-container');
+      const values = getDynamicListValues('values-container');
+      const resources = getDynamicListValues('resources-container');
+      const constraints = getDynamicListValues('constraints-container');
+
+      const fillChips = (id, items) => {
+        const container = document.getElementById(id);
+        container.innerHTML = '';
+        if (items.length === 0) {
+          container.innerHTML = '<span style="color: var(--text-secondary); font-style: italic;">None listed</span>';
+        } else {
+          items.forEach(item => {
+            const chip = document.createElement('span');
+            chip.className = 'inventory-chip';
+            chip.textContent = item;
+            container.appendChild(chip);
+          });
+        }
+      };
+
+      fillChips('res-skills', skills);
+      fillChips('res-interests', interests);
+      fillChips('res-values', values);
+      fillChips('res-resources', resources);
+      fillChips('res-constraints', constraints);
+
+      // Parse helper for lists (commas, newlines, bullets)
+      function parseList(arr) {
+        const items = [];
+        arr.forEach(str => {
+          if (!str) return;
+          // Standardize separators
+          let cleaned = str
+            .replace(/;\s*/g, '\n')
+            .replace(/\/\s*/g, '\n')
+            .replace(/•\s*/g, '\n')
+            .replace(/\-\s*/g, '\n');
+          
+          cleaned = cleaned.replace(/\b\d+[\.\)]\s*/g, '\n');
+
+          cleaned.split(/[\n,]+/).forEach(s => {
+            let item = s.trim();
+            item = item.replace(/^[\s\-\*•\d\.\)]+/, '');
+            item = item.replace(/[\.\,\s]+$/, '');
+            const val = item.trim();
+            if (val) items.push(val);
+          });
+        });
+        return items;
+      }
+
+      function normalizeWord(word) {
+        let clean = word.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (clean.endsWith('ing')) clean = clean.slice(0, -3);
+        else if (clean.endsWith('ed')) clean = clean.slice(0, -2);
+        else if (clean.endsWith('er')) clean = clean.slice(0, -2);
+        else if (clean.endsWith('es')) clean = clean.slice(0, -2);
+        else if (clean.endsWith('s') && !clean.endsWith('ss')) clean = clean.slice(0, -1);
+        else if (clean.endsWith('e') && clean.length > 4) clean = clean.slice(0, -1);
+        if (clean.length > 3 && clean[clean.length - 1] === clean[clean.length - 2]) {
+          clean = clean.slice(0, -1);
+        }
+        return clean;
+      }
+
+      function levenshtein(a, b) {
+        const matrix = [];
+        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+          for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+              matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+              matrix[i][j] = Math.min(
+                matrix[i - 1][j - 1] + 1,
+                Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+              );
+            }
+          }
+        }
+        return matrix[b.length][a.length];
+      }
+
+      function getNormalizedWords(phrase) {
+        if (!phrase) return [];
+        return phrase.toLowerCase()
+          .split(/\s+/)
+          .map(w => w.replace(/[^a-z0-9]/g, ''))
+          .filter(Boolean)
+          .map(normalizeWord)
+          .filter(Boolean);
+      }
+
+      function isMatch(itemA, itemB) {
+        if (!itemA || !itemB) return false;
+        const cleanA = itemA.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const cleanB = itemB.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (cleanA === cleanB) return true;
+
+        const normA = normalizeWord(itemA);
+        const normB = normalizeWord(itemB);
+        if (normA === normB) return true;
+
+        if (normA.length >= 3 && normB.length >= 3) {
+          if (normA.includes(normB) || normB.includes(normA)) return true;
+        }
+
+        const wordsA = getNormalizedWords(itemA);
+        const wordsB = getNormalizedWords(itemB);
+        if (wordsA.length === 0 || wordsB.length === 0) return false;
+        if (Math.abs(wordsA.length - wordsB.length) > 1) return false;
+
+        let matchCount = 0;
+        const usedB = new Array(wordsB.length).fill(false);
+
+        for (let i = 0; i < wordsA.length; i++) {
+          const wA = wordsA[i];
+          let found = false;
+          for (let j = 0; j < wordsB.length; j++) {
+            if (usedB[j]) continue;
+            const wB = wordsB[j];
+            if (wA === wB) {
+              found = true;
+              usedB[j] = true;
+              break;
+            }
+            if (wA.length >= 3 && wB.length >= 3) {
+              const dist = levenshtein(wA, wB);
+              const threshold = Math.max(wA.length, wB.length) >= 7 ? 2 : 1;
+              if (dist <= threshold) {
+                found = true;
+                usedB[j] = true;
+                break;
+              }
+            }
+          }
+          if (found) matchCount++;
+        }
+
+        const totalWords = Math.max(wordsA.length, wordsB.length);
+        if (totalWords === 1) {
+          return matchCount === 1;
+        } else {
+          return matchCount >= (totalWords - 1);
+        }
+      }
+
+      const parsedSkills = parseList(skills);
+      const parsedInterests = parseList(interests);
+      const parsedValues = parseList(values);
+      const parsedResources = parseList(resources);
+      const parsedConstraints = parseList(constraints);
+
+      // Skill-Interest Overlap (Fuzzy matched)
+      const flowActivities = parsedSkills.filter(item => 
+        parsedInterests.some(x => isMatch(x, item))
+      );
+      const flowText = flowActivities.length > 0 
+        ? `These are your flow activities: <strong>${flowActivities.join(', ')}</strong>. Double down here.` 
+        : "No direct overlap between skills and interests listed yet. Try finding activities that combine both.";
+
+      // Values-Constraints Tension
+      const valCount = parsedValues.length;
+      const conCount = parsedConstraints.length;
+      const skillCount = parsedSkills.length;
+      const tensionText = `You listed ${valCount} values and ${conCount} constraints. ${
+        conCount > skillCount 
+          ? `If constraints (${conCount}) outnumber actionable skills (${skillCount}), that is your bottleneck.` 
+          : `Since constraints (${conCount}) do not outnumber actionable skills (${skillCount}), you have solid executing capacity.`
+      }`;
+
+      // Underutilized Assets (Fuzzy matched)
+      const underutilized = parsedResources.filter(res => 
+        !parsedSkills.some(x => isMatch(x, res))
+      );
+      const underutilizedText = underutilized.length > 0 
+        ? `You have <strong>${underutilized.join(', ')}</strong> available but it does not appear in your skill set. Is this untapped?`
+        : "All listed resources are currently backed by your active skills.";
+
+      const insightsBox = document.getElementById('inventory-insights-box');
+      insightsBox.innerHTML = `
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 1rem;">Calculated Inventory Insights</h3>
+        <ul style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 1rem;">
+          <li style="padding: 1rem; background-color: var(--bg-card); border-radius: var(--border-radius); border-left: 3px solid var(--accent);">
+            <strong style="display: block; font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Skill-Interest Overlap</strong>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">${flowText}</p>
+          </li>
+          <li style="padding: 1rem; background-color: var(--bg-card); border-radius: var(--border-radius); border-left: 3px solid #B07E7A;">
+            <strong style="display: block; font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Values-Constraints Tension</strong>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">${tensionText}</p>
+          </li>
+          <li style="padding: 1rem; background-color: var(--bg-card); border-radius: var(--border-radius); border-left: 3px solid #78856F;">
+            <strong style="display: block; font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Underutilized Assets</strong>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">${underutilizedText}</p>
+          </li>
+        </ul>
+      `;
+      insightsBox.style.display = 'block';
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('inventory-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WOOP Goal Setter — Just Do It</title>
+  <meta name="description" content="Combine positive thinking with realistic obstacle planning using the WOOP framework (Wish, Outcome, Obstacle, Plan).">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">Just Do It</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#library">Library</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="site-content">
+    
+    <!-- Page Header -->
+    <div class="tool-header">
+      <div class="tool-header-title">
+        <h1>WOOP Goal Setter</h1>
+        <span class="tag tag-goals">Goals</span>
+      </div>
+      <p class="subtitle">Couple your positive desires with realistic analysis of internal hurdles to create an actionable execution script.</p>
+    </div>
+
+    <div class="tool-divider"></div>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="woop-form">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Wish -->
+          <div class="input-group">
+            <label for="wish-input">Wish <span>(What is an important, challenging goal you want to achieve?)</span></label>
+            <input type="text" id="wish-input" placeholder="e.g. Present my project pitch to the regional committee" required>
+          </div>
+
+          <!-- Outcome -->
+          <div class="input-group">
+            <label for="outcome-input">Outcome <span>(What is the best result or feeling of achieving this wish?)</span></label>
+            <input type="text" id="outcome-input" placeholder="e.g. Securing funding support and gaining professional validation" required>
+          </div>
+
+          <!-- Obstacle -->
+          <div class="input-group">
+            <label for="obstacle-input">Obstacle <span>(What internal hurdle - fear, habit, belief - might get in your way?)</span></label>
+            <input type="text" id="obstacle-input" placeholder="e.g. Social anxiety and freezing up under pressure during presentation" required>
+          </div>
+
+          <!-- Plan -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="input-group">
+              <label for="obstacle-trigger-input">If [Obstacle] occurs...</label>
+              <input type="text" id="obstacle-trigger-input" placeholder="e.g. If I start feeling my chest tighten and forget my next slide..." required>
+            </div>
+            <div class="input-group">
+              <label for="plan-action-input">Then I will [Action]...</label>
+              <input type="text" id="plan-action-input" placeholder="e.g. Then I will pause, take 3 deep breaths, and refer to my physical index cue cards..." required>
+            </div>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Build my WOOP Plan →</button>
+      </form>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="woop-result-section">
+      <div class="result-header">
+        <h2>Your WOOP Action Plan</h2>
+        <button type="button" class="btn btn-primary" onclick="exportPDF()">Download PDF</button>
+      </div>
+
+      <div class="result-card print-area">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+          <h1 style="font-size: 1.8rem; font-family: var(--font-display);">WOOP Goal Blueprint</h1>
+          <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Generated on: <span id="generate-date"></span>
+          </p>
+        </div>
+
+        <div class="woop-layout">
+          
+          <div class="woop-grid">
+            <div class="woop-card">
+              <h3>Wish (W)</h3>
+              <p id="res-wish" style="font-size: 1.05rem;"></p>
+            </div>
+            <div class="woop-card">
+              <h3>Outcome (O)</h3>
+              <p id="res-outcome" style="font-size: 1.05rem;"></p>
+            </div>
+          </div>
+
+          <div class="woop-card" style="border-left: 4px solid #B07E7A;">
+            <h3>Obstacle (O)</h3>
+            <p id="res-obstacle" style="font-size: 1.05rem;"></p>
+          </div>
+
+          <div class="woop-statement">
+            <span class="label">If-Then Plan:</span><br>
+            "If <strong id="res-plan-trigger" style="color: var(--text-primary);"></strong>, then I will <strong id="res-plan-action" style="color: var(--accent);"></strong>."
+          </div>
+
+          <!-- WOOP Insights Box -->
+          <div id="woop-insights-box" class="reflection-box" style="margin-top: 1.5rem; border-top: 1px dashed var(--border); padding-top: 1rem; display: none;"></div>
+
+          <!-- Psychology Explanation Card -->
+          <div style="margin-top: 1.5rem; text-align: center;">
+            <p style="font-size: 0.9rem; font-style: italic; color: var(--text-secondary); max-width: 650px; margin: 0 auto; line-height: 1.6;">
+              Research shows that people who form specific if-then plans are 2–3x more likely to follow through. The obstacle you named is the critical part — most goal systems skip it entirely.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- How-To Overlay -->
+  <div class="howto-overlay">
+    <div class="howto-box">
+      <button class="howto-close-btn" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>WOOP Goal Setter</h2>
+      
+      <div class="howto-section">
+        <h3>What it is</h3>
+        <p>WOOP (Wish, Outcome, Obstacle, Plan) is a science-backed mental strategy developed by NYU psychologist Gabriele Oettingen. It is based on twenty years of research in the science of motivation. Unlike traditional "positive thinking," which can actually drain our energy by tricking our brain into feeling like we've already won, WOOP uses <strong>mental contrasting</strong>—coupling our desires directly with the internal obstacles holding us back—to pre-program our brains for immediate action.</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>The 4 Steps of WOOP</h3>
+        <p>1. <strong>Wish (W)</strong>: Define a goal that is challenging but achievable for you in the near term.</p>
+        <p>2. <strong>Outcome (O)</strong>: Visualize the best-case result. How will it feel? What is the core benefit?</p>
+        <p>3. <strong>Obstacle (O)</strong>: Identify the <strong>internal</strong> obstacle holding you back. This is critical. It must be something within your control (e.g., procrastination, fear of failure, social anxiety) rather than external excuses.</p>
+        <p>4. <strong>Plan (P)</strong>: Create an If-Then script. If the internal obstacle arises, what action will you take to pivot? (e.g., "If I start browsing social media, then I will close the tab and write one line of code").</p>
+      </div>
+
+      <div class="howto-section">
+        <h3>Real-world Examples</h3>
+        <blockquote>
+          <strong>Example A (Public Speaking)</strong>:<br>
+          • <em>Wish</em>: Pitch my project to the leadership committee.<br>
+          • <em>Outcome</em>: Securing funding and professional validation.<br>
+          • <em>Obstacle</em>: Social anxiety, freezing up, and heart racing.<br>
+          • <em>Plan</em>: If I start feeling my chest tighten and forget my next slide, then I will pause, take 3 deep breaths, and refer to my physical index cue cards.
+        </blockquote>
+        <blockquote>
+          <strong>Example B (Learning & Code)</strong>:<br>
+          • <em>Wish</em>: Finish the first module of my online programming course.<br>
+          • <em>Outcome</em>: Feeling confident to start building my own web applications.<br>
+          • <em>Obstacle</em>: Procrastination and picking up my phone when a bug is hard to solve.<br>
+          • <em>Plan</em>: If I hit a bug and reach for my phone, then I will put my phone in the drawer and write a print statement to debug.
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bulb Trigger -->
+  <button class="howto-trigger" title="Show How-To Guide">
+    <svg viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      Built by Rishi with <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: #B07E7A; display: inline-block; vertical-align: middle; margin: 0 2px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> · Suggestions? <a href="mailto:rishi.msrit@gmail.com" style="color: var(--text-secondary); text-decoration: underline;">rishi.msrit@gmail.com</a>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script>
+    document.getElementById('woop-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      document.getElementById('res-wish').textContent = document.getElementById('wish-input').value.trim();
+      document.getElementById('res-outcome').textContent = document.getElementById('outcome-input').value.trim();
+      document.getElementById('res-obstacle').textContent = document.getElementById('obstacle-input').value.trim();
+      document.getElementById('res-plan-trigger').textContent = document.getElementById('obstacle-trigger-input').value.trim();
+      document.getElementById('res-plan-action').textContent = document.getElementById('plan-action-input').value.trim();
+
+      // WOOP Checks
+      const obstacleVal = document.getElementById('obstacle-input').value.toLowerCase();
+      const planVal = document.getElementById('plan-action-input').value.toLowerCase();
+
+      const vagueWords = ['try', 'maybe', 'hope', 'attempt'];
+      const externalWords = ['they', 'people', 'others', 'weather', 'luck', 'time'];
+
+      let planWarning = "";
+      const foundVague = vagueWords.find(word => planVal.includes(word));
+      if (foundVague) {
+        planWarning = `<p style="margin: 0; color: #B07E7A;">⚠️ <strong>Plan Strength Check:</strong> Your if-then plan uses uncertain language ("${foundVague}"). Replace "${foundVague}" with a specific, concrete action. <em>Weak: 'I will try to focus.' Strong: 'I will close all tabs and set a 25-minute timer.'</em></p>`;
+      }
+
+      let obstacleWarning = "";
+      const foundExternal = externalWords.find(word => obstacleVal.includes(word));
+      if (foundExternal) {
+        obstacleWarning = `<p style="margin: 0; color: #B07E7A;">⚠️ <strong>Obstacle Check:</strong> WOOP works best when the obstacle is internal — something within your control. The obstacle you named may be external ("${foundExternal}"). What internal response can you plan for instead?</p>`;
+      }
+
+      const insightsBox = document.getElementById('woop-insights-box');
+      if (planWarning || obstacleWarning) {
+        insightsBox.innerHTML = `
+          <h3 style="font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.5rem; text-align: left;">Plan Strength Check</h3>
+          <div style="font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+            ${planWarning}
+            ${obstacleWarning}
+          </div>
+        `;
+        insightsBox.style.display = 'block';
+      } else {
+        insightsBox.style.display = 'none';
+      }
+
+      document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const resSec = document.getElementById('woop-result-section');
+      resSec.classList.add('show');
+      resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
