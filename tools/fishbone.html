@@ -59,6 +59,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="fishbone-form">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         
         <!-- Problem Statement -->
         <div class="input-group" style="margin-bottom: 2rem;">
@@ -140,6 +143,7 @@
           </div>
 
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary">Build my Fishbone Diagram →</button>
       </form>
@@ -395,6 +399,10 @@
 
       const resSec = document.getElementById('fishbone-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

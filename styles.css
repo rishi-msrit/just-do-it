@@ -2086,3 +2086,30 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+/* Collapsible Input details / summary styling */
+.input-section details {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: var(--transition);
+}
+
+.input-section details[open] {
+  padding-bottom: 1.5rem;
+}
+
+.input-section summary {
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-primary);
+  user-select: none;
+  outline: none;
+}
+
+.input-section summary:hover {
+  color: var(--accent);
+}

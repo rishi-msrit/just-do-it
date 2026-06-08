@@ -17,6 +17,49 @@
       margin-bottom: 0.5rem;
       display: none;
     }
+    .whys-chain {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .whys-node {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--border-radius);
+      padding: 1rem 1.5rem;
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .whys-node.root-cause {
+      border: 2px solid var(--accent);
+      background: rgba(226, 192, 146, 0.08);
+    }
+    .whys-node-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+      letter-spacing: 1px;
+    }
+    .whys-node-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .whys-arrow-down {
+      color: var(--accent);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .whys-arrow-down svg {
+      width: 24px;
+      height: 24px;
+    }
   </style>
 </head>
 <body>
@@ -51,49 +94,53 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="whys-form">
-        
-        <!-- Problem Statement -->
-        <div class="input-group" style="margin-bottom: 2rem;">
-          <label for="problem-input">Define the initial symptom / problem statement</label>
-          <input type="text" id="problem-input" placeholder="e.g. We missed the shipping deadline for the website launch" required>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+        <details id="inputs-details" open>
+          <summary>Your inputs (click to edit)</summary>
           
-          <!-- Why 1 -->
-          <div class="input-group" id="why1-group">
-            <label for="why1-input">Why 1: Why did the problem happen?</label>
-            <input type="text" id="why1-input" placeholder="e.g. Because the build failed at the last minute" required>
+          <!-- Problem Statement -->
+          <div class="input-group" style="margin-bottom: 2rem;">
+            <label for="problem-input">Define the initial symptom / problem statement</label>
+            <input type="text" id="problem-input" placeholder="e.g. We missed the shipping deadline for the website launch" required>
           </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+            
+            <!-- Why 1 -->
+            <div class="input-group" id="why1-group">
+              <label for="why1-input">Why 1: Why did the problem happen?</label>
+              <input type="text" id="why1-input" placeholder="e.g. Because the build failed at the last minute" required>
+            </div>
 
-          <!-- Why 2 -->
-          <div class="input-group" id="why2-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
-            <label for="why2-input">Why 2: Why did that happen?</label>
-            <div id="prompt-why2" class="prompt-box"></div>
-            <input type="text" id="why2-input" placeholder="e.g. Because the server storage ran completely out of disk space">
+            <!-- Why 2 -->
+            <div class="input-group" id="why2-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+              <label for="why2-input">Why 2: Why did that happen?</label>
+              <div id="prompt-why2" class="prompt-box"></div>
+              <input type="text" id="why2-input" placeholder="e.g. Because the server storage ran completely out of disk space">
+            </div>
+
+            <!-- Why 3 -->
+            <div class="input-group" id="why3-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+              <label for="why3-input">Why 3: Why did that happen?</label>
+              <div id="prompt-why3" class="prompt-box"></div>
+              <input type="text" id="why3-input" placeholder="e.g. Because the log files were never set to archive or auto-delete">
+            </div>
+
+            <!-- Why 4 -->
+            <div class="input-group" id="why4-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+              <label for="why4-input">Why 4: Why did that happen?</label>
+              <div id="prompt-why4" class="prompt-box"></div>
+              <input type="text" id="why4-input" placeholder="e.g. Because the server config file was written manually, skipping standard configurations">
+            </div>
+
+            <!-- Why 5 -->
+            <div class="input-group" id="why5-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+              <label for="why5-input">Why 5: Why did that happen? (Root Cause)</label>
+              <div id="prompt-why5" class="prompt-box"></div>
+              <input type="text" id="why5-input" placeholder="e.g. Because we don't have an infrastructure-as-code automation policy">
+            </div>
+
           </div>
-
-          <!-- Why 3 -->
-          <div class="input-group" id="why3-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
-            <label for="why3-input">Why 3: Why did that happen?</label>
-            <div id="prompt-why3" class="prompt-box"></div>
-            <input type="text" id="why3-input" placeholder="e.g. Because the log files were never set to archive or auto-delete">
-          </div>
-
-          <!-- Why 4 -->
-          <div class="input-group" id="why4-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
-            <label for="why4-input">Why 4: Why did that happen?</label>
-            <div id="prompt-why4" class="prompt-box"></div>
-            <input type="text" id="why4-input" placeholder="e.g. Because the server config file was written manually, skipping standard configurations">
-          </div>
-
-          <!-- Why 5 -->
-          <div class="input-group" id="why5-group" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
-            <label for="why5-input">Why 5: Why did that happen? (Root Cause)</label>
-            <div id="prompt-why5" class="prompt-box"></div>
-            <input type="text" id="why5-input" placeholder="e.g. Because we don't have an infrastructure-as-code automation policy">
-          </div>
-
-        </div>
+        </details>
 
         <button type="submit" class="btn btn-primary">Build my 5 Whys Chain →</button>
       </form>
@@ -114,50 +161,8 @@
           </p>
         </div>
 
-        <!-- Flowchart Chain -->
-        <div class="whys-chain">
-          
-          <div class="whys-node">
-            <div class="whys-node-label">Symptom</div>
-            <div class="whys-node-text" id="res-problem"></div>
-          </div>
-
-          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-
-          <div class="whys-node">
-            <div class="whys-node-label">Why 1</div>
-            <div class="whys-node-text" id="res-why1"></div>
-          </div>
-
-          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-
-          <div class="whys-node">
-            <div class="whys-node-label">Why 2</div>
-            <div class="whys-node-text" id="res-why2"></div>
-          </div>
-
-          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-
-          <div class="whys-node">
-            <div class="whys-node-label">Why 3</div>
-            <div class="whys-node-text" id="res-why3"></div>
-          </div>
-
-          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-
-          <div class="whys-node">
-            <div class="whys-node-label">Why 4</div>
-            <div class="whys-node-text" id="res-why4"></div>
-          </div>
-
-          <div class="whys-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-
-          <div class="whys-node root-cause">
-            <div class="whys-node-label">Root Cause (Why 5)</div>
-            <div class="whys-node-text" id="res-why5"></div>
-          </div>
-
-        </div>
+        <!-- Flowchart Chain Container -->
+        <div class="whys-chain" id="whys-chain-container"></div>
 
         <!-- Root Cause Nudge -->
         <div style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
@@ -168,7 +173,7 @@
 
   </main>
 
-  <!-- How-To Overlay -->
+  <!-- How-To Guide Overlay -->
   <div class="howto-overlay">
     <div class="howto-box">
       <button class="howto-close-btn" title="Close">
@@ -193,21 +198,21 @@
         <h3>Real-world Examples</h3>
         <blockquote>
           <strong>Example A (System Outage)</strong>:<br>
-          • <em>Symptom</em>: The database crashed and took down the site.<br>
-          • <em>Why 1</em>: The disk drive filled up completely.<br>
-          • <em>Why 2</em>: Large temp files were not being deleted.<br>
-          • <em>Why 3</em>: The cron script that clears temp files failed.<br>
-          • <em>Why 4</em>: The script relied on a legacy database driver that was removed.<br>
-          • <em>Why 5 (Root Cause)</em>: We do not have a dependency management policy for system integrations.
+          • Symptom: The database crashed and took down the site.<br>
+          • Why 1: The disk drive filled up completely.<br>
+          • Why 2: Large temp files were not being deleted.<br>
+          • Why 3: The cron script that clears temp files failed.<br>
+          • Why 4: The script relied on a legacy database driver that was removed.<br>
+          • Why 5 (Root Cause): We do not have a dependency management policy for system integrations.
         </blockquote>
         <blockquote>
           <strong>Example B (Personal Habit)</strong>:<br>
-          • <em>Symptom</em>: I missed my dentist appointment.<br>
-          • <em>Why 1</em>: I woke up an hour late.<br>
-          • <em>Why 2</em>: My phone battery died overnight, so my alarm didn't ring.<br>
-          • <em>Why 3</em>: I forgot to plug my phone in before sleeping.<br>
-          • <em>Why 4</em>: My charger is in the living room and I fell asleep reading in bed.<br>
-          • <em>Why 5 (Root Cause)</em>: I do not have a consistent bedtime routine or a secondary alarm system.
+          • Symptom: I missed my dentist appointment.<br>
+          • Why 1: Woke up an hour late.<br>
+          • Why 2: Phone battery died overnight, so alarm didn't ring.<br>
+          • Why 3: Forgot to plug phone in before sleeping.<br>
+          • Why 4: Charger is in the living room and I fell asleep reading in bed.<br>
+          • Why 5 (Root Cause): I do not have a consistent bedtime routine or a secondary alarm system.
         </blockquote>
       </div>
     </div>
@@ -312,24 +317,40 @@
       e.preventDefault();
       
       const prob = document.getElementById('problem-input').value.trim();
-      const w1 = document.getElementById('why1-input').value.trim();
-      const w2 = document.getElementById('why2-input').value.trim();
-      const w3 = document.getElementById('why3-input').value.trim();
-      const w4 = document.getElementById('why4-input').value.trim();
-      const w5 = document.getElementById('why5-input').value.trim();
-
-      document.getElementById('res-problem').textContent = prob;
-      document.getElementById('res-why1').textContent = w1;
-      document.getElementById('res-why2').textContent = w2;
-      document.getElementById('res-why3').textContent = w3;
-      document.getElementById('res-why4').textContent = w4;
-      document.getElementById('res-why5').textContent = w5;
-
-      document.getElementById('res-surface-problem').textContent = prob;
+      const whysValues = inputs.map(input => input.value.trim()).filter(Boolean);
       
-      const rootCause = w5 || w4 || w3 || w2 || w1;
+      const chainContainer = document.getElementById('whys-chain-container');
+      chainContainer.innerHTML = '';
+
+      // Render symptom first
+      const symptomNode = document.createElement('div');
+      symptomNode.className = 'whys-node';
+      symptomNode.innerHTML = `
+        <div class="whys-node-label">Symptom</div>
+        <div class="whys-node-text">${prob}</div>
+      `;
+      chainContainer.appendChild(symptomNode);
+
+      whysValues.forEach((val, idx) => {
+        // Render downward arrow
+        const arrow = document.createElement('div');
+        arrow.className = 'whys-arrow-down';
+        arrow.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>`;
+        chainContainer.appendChild(arrow);
+
+        const isLast = (idx === whysValues.length - 1);
+        const node = document.createElement('div');
+        node.className = `whys-node ${isLast ? 'root-cause' : ''}`;
+        node.innerHTML = `
+          <div class="whys-node-label">${isLast ? 'Root Cause ' : ''}Why ${idx + 1}</div>
+          <div class="whys-node-text">${val}</div>
+        `;
+        chainContainer.appendChild(node);
+      });
+
+      const rootCause = whysValues[whysValues.length - 1] || prob;
       document.getElementById('res-root-cause-box').innerHTML = 
-        `Your surface problem was: <strong>${prob}</strong>. The root cause is: <strong style="color: var(--accent);">${rootCause}</strong>. Solutions that only address the surface will not fix this.`;
+        `Your surface problem was: <strong>${prob}</strong>. The root cause is: <strong style="color: var(--accent);">${rootCause}</strong>. Any solution that only addresses the surface will return.`;
 
       document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
         year: 'numeric', month: 'long', day: 'numeric'
@@ -337,6 +358,10 @@
 
       const resSec = document.getElementById('whys-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

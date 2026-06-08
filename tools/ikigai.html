@@ -14,6 +14,115 @@
       .ikigai-circle.needs { background-color: rgba(111, 128, 133, 0.2) !important; }
       .ikigai-circle.paid { background-color: rgba(176, 152, 122, 0.2) !important; }
     }
+    
+    /* Interactive zone transitions and styling */
+    .ikigai-interactive-zone {
+      cursor: pointer;
+    }
+    
+    .ikigai-circle-svg {
+      transition: stroke-width 0.2s ease, stroke-opacity 0.2s ease;
+    }
+    
+    .ikigai-circle-svg:hover {
+      stroke-width: 3.5;
+      stroke-opacity: 0.9;
+    }
+    
+    /* Tooltip style — small pill appearing near the cursor */
+    .ikigai-tooltip {
+      position: absolute;
+      background: var(--bg-dark);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 2000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .ikigai-item {
+      display: inline-block;
+      padding: 2px 6px;
+      margin: 2px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+    .ikigai-item.ikigai-highlight {
+      background-color: var(--accent);
+      color: var(--white);
+      font-weight: 600;
+      transform: scale(1.05);
+    }
+
+    /* Hover highlight zones */
+    .ikigai-hover-zone {
+      fill: rgba(139, 111, 71, 0);
+      transition: fill 0.2s ease;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .ikigai-hover-zone:hover {
+      fill: rgba(139, 111, 71, 0.25);
+    }
+
+    /* Disable pointer events on labels inside the SVG so hover falls through to target zones */
+    .ikigai-zone-label,
+    .ikigai-outer-label,
+    .ikigai-center-sub,
+    .ikigai-center-main,
+    #v-ikigai,
+    .intersection-label text,
+    .intersection-label circle {
+      pointer-events: none;
+    }
+
+    /* Breakdown Summary table styling */
+    .ikigai-breakdown-container {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--border-radius);
+      background-color: var(--bg-card);
+    }
+    .ikigai-breakdown-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--text-primary);
+      padding-bottom: 0.5rem;
+    }
+    .ikigai-breakdown-row {
+      display: grid;
+      grid-template-columns: 120px 220px 30px 1fr;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      align-items: center;
+    }
+    .ikigai-breakdown-row.total-row {
+      border-top: 2px solid var(--text-primary);
+      border-bottom: 2px solid var(--text-primary);
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+    .ikigai-breakdown-nudge {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -48,6 +157,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="ikigai-form">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
           
           <div class="input-group">
@@ -71,6 +183,7 @@
           </div>
 
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary">Build my Ikigai →</button>
       </form>
@@ -102,32 +215,129 @@
               .needs-circle { fill: #D1E9FC; stroke: #85AFD2; }
               .paid-circle  { fill: #E6DBFC; stroke: #A791D1; }
             </style>
+            <clipPath id="clip-love">
+              <circle cx="320" cy="185" r="145" />
+            </clipPath>
+            <clipPath id="clip-good">
+              <circle cx="195" cy="310" r="145" />
+            </clipPath>
+            <clipPath id="clip-needs">
+              <circle cx="445" cy="310" r="145" />
+            </clipPath>
+            <clipPath id="clip-paid">
+              <circle cx="320" cy="435" r="145" />
+            </clipPath>
+            <mask id="exclude-center">
+              <rect x="0" y="0" width="640" height="630" fill="white" />
+              <circle cx="320" cy="310" r="46" fill="black" />
+            </mask>
           </defs>
 
             <!-- Four circles in diamond arrangement: Top=Love, Left=Good, Right=Needs, Bottom=Paid -->
-            <circle cx="320" cy="185" r="145" class="ikigai-circle-svg love-circle" fill="#FDDAC5" stroke="#E2A684" stroke-width="1.5" fill-opacity="0.5"/>
-            <circle cx="195" cy="310" r="145" class="ikigai-circle-svg good-circle" fill="#D4EEDE" stroke="#82B395" stroke-width="1.5" fill-opacity="0.5"/>
-            <circle cx="445" cy="310" r="145" class="ikigai-circle-svg needs-circle" fill="#D1E9FC" stroke="#85AFD2" stroke-width="1.5" fill-opacity="0.5"/>
-            <circle cx="320" cy="435" r="145" class="ikigai-circle-svg paid-circle" fill="#E6DBFC" stroke="#A791D1" stroke-width="1.5" fill-opacity="0.5"/>
+            <circle cx="320" cy="185" r="145" class="ikigai-circle-svg love-circle ikigai-interactive-zone" data-tooltip="What You Love (Passions &amp; Enjoyment)" fill="#FDDAC5" stroke="#E2A684" stroke-width="1.5" fill-opacity="0.5"/>
+            <circle cx="195" cy="310" r="145" class="ikigai-circle-svg good-circle ikigai-interactive-zone" data-tooltip="What You're Good At (Skills &amp; Talents)" fill="#D4EEDE" stroke="#82B395" stroke-width="1.5" fill-opacity="0.5"/>
+            <circle cx="445" cy="310" r="145" class="ikigai-circle-svg needs-circle ikigai-interactive-zone" data-tooltip="What the World Needs (Societal Value &amp; Problems)" fill="#D1E9FC" stroke="#85AFD2" stroke-width="1.5" fill-opacity="0.5"/>
+            <circle cx="320" cy="435" r="145" class="ikigai-circle-svg paid-circle ikigai-interactive-zone" data-tooltip="What You Can Be Paid For (Market Demand &amp; Careers)" fill="#E6DBFC" stroke="#A791D1" stroke-width="1.5" fill-opacity="0.5"/>
 
             <!-- Intersection zone labels -->
-            <text id="v-passion" x="244" y="245" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">PASSION</text>
-            <text id="v-mission" x="396" y="245" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">MISSION</text>
-            <text id="v-profession" x="244" y="383" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">PROFESSION</text>
-            <text id="v-vocation" x="396" y="383" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8">VOCATION</text>
+            <g class="intersection-label">
+              <text id="v-passion" x="244" y="245" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="8.0" font-weight="700" letter-spacing="0.8">PASSION</text>
+            </g>
 
-            <!-- Centre medallion -->
-            <circle cx="320" cy="310" r="46" fill="white" stroke="#8B6F47" stroke-width="2.5" class="ikigai-center-circle"/>
-            <text x="320" y="294" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" font-weight="700" letter-spacing="1.5" fill="#8B6F47" class="ikigai-center-sub">YOUR</text>
-            <text x="320" y="312" text-anchor="middle" font-family="Playfair Display, serif" font-size="13" font-weight="700" font-style="italic" fill="#8B6F47" class="ikigai-center-main">Ikigai</text>
-            <text id="v-ikigai" x="320" y="330" text-anchor="middle" fill="#8B6F47" font-family="DM Sans, sans-serif" font-size="8.5" font-weight="700"></text>
+            <g class="intersection-label">
+              <text id="v-mission" x="396" y="245" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="8.0" font-weight="700" letter-spacing="0.8">MISSION</text>
+            </g>
+
+            <g class="intersection-label">
+              <text id="v-profession" x="244" y="383" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="8.0" font-weight="700" letter-spacing="0.8">PROFESSION</text>
+            </g>
+
+            <g class="intersection-label">
+              <text id="v-vocation" x="396" y="383" text-anchor="middle" class="ikigai-zone-label" fill="#3d2c1c" font-family="DM Mono, monospace" font-size="8.0" font-weight="700" letter-spacing="0.8">VOCATION</text>
+            </g>
+
+            <!-- Centre medallion group -->
+            <g class="intersection-label">
+              <circle cx="320" cy="310" r="46" fill="white" stroke="#8B6F47" stroke-width="2.5" class="ikigai-center-circle"/>
+              <text x="320" y="294" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" font-weight="700" letter-spacing="1.5" fill="#8B6F47" class="ikigai-center-sub">YOUR</text>
+              <text x="320" y="312" text-anchor="middle" font-family="Playfair Display, serif" font-size="13" font-weight="700" font-style="italic" fill="#8B6F47" class="ikigai-center-main">Ikigai</text>
+              <text id="v-ikigai" x="320" y="330" text-anchor="middle" fill="#8B6F47" font-family="DM Sans, sans-serif" font-size="7.5" font-weight="700"></text>
+            </g>
 
             <!-- Outer circle labels -->
             <text x="320" y="24" text-anchor="middle" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">WHAT YOU LOVE</text>
             <text x="22" y="310" text-anchor="middle" transform="rotate(-90,22,310)" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">GOOD AT</text>
             <text x="618" y="310" text-anchor="middle" transform="rotate(90,618,310)" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">WORLD NEEDS</text>
             <text x="320" y="622" text-anchor="middle" class="ikigai-outer-label" font-family="DM Sans, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#6B5E4A">PAID FOR</text>
+
+            <!-- Hover Zones Overlay (Placed on top of labels but utilizes pointer-events and transparent fills) -->
+            <g id="ikigai-hover-overlay">
+              <!-- Passion = Love ∩ Good (minus center) -->
+              <g clip-path="url(#clip-love)" mask="url(#exclude-center)">
+                <rect x="0" y="0" width="640" height="630" class="ikigai-hover-zone" data-zone="passion" clip-path="url(#clip-good)" />
+              </g>
+              
+              <!-- Mission = Love ∩ Needs (minus center) -->
+              <g clip-path="url(#clip-love)" mask="url(#exclude-center)">
+                <rect x="0" y="0" width="640" height="630" class="ikigai-hover-zone" data-zone="mission" clip-path="url(#clip-needs)" />
+              </g>
+              
+              <!-- Profession = Good ∩ Paid (minus center) -->
+              <g clip-path="url(#clip-good)" mask="url(#exclude-center)">
+                <rect x="0" y="0" width="640" height="630" class="ikigai-hover-zone" data-zone="profession" clip-path="url(#clip-paid)" />
+              </g>
+              
+              <!-- Vocation = Needs ∩ Paid (minus center) -->
+              <g clip-path="url(#clip-needs)" mask="url(#exclude-center)">
+                <rect x="0" y="0" width="640" height="630" class="ikigai-hover-zone" data-zone="vocation" clip-path="url(#clip-paid)" />
+              </g>
+              
+              <!-- Ikigai = Center circle overlap -->
+              <circle cx="320" cy="310" r="46" class="ikigai-hover-zone" data-zone="ikigai" />
+            </g>
           </svg>
+        </div>
+
+        <!-- Intersection Summary Table -->
+        <div id="ikigai-breakdown-section" class="ikigai-breakdown-container" style="display: none;">
+          <div class="ikigai-breakdown-title">YOUR IKIGAI BREAKDOWN</div>
+          
+          <div class="ikigai-breakdown-row">
+            <div>Passion</div>
+            <div style="color: var(--text-secondary);">(Love &cap; Good At)</div>
+            <div>&rarr;</div>
+            <div id="breakdown-passion"></div>
+          </div>
+          
+          <div class="ikigai-breakdown-row">
+            <div>Mission</div>
+            <div style="color: var(--text-secondary);">(Love &cap; World Needs)</div>
+            <div>&rarr;</div>
+            <div id="breakdown-mission"></div>
+          </div>
+          
+          <div class="ikigai-breakdown-row">
+            <div>Profession</div>
+            <div style="color: var(--text-secondary);">(Good At &cap; Paid For)</div>
+            <div>&rarr;</div>
+            <div id="breakdown-profession"></div>
+          </div>
+          
+          <div class="ikigai-breakdown-row">
+            <div>Vocation</div>
+            <div style="color: var(--text-secondary);">(World Needs &cap; Paid For)</div>
+            <div>&rarr;</div>
+            <div id="breakdown-vocation"></div>
+          </div>
+          
+          <div class="ikigai-breakdown-row total-row">
+            <div>Your Ikigai</div>
+            <div style="color: var(--text-secondary);">(all four)</div>
+            <div>&rarr;</div>
+            <div id="breakdown-ikigai"></div>
+          </div>
+          
+          <div id="breakdown-nudge" class="ikigai-breakdown-nudge"></div>
         </div>
 
         <!-- User text in readable cards below diagram, colour-coded to their circle -->
@@ -217,6 +427,13 @@
 
   <script src="../main.js"></script>
   <script>
+    // State to store current intersections for hover effects
+    let currentPassion = [];
+    let currentMission = [];
+    let currentProfession = [];
+    let currentVocation = [];
+    let currentIkigai = [];
+
     document.getElementById('ikigai-form').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -225,141 +442,41 @@
       const inputNeeds = document.getElementById('needs-input').value;
       const inputPaid = document.getElementById('paid-input').value;
 
-      document.getElementById('res-love').textContent = inputLove;
-      document.getElementById('res-good').textContent = inputGood;
-      document.getElementById('res-needs').textContent = inputNeeds;
-      document.getElementById('res-paid').textContent = inputPaid;
-
       // Logic functions
       function parseList(str) {
         if (!str) return [];
-        // Standardize separators (commas, semicolons, slashes, bullet characters, dashes)
-        let cleaned = str
-          .replace(/;\s*/g, '\n')
-          .replace(/\/\s*/g, '\n')
-          .replace(/•\s*/g, '\n')
-          .replace(/\-\s*/g, '\n');
-        
-        // Handle inline lists like "1. coding 2. design" or "1) coding 2) design"
-        cleaned = cleaned.replace(/\b\d+[\.\)]\s*/g, '\n');
-
-        return cleaned.split(/[\n,]+/)
-          .map(s => {
-            let item = s.trim();
-            // Remove leading bullet remnants or digits
-            item = item.replace(/^[\s\-\*•\d\.\)]+/, '');
-            // Remove trailing spaces or trailing punctuation
-            item = item.replace(/[\.\,\s]+$/, '');
-            return item.trim();
-          })
+        return str.split(',')
+          .map(s => s.trim())
           .filter(Boolean);
       }
 
-      function normalizeWord(word) {
-        // Lowercase and strip all non-alphanumeric characters and whitespace
-        let clean = word.toLowerCase().replace(/[^a-z0-9]/g, '');
-        
-        // Remove common suffixes
-        if (clean.endsWith('ing')) clean = clean.slice(0, -3);
-        else if (clean.endsWith('ed')) clean = clean.slice(0, -2);
-        else if (clean.endsWith('er')) clean = clean.slice(0, -2);
-        else if (clean.endsWith('es')) clean = clean.slice(0, -2);
-        else if (clean.endsWith('s') && !clean.endsWith('ss')) clean = clean.slice(0, -1);
-        else if (clean.endsWith('e') && clean.length > 4) clean = clean.slice(0, -1);
-
-        // Remove final double consonant (e.g. runn -> run)
-        if (clean.length > 3 && clean[clean.length - 1] === clean[clean.length - 2]) {
-          clean = clean.slice(0, -1);
-        }
-        return clean;
-      }
-
-      function levenshtein(a, b) {
-        const matrix = [];
-        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-        for (let i = 1; i <= b.length; i++) {
-          for (let j = 1; j <= a.length; j++) {
-            if (b.charAt(i - 1) === a.charAt(j - 1)) {
-              matrix[i][j] = matrix[i - 1][j - 1];
-            } else {
-              matrix[i][j] = Math.min(
-                matrix[i - 1][j - 1] + 1,
-                Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
-              );
-            }
+      function uniqueList(arr) {
+        const res = [];
+        arr.forEach(item => {
+          if (!res.some(x => x.trim().toLowerCase() === item.trim().toLowerCase())) {
+            res.push(item.trim());
           }
-        }
-        return matrix[b.length][a.length];
-      }
-
-      function getNormalizedWords(phrase) {
-        if (!phrase) return [];
-        return phrase.toLowerCase()
-          .split(/\s+/)
-          .map(w => w.replace(/[^a-z0-9]/g, ''))
-          .filter(Boolean)
-          .map(normalizeWord)
-          .filter(Boolean);
+        });
+        return res;
       }
 
       function isMatch(itemA, itemB) {
         if (!itemA || !itemB) return false;
-        
-        // 1. Check exact match after stripping all spacing and punctuation
-        const cleanA = itemA.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const cleanB = itemB.toLowerCase().replace(/[^a-z0-9]/g, '');
-        if (cleanA === cleanB) return true;
+        return itemA.trim().toLowerCase() === itemB.trim().toLowerCase();
+      }
 
-        // 2. Check normalized version (with suffix stemming)
-        const normA = normalizeWord(itemA);
-        const normB = normalizeWord(itemB);
-        if (normA === normB) return true;
+      function getIntersection(listA, listB) {
+        return listA.filter(itemA => 
+          listB.some(itemB => isMatch(itemA, itemB))
+        );
+      }
 
-        // 3. Substring check for concatenated/compound words (e.g., "musiccoading" vs "coading")
-        if (normA.length >= 3 && normB.length >= 3) {
-          if (normA.includes(normB) || normB.includes(normA)) return true;
-        }
-
-        // 4. Word-by-word structural similarity check
-        const wordsA = getNormalizedWords(itemA);
-        const wordsB = getNormalizedWords(itemB);
-        if (wordsA.length === 0 || wordsB.length === 0) return false;
-        if (Math.abs(wordsA.length - wordsB.length) > 1) return false;
-
-        let matchCount = 0;
-        const usedB = new Array(wordsB.length).fill(false);
-
-        for (let i = 0; i < wordsA.length; i++) {
-          const wA = wordsA[i];
-          let found = false;
-          for (let j = 0; j < wordsB.length; j++) {
-            if (usedB[j]) continue;
-            const wB = wordsB[j];
-            if (wA === wB) {
-              found = true;
-              usedB[j] = true;
-              break;
-            }
-            if (wA.length >= 3 && wB.length >= 3) {
-              const dist = levenshtein(wA, wB);
-              const threshold = Math.max(wA.length, wB.length) >= 7 ? 2 : 1;
-              if (dist <= threshold) {
-                found = true;
-                usedB[j] = true;
-                break;
-              }
-            }
-          }
-          if (found) matchCount++;
-        }
-
-        const totalWords = Math.max(wordsA.length, wordsB.length);
-        if (totalWords === 1) {
-          return matchCount === 1;
-        } else {
-          return matchCount >= (totalWords - 1);
-        }
+      function getFourWayIntersection(love, good, needs, paid) {
+        return love.filter(item =>
+          good.some(x => isMatch(item, x)) &&
+          needs.some(x => isMatch(item, x)) &&
+          paid.some(x => isMatch(item, x))
+        );
       }
 
       function formatOverlap(arr, fallback) {
@@ -368,12 +485,12 @@
         return joined.length > 20 ? joined.substring(0, 17) + '...' : joined;
       }
 
-      const love = parseList(inputLove);
-      const good = parseList(inputGood);
-      const needs = parseList(inputNeeds);
-      const paid = parseList(inputPaid);
+      const love = uniqueList(parseList(inputLove));
+      const good = uniqueList(parseList(inputGood));
+      const needs = uniqueList(parseList(inputNeeds));
+      const paid = uniqueList(parseList(inputPaid));
 
-      // Create list of unique items, preserving original capitalization and form
+      // Calculate details for each unique item
       const uniqueItems = [];
       [...love, ...good, ...needs, ...paid].forEach(item => {
         if (!uniqueItems.some(x => isMatch(x, item))) {
@@ -381,7 +498,6 @@
         }
       });
 
-      // Calculate details for each unique item
       const itemDetails = uniqueItems.map(item => {
         const inLove = love.some(x => isMatch(x, item));
         const inGood = good.some(x => isMatch(x, item));
@@ -389,10 +505,10 @@
         const inPaid = paid.some(x => isMatch(x, item));
         
         const circles = [];
-        if (inLove) circles.push("Love");
-        if (inGood) circles.push("Good At");
-        if (inNeeds) circles.push("World Needs");
-        if (inPaid) circles.push("Paid For");
+        if (inLove) circles.push("love");
+        if (inGood) circles.push("good");
+        if (inNeeds) circles.push("needs");
+        if (inPaid) circles.push("paid");
         
         return {
           name: item,
@@ -401,42 +517,87 @@
         };
       });
 
-      const ikigai = itemDetails.filter(d => d.count === 4).map(d => d.name);
+      // Render parsed items as interactive spans
+      const fillChips = (id, items, currentCategory) => {
+        const container = document.getElementById(id);
+        container.innerHTML = '';
+        if (items.length === 0) {
+          container.innerHTML = '<span style="color: var(--text-secondary); font-style: italic;">None listed</span>';
+        } else {
+          items.forEach(item => {
+            const detail = itemDetails.find(d => isMatch(d.name, item));
+            const cats = detail ? detail.circles.join(' ') : currentCategory;
+            
+            const span = document.createElement('span');
+            span.className = 'ikigai-item';
+            span.setAttribute('data-categories', cats);
+            span.textContent = item;
+            container.appendChild(span);
+          });
+        }
+      };
 
-      const passion = itemDetails.filter(d => 
-        d.circles.includes("Love") && 
-        d.circles.includes("Good At") && 
-        d.count < 4
-      ).map(d => d.name);
+      fillChips('res-love', love, 'love');
+      fillChips('res-good', good, 'good');
+      fillChips('res-needs', needs, 'needs');
+      fillChips('res-paid', paid, 'paid');
 
-      const mission = itemDetails.filter(d => 
-        d.circles.includes("Love") && 
-        d.circles.includes("World Needs") && 
-        d.count < 4
-      ).map(d => d.name);
-
-      const profession = itemDetails.filter(d => 
-        d.circles.includes("Good At") && 
-        d.circles.includes("Paid For") && 
-        d.count < 4
-      ).map(d => d.name);
-
-      const vocation = itemDetails.filter(d => 
-        d.circles.includes("World Needs") && 
-        d.circles.includes("Paid For") && 
-        d.count < 4
-      ).map(d => d.name);
+      // Intersections
+      currentPassion = getIntersection(love, good);
+      currentMission = getIntersection(love, needs);
+      currentProfession = getIntersection(good, paid);
+      currentVocation = getIntersection(needs, paid);
+      currentIkigai = getFourWayIntersection(love, good, needs, paid);
 
       // Update diagram text
-      document.getElementById('v-passion').textContent = formatOverlap(passion, 'PASSION');
-      document.getElementById('v-mission').textContent = formatOverlap(mission, 'MISSION');
-      document.getElementById('v-profession').textContent = formatOverlap(profession, 'PROFESSION');
-      document.getElementById('v-vocation').textContent = formatOverlap(vocation, 'VOCATION');
-      document.getElementById('v-ikigai').textContent = formatOverlap(ikigai, '');
+      document.getElementById('v-passion').textContent = formatOverlap(currentPassion, 'PASSION');
+      document.getElementById('v-mission').textContent = formatOverlap(currentMission, 'MISSION');
+      document.getElementById('v-profession').textContent = formatOverlap(currentProfession, 'PROFESSION');
+      document.getElementById('v-vocation').textContent = formatOverlap(currentVocation, 'VOCATION');
+      document.getElementById('v-ikigai').textContent = formatOverlap(currentIkigai, '');
 
-      const insightBox = document.getElementById('ikigai-insight-box');
+      // Populate Static Breakdown Summary Table
+      function formatBreakdown(arr) {
+        if (arr.length === 0) return 'No overlap yet';
+        return arr.join(', ');
+      }
       
-      // Separate priorities
+      document.getElementById('breakdown-passion').textContent = formatBreakdown(currentPassion);
+      document.getElementById('breakdown-mission').textContent = formatBreakdown(currentMission);
+      document.getElementById('breakdown-profession').textContent = formatBreakdown(currentProfession);
+      document.getElementById('breakdown-vocation').textContent = formatBreakdown(currentVocation);
+      document.getElementById('breakdown-ikigai').textContent = formatBreakdown(currentIkigai);
+
+      // Setup nudge text
+      const nudgeEl = document.getElementById('breakdown-nudge');
+      if (currentIkigai.length > 0) {
+        nudgeEl.innerHTML = `Your Ikigai is: <strong>${currentIkigai.join(', ')}</strong>. This is where your love, skill, purpose, and livelihood meet.`;
+      } else {
+        const intersections = [
+          { name: "Passion", items: currentPassion },
+          { name: "Mission", items: currentMission },
+          { name: "Profession", items: currentProfession },
+          { name: "Vocation", items: currentVocation }
+        ];
+        const maxLength = Math.max(...intersections.map(i => i.items.length));
+        let closestOverlapText = '';
+        if (maxLength === 0) {
+          closestOverlapText = 'none';
+        } else {
+          const best = intersections.filter(i => i.items.length === maxLength).map(i => i.name);
+          if (best.length === 1) {
+            closestOverlapText = best[0];
+          } else {
+            closestOverlapText = best.slice(0, -1).join(', ') + ' and ' + best[best.length - 1];
+          }
+        }
+        nudgeEl.innerHTML = `No single item appears across all four areas yet. Your closest overlap is <strong>${closestOverlapText}</strong>.`;
+      }
+
+      document.getElementById('ikigai-breakdown-section').style.display = 'block';
+
+      // Insight prioritize lists logic (standard rank insights)
+      const insightBox = document.getElementById('ikigai-insight-box');
       const rank1 = itemDetails.filter(d => d.count === 4);
       const rank2 = itemDetails.filter(d => d.count === 3);
       const rank3 = itemDetails.filter(d => d.count === 2);
@@ -446,7 +607,8 @@
         priorityHtml += `
           <div style="margin-bottom: 1.5rem;">
             <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #8B6F47; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-              <span>🏆 Priority 1: Core Ikigai (Perfect 4/4 Alignment)</span>
+              <svg viewBox="0 0 24 24" style="width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2.2; display: inline-block; vertical-align: middle;"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg>
+              <span>Priority 1: Core Ikigai (Perfect 4/4 Alignment)</span>
             </h4>
             <ul style="padding-left: 1.25rem; line-height: 1.5; color: var(--text-primary); margin: 0;">
               ${rank1.map(item => `
@@ -462,20 +624,29 @@
         priorityHtml += `
           <div style="margin-bottom: 1.5rem;">
             <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #B07E7A; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-              <span>⚡ Priority 2: High-Potential Paths (3/4 Overlap)</span>
+              <svg viewBox="0 0 24 24" style="width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2.2; display: inline-block; vertical-align: middle;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span>Priority 2: High-Potential Paths (3/4 Overlap)</span>
             </h4>
             <ul style="padding-left: 1.25rem; line-height: 1.5; color: var(--text-primary); margin: 0;">
               ${rank2.map(item => {
-                const missing = ["Love", "Good At", "World Needs", "Paid For"].filter(c => !item.circles.includes(c));
+                const missing = ["love", "good", "needs", "paid"].filter(c => !item.circles.includes(c));
                 let suggestion = '';
-                if (missing.includes("Love")) suggestion = "find a way to make it more engaging or personally meaningful";
-                else if (missing.includes("Good At")) suggestion = "invest in building your skills or get training";
-                else if (missing.includes("World Needs")) suggestion = "align it with a pressing social problem or need";
-                else if (missing.includes("Paid For")) suggestion = "find a business model, client base, or job description that pays for this";
+                if (missing.includes("love")) suggestion = "find a way to make it more engaging or personally meaningful";
+                else if (missing.includes("good")) suggestion = "invest in building your skills or get training";
+                else if (missing.includes("needs")) suggestion = "align it with a pressing social problem or need";
+                else if (missing.includes("paid")) suggestion = "find a business model, client base, or job description that pays for this";
                 
+                const missingLabels = missing.map(c => {
+                  if (c === "love") return "Love";
+                  if (c === "good") return "Good At";
+                  if (c === "needs") return "World Needs";
+                  if (c === "paid") return "Paid For";
+                  return c;
+                });
+
                 return `
                   <li style="margin-bottom: 0.4rem;">
-                    <strong>${item.name}</strong> — missing <span style="color: #B07E7A; font-weight: bold;">${missing.join(', ')}</span>. To unlock full Ikigai, you need to ${suggestion}.
+                    <strong>${item.name}</strong> — missing <span style="color: #B07E7A; font-weight: bold;">${missingLabels.join(', ')}</span>. To unlock full Ikigai, you need to ${suggestion}.
                   </li>
                 `;
               }).join('')}
@@ -487,17 +658,27 @@
         priorityHtml += `
           <div>
             <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #78856F; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-              <span>🌱 Priority 3: Strategic Opportunities (2/4 Overlap)</span>
+              <svg viewBox="0 0 24 24" style="width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2.2; display: inline-block; vertical-align: middle;"><path d="M2 22s8-4 8-10V2"/><path d="M12 2s8 4 8 10v10"/><path d="M2 22h20"/></svg>
+              <span>Priority 3: Strategic Opportunities (2/4 Overlap)</span>
             </h4>
             <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0 0 0.5rem 0;">
               These are foundational elements (passions, skills, or careers) that intersect in key areas:
             </p>
             <ul style="padding-left: 1.25rem; line-height: 1.5; color: var(--text-primary); margin: 0;">
-              ${rank3.map(item => `
-                <li style="margin-bottom: 0.4rem;">
-                  <strong>${item.name}</strong> — connects your <em>${item.circles.join(' & ')}</em>.
-                </li>
-              `).join('')}
+              ${rank3.map(item => {
+                const formattedCircles = item.circles.map(c => {
+                  if (c === "love") return "Love";
+                  if (c === "good") return "Good At";
+                  if (c === "needs") return "World Needs";
+                  if (c === "paid") return "Paid For";
+                  return c;
+                }).join(' & ');
+                return `
+                  <li style="margin-bottom: 0.4rem;">
+                    <strong>${item.name}</strong> — connects your <em>${formattedCircles}</em>.
+                  </li>
+                `;
+              }).join('')}
             </ul>
           </div>
         `;
@@ -512,7 +693,10 @@
         `;
       } else {
         insightBox.innerHTML = `
-          <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">📋 Your Ikigai Priority List</h3>
+          <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <svg viewBox="0 0 24 24" style="width: 1.35rem; height: 1.35rem; fill: none; stroke: currentColor; stroke-width: 2.2; display: inline-block; vertical-align: middle;"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>Your Ikigai Priority List</span>
+          </h3>
           ${priorityHtml}
         `;
       }
@@ -524,7 +708,83 @@
 
       const resSec = document.getElementById('ikigai-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Hover tooltip interactive system
+    document.addEventListener('DOMContentLoaded', () => {
+      const tooltip = document.getElementById('ikigai-tooltip') || (() => {
+        const div = document.createElement('div');
+        div.id = 'ikigai-tooltip';
+        div.className = 'ikigai-tooltip';
+        document.body.appendChild(div);
+        return div;
+      })();
+
+      // Interactive hover targets for intersections
+      document.querySelectorAll('.ikigai-hover-zone').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          const zone = el.getAttribute('data-zone');
+          
+          let items = [];
+          let title = '';
+          if (zone === 'passion') { title = 'Passion'; items = currentPassion; }
+          else if (zone === 'mission') { title = 'Mission'; items = currentMission; }
+          else if (zone === 'profession') { title = 'Profession'; items = currentProfession; }
+          else if (zone === 'vocation') { title = 'Vocation'; items = currentVocation; }
+          else if (zone === 'ikigai') { title = 'Ikigai'; items = currentIkigai; }
+
+          // Highlight matching chips in results
+          if (items.length > 0) {
+            document.querySelectorAll('.ikigai-item').forEach(itemSpan => {
+              const text = itemSpan.textContent.trim().toLowerCase();
+              if (items.some(x => x.toLowerCase() === text)) {
+                itemSpan.classList.add('ikigai-highlight');
+              }
+            });
+          }
+
+          const textContent = items.length > 0 ? items.join(', ') : 'No overlap yet';
+          tooltip.innerHTML = `<strong>${title}:</strong> ${textContent}`;
+          tooltip.style.opacity = '1';
+        });
+
+        el.addEventListener('mousemove', (e) => {
+          tooltip.style.left = (e.pageX + 15) + 'px';
+          tooltip.style.top = (e.pageY + 15) + 'px';
+        });
+
+        el.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          document.querySelectorAll('.ikigai-item').forEach(itemSpan => {
+            itemSpan.classList.remove('ikigai-highlight');
+          });
+        });
+      });
+
+      // Big outer circles hover logic
+      document.querySelectorAll('.ikigai-circle-svg').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          const text = el.getAttribute('data-tooltip');
+          if (text) {
+            tooltip.innerHTML = text;
+            tooltip.style.opacity = '1';
+          }
+        });
+
+        el.addEventListener('mousemove', (e) => {
+          tooltip.style.left = (e.pageX + 15) + 'px';
+          tooltip.style.top = (e.pageY + 15) + 'px';
+        });
+
+        el.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+        });
+      });
     });
   </script>
 </body>

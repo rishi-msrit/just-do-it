@@ -48,6 +48,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="pareto-form">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         <p style="margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.95rem;">
           List your activities. Estimate what percentage of your total <strong>Time</strong> you spend on each, and what percentage of your total <strong>Results / Value</strong> it produces.
         </p>
@@ -78,6 +81,7 @@
 
         <button type="button" class="btn" id="btn-add-pareto" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Activity Row</button>
         <br>
+      </details>
         <button type="submit" class="btn btn-primary">Analyze 80/20 Leverage →</button>
       </form>
     </section>
@@ -283,21 +287,6 @@
           </p>
         `;
 
-        if (bottomItems.length > 0) {
-          const bottomNames = bottomItems.map(item => `"${item.name}"`).join(', ');
-          const bottomResultsSum = bottomItems.reduce((sum, item) => sum + item.results, 0);
-          const bottomTimeSum = bottomItems.reduce((sum, item) => sum + item.time, 0);
-          
-          summaryHtml += `
-            <p style="font-size: 0.95rem; color: #B07E7A; margin: 0; border-top: 1px dashed var(--border); padding-top: 0.75rem; margin-top: 0.75rem;">
-              ⚠️ <strong>Low Leverage:</strong> ${bottomNames} consume ${bottomTimeSum}% of your time but produce only ${bottomResultsSum}% of results.
-            </p>
-          `;
-        }
-
-        summaryCard.innerHTML = summaryHtml;
-      } else {
-        summaryCard.innerHTML = `<p style="color: var(--text-secondary); font-style: italic; margin: 0;">No activities added.</p>`;
       }
 
       document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
@@ -306,6 +295,10 @@
 
       const resSec = document.getElementById('pareto-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

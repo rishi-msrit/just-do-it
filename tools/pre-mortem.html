@@ -9,10 +9,23 @@
   <style>
     .premortem-pair-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr auto;
       gap: 1rem;
       margin-bottom: 0.75rem;
       align-items: center;
+    }
+    .btn-remove-premortem {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 0.5rem;
+      transition: var(--transition);
+    }
+    .btn-remove-premortem:hover {
+      color: #B07E7A;
     }
   </style>
 </head>
@@ -48,36 +61,42 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="pre-mortem-form">
-        
-        <!-- Goal/Project statement -->
-        <div class="input-group" style="margin-bottom: 2rem;">
-          <label for="project-input">Describe your Plan or Project Goal</label>
-          <input type="text" id="project-input" placeholder="e.g. Applying for a competitive ML research fellowship" required>
-        </div>
-
-        <h3 style="margin-bottom: 0.5rem;">Identify Failures & Preventions</h3>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-          Imagine it is 6 months from now and the project has failed catastrophically. List potential failure reasons and what you can do TODAY to prevent them.
-        </p>
-
-        <div style="margin-bottom: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-weight: bold;">
-          <div>Failure Reason</div>
-          <div>Countermeasure / Prevention Action</div>
-        </div>
-
-        <div id="premortem-pairs-container">
-          <div class="premortem-pair-row">
-            <input type="text" placeholder="e.g. Missed the recommendation letter deadline" class="fail-input" required>
-            <input type="text" placeholder="e.g. Request letters 6 weeks early, send reminders" class="prev-input">
+        <details id="inputs-details" open>
+          <summary>Your inputs (click to edit)</summary>
+          
+          <!-- Goal/Project statement -->
+          <div class="input-group" style="margin-bottom: 2rem;">
+            <label for="project-input">Describe your Plan or Project Goal</label>
+            <input type="text" id="project-input" placeholder="e.g. Applying for a competitive ML research fellowship" required>
           </div>
-          <div class="premortem-pair-row">
-            <input type="text" placeholder="e.g. Research proposal was too generic" class="fail-input">
-            <input type="text" placeholder="e.g. Get reviews from 2 postdocs in the field" class="prev-input">
-          </div>
-        </div>
 
-        <button type="button" class="btn" id="btn-add-premortem" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Failure/Prevention Row</button>
-        <br>
+          <h3 style="margin-bottom: 0.5rem;">Identify Failures & Preventions</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Imagine it is 6 months from now and the project has failed catastrophically. List potential failure reasons and what you can do TODAY to prevent them.
+          </p>
+
+          <div style="margin-bottom: 1rem; display: grid; grid-template-columns: 1fr 1fr 40px; gap: 1rem; font-weight: bold;">
+            <div>Failure Reason</div>
+            <div>Countermeasure / Prevention Action</div>
+            <div></div>
+          </div>
+
+          <div id="premortem-pairs-container">
+            <div class="premortem-pair-row">
+              <input type="text" placeholder="e.g. Missed the recommendation letter deadline" class="fail-input" required>
+              <input type="text" placeholder="e.g. Request letters 6 weeks early, send reminders" class="prev-input">
+              <button type="button" class="btn-remove-premortem" style="visibility: hidden;">&times;</button>
+            </div>
+            <div class="premortem-pair-row">
+              <input type="text" placeholder="e.g. Research proposal was too generic" class="fail-input">
+              <input type="text" placeholder="e.g. Get reviews from 2 postdocs in the field" class="prev-input">
+              <button type="button" class="btn-remove-premortem" style="visibility: hidden;">&times;</button>
+            </div>
+          </div>
+
+          <button type="button" class="btn" id="btn-add-premortem" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Failure/Prevention Row</button>
+          <br>
+        </details>
         <button type="submit" class="btn btn-primary">Build my Pre-Mortem →</button>
       </form>
     </section>
@@ -102,19 +121,36 @@
         </p>
 
         <!-- Two-column Pre-Mortem Table -->
-        <table class="premortem-table">
+        <table class="premortem-table" style="margin-bottom: 2rem; width: 100%; border-collapse: collapse;">
           <thead>
             <tr>
-              <th style="width: 50%;">Anticipated Failure Mode</th>
-              <th style="width: 50%;">Countermeasure (To Do Now)</th>
+              <th style="width: 50%; text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border);">Anticipated Failure Mode</th>
+              <th style="width: 50%; text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border);">Countermeasure (To Do Now)</th>
             </tr>
           </thead>
           <tbody id="premortem-res-body"></tbody>
         </table>
 
-        <!-- Pre-Mortem Risk Count Summary -->
-        <div class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
-          <p id="pre-mortem-summary-count" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;"></p>
+        <!-- Progress and Analysis Summary -->
+        <div id="premortem-analysis-card" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.95rem;">
+              <span>Pre-Mortem Plan Readiness Score</span>
+              <span id="readiness-pct-text">0%</span>
+            </div>
+            <div style="height: 12px; background: var(--border); border-radius: var(--border-radius); overflow: hidden; width: 100%;">
+              <div id="readiness-bar" style="height: 100%; width: 0%; background-color: var(--accent); transition: width 0.4s ease;"></div>
+            </div>
+          </div>
+          <p id="pre-mortem-summary-count" style="font-size: 1.05rem; color: var(--text-primary); margin: 0; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Highlight & Checklist Box -->
+        <div id="pre-mortem-actions-container" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+          <!-- Most Dangerous Risk card -->
+          <div id="pre-mortem-warning-card" style="background: rgba(176, 126, 122, 0.08); border: 1px solid #B07E7A; padding: 1.25rem; border-radius: var(--border-radius); display: none;"></div>
+          <!-- Action Checklist card -->
+          <div id="pre-mortem-checklist-card" style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--border-radius); display: none;"></div>
         </div>
       </div>
     </section>
@@ -150,14 +186,13 @@
         <h3>Real-world Examples</h3>
         <blockquote>
           <strong>Example (Submitting a Critical Fellowship Application)</strong>:<br>
-          • <em>Failure Mode</em>: The recommendation letters from my professors were not uploaded in time, leading to immediate disqualification.<br>
-          • <em>Prevention Action (Today)</em>: Request the letters 6 weeks before the deadline, and set up a weekly check-in schedule to follow up.<br><br>
-          • <em>Failure Mode</em>: The server crashed on the submission website during the final hour, preventing application submission.<br>
-          • <em>Prevention Action (Today)</em>: Set an internal hard deadline to submit the completed application 48 hours before the official cutoff.
+          • Failure Mode: The recommendation letters from my professors were not uploaded in time, leading to immediate disqualification.<br>
+          • Prevention Action (Today): Request the letters 6 weeks before the deadline, and set up a weekly check-in schedule to follow up.<br><br>
+          • Failure Mode: The server crashed on the submission website during the final hour, preventing application submission.<br>
+          • Prevention Action (Today): Set an internal hard deadline to submit the completed application 48 hours before the official cutoff.
         </blockquote>
       </div>
     </div>
-  </div>
   </div>
 
   <!-- Floating Bulb Trigger -->
@@ -188,7 +223,7 @@
       row.innerHTML = `
         <input type="text" placeholder="Enter failure..." class="fail-input" required>
         <input type="text" placeholder="Enter prevention..." class="prev-input">
-        <button type="button" class="btn-icon btn-remove-premortem" title="Remove">&times;</button>
+        <button type="button" class="btn-remove-premortem" title="Remove">&times;</button>
       `;
       container.appendChild(row);
     });
@@ -207,8 +242,11 @@
       const pairs = [];
 
       rows.forEach(row => {
-        const fail = row.querySelector('.fail-input').value.trim();
-        const prev = row.querySelector('.prev-input').value.trim();
+        const failInput = row.querySelector('.fail-input');
+        const fail = failInput ? failInput.value.trim() : '';
+        const prevInput = row.querySelector('.prev-input');
+        const prev = prevInput ? prevInput.value.trim() : '';
+        
         if (fail) {
           pairs.push({ fail, prev });
         }
@@ -236,8 +274,8 @@
           }
 
           tr.innerHTML = `
-            <td><strong>${p.fail}</strong></td>
-            <td>${hasPrev ? p.prev : '<span style="color: #B07E7A; font-style: italic; font-weight: 500;">No prevention plan defined today!</span>'}</td>
+            <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);"><strong>${p.fail}</strong></td>
+            <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">${hasPrev ? p.prev : '<span style="color: #B07E7A; font-style: italic; font-weight: 500;">No prevention plan defined today!</span>'}</td>
           `;
           tbody.appendChild(tr);
         });
@@ -246,10 +284,72 @@
       const withoutPreventions = totalRisks - withPreventions;
       const readiness = totalRisks > 0 ? Math.round((withPreventions / totalRisks) * 100) : 0;
 
+      document.getElementById('readiness-pct-text').textContent = `${readiness}%`;
+      document.getElementById('readiness-bar').style.width = `${readiness}%`;
+
       document.getElementById('pre-mortem-summary-count').innerHTML = 
-        `You identified <strong>${totalRisks}</strong> ways this could fail. <strong>${withPreventions}</strong> have prevention plans. <strong>${withoutPreventions}</strong> are unaddressed — these are your blind spots.<br>` +
+        `You identified <strong>${totalRisks}</strong> ways this could fail. <strong>${withPreventions}</strong> have prevention plans. <strong>${withoutPreventions}</strong> are unaddressed — these are your blind spots. <br>` +
         `<span style="display: block; margin-top: 0.75rem; font-size: 1.1rem; font-weight: 700; color: ${readiness >= 80 ? '#78856F' : '#B07E7A'}; font-family: var(--font-display);">` +
-        `Pre-Mortem Readiness: ${readiness}%. ${readiness >= 80 ? 'Ready to proceed.' : 'Aim for above 80% before starting.'}</span>`;
+        `${readiness >= 80 ? 'Plan is ready to proceed.' : 'Aim for above 80% readiness by adding preventions before starting.'}</span>`;
+
+      // Highlight most dangerous risk & checklist
+      const unaddressed = pairs.filter(p => !p.prev);
+      const addressed = pairs.filter(p => p.prev);
+      
+      const warningCard = document.getElementById('pre-mortem-warning-card');
+      if (unaddressed.length > 0) {
+        warningCard.innerHTML = `
+          <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #B07E7A; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 6px;">
+            <svg style="width: 20px; height: 20px; fill: #B07E7A;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+            Critical Blind Spot — Most Dangerous Risk
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
+            The failure mode <strong>"${unaddressed[0].fail}"</strong> has no prevention plan today.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
+            An unmitigated risk is a planned failure mode. Create a safeguard for this first.
+          </p>
+        `;
+        warningCard.style.display = 'block';
+      } else if (pairs.length > 0) {
+        warningCard.innerHTML = `
+          <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #78856F; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 6px;">
+            <svg style="width: 20px; height: 20px; fill: #78856F;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Clean Pre-Mortem Execution Ready
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-primary); margin: 0;">
+            All identified failure modes have prevention plans. Proceed with action.
+          </p>
+        `;
+        warningCard.style.display = 'block';
+      } else {
+        warningCard.style.display = 'none';
+      }
+
+      const checklistCard = document.getElementById('pre-mortem-checklist-card');
+      if (addressed.length > 0) {
+        const checklistItems = addressed.map((p, idx) => `
+          <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.5;">
+            <input type="checkbox" id="chk-${idx}" style="margin-top: 3px; cursor: pointer;">
+            <label for="chk-${idx}" style="cursor: pointer; color: var(--text-primary);">
+              <strong>${p.prev}</strong> <span style="color: var(--text-secondary);">(prevents failure: "${p.fail}")</span>
+            </label>
+          </div>
+        `).join('');
+        
+        checklistCard.innerHTML = `
+          <h3 style="font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+            <svg style="width: 20px; height: 20px; fill: var(--accent);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Printable Action Checklist
+          </h3>
+          <div style="display: flex; flex-direction: column;">
+            ${checklistItems}
+          </div>
+        `;
+        checklistCard.style.display = 'block';
+      } else {
+        checklistCard.style.display = 'none';
+      }
 
       document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
         year: 'numeric', month: 'long', day: 'numeric'
@@ -257,6 +357,10 @@
 
       const resSec = document.getElementById('pre-mortem-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

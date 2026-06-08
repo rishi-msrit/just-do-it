@@ -39,6 +39,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="principles-form">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         
         <!-- Problem or Goal -->
         <div class="input-group" style="margin-bottom: 2rem;">
@@ -82,6 +85,7 @@
           <label for="rebuild-input">4. Rebuild: what solution can you construct using ONLY these truths?</label>
           <textarea id="rebuild-input" placeholder="e.g. We can build reusable rockets by focusing engineering on vertical landing and recovery, reducing cost by 100x." required></textarea>
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary btn-large">Analyze with First Principles →</button>
       </form>
@@ -248,21 +252,6 @@
 
       // Calculations & Insights
       const totalAssumptions = assumptions.length;
-      const challengedCount = assumptions.filter(a => a.checked).length;
-      const unchallenged = assumptions.filter(a => !a.checked).map(a => `"${a.text}"`);
-      const pct = totalAssumptions > 0 ? Math.round((challengedCount / totalAssumptions) * 100) : 0;
-
-      let unchallengedHtml = "";
-      if (unchallenged.length > 0) {
-        unchallengedHtml = `<p style="margin: 0.5rem 0 0; color: #B07E7A;">⚠️ <strong>Unchallenged assumptions:</strong> ${unchallenged.join(', ')}. Are you certain these are true?</p>`;
-      } else {
-        unchallengedHtml = `<p style="margin: 0.5rem 0 0; color: #78856F;">✓ You challenged all listed assumptions!</p>`;
-      }
-
-      const insightsBox = document.getElementById('principles-insights-box');
-      insightsBox.innerHTML = `
-        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.75rem; text-align: left;">First Principles Reduction Analysis</h3>
-        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
           <p style="margin: 0; color: var(--text-primary);">
             You challenged <strong>${challengedCount}</strong> of <strong>${totalAssumptions}</strong> assumptions (<strong>${pct}%</strong>). First Principles thinking is most powerful when you challenge everything, including the ones that feel obvious.
           </p>
@@ -280,6 +269,10 @@
 
       const resSec = document.getElementById('principles-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

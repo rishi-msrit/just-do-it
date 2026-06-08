@@ -39,6 +39,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="smart-goals-form">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
           
           <!-- Vague Goal -->
@@ -78,6 +81,7 @@
           </div>
 
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary">Build my SMART Goal →</button>
       </form>
@@ -259,8 +263,8 @@
           f.pill.style.border = '2px solid #B07E7A';
           const note = document.createElement('div');
           note.className = 'smart-warning-note';
-          note.style.cssText = 'font-size: 0.8rem; color: #B07E7A; margin-top: 0.5rem; font-style: italic; line-height: 1.3; font-weight: 500; text-align: left;';
-          note.innerHTML = `⚠️ This answer contains vague language ("${foundWord}"). SMART goals lose power when measurability is unclear. Can you make this more specific?`;
+          note.style.cssText = 'font-size: 0.8rem; color: #B07E7A; margin-top: 0.5rem; font-style: italic; line-height: 1.3; font-weight: 500; text-align: left; display: flex; align-items: flex-start; gap: 0.3rem;';
+          note.innerHTML = `<svg style="width: 14px; height: 14px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg> <span>This answer contains vague language ("${foundWord}"). SMART goals lose power when measurability is unclear. Can you make this more specific?</span>`;
           f.pill.appendChild(note);
         }
       });
@@ -276,12 +280,18 @@
         if (!note) {
           note = document.createElement('div');
           note.className = 'smart-warning-note';
-          note.style.cssText = 'font-size: 0.8rem; color: #B07E7A; margin-top: 0.5rem; font-style: italic; line-height: 1.3; font-weight: 500; text-align: left;';
+          note.style.cssText = 'font-size: 0.8rem; color: #B07E7A; margin-top: 0.5rem; font-style: italic; line-height: 1.3; font-weight: 500; text-align: left; display: flex; align-items: flex-start; gap: 0.3rem;';
+          note.innerHTML = `<svg style="width: 14px; height: 14px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg> <span>A time-bound goal needs a specific date or deadline, not a general timeframe.</span>`;
           timePill.appendChild(note);
         } else {
-          note.innerHTML += "<br>";
+          note.style.display = 'flex';
+          note.style.flexDirection = 'column';
+          note.style.gap = '0.3rem';
+          const subNote = document.createElement('div');
+          subNote.style.cssText = 'display: flex; align-items: flex-start; gap: 0.3rem;';
+          subNote.innerHTML = `<svg style="width: 14px; height: 14px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg> <span>A time-bound goal needs a specific date or deadline, not a general timeframe.</span>`;
+          note.appendChild(subNote);
         }
-        note.innerHTML += `⚠️ A time-bound goal needs a specific date or deadline, not a general timeframe.`;
       }
 
       document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
@@ -290,6 +300,10 @@
 
       const resSec = document.getElementById('smart-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

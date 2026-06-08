@@ -48,49 +48,53 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="rice-form">
-        <div style="margin-bottom: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.8fr; gap: 0.75rem; font-weight: bold; font-size: 0.9rem;">
-          <div>Item Name / Goal</div>
-          <div>Reach <span>(users)</span></div>
-          <div>Impact <span>(1-3)</span></div>
-          <div>Confidence <span>(%)</span></div>
-          <div>Effort <span>(weeks)</span></div>
-          <div style="text-align: center;">Live Score</div>
-        </div>
+        <details id="inputs-details" open>
+          <summary>Your inputs (click to edit)</summary>
 
-        <div id="rice-rows-container">
-          <div class="rice-row">
-            <input type="text" placeholder="e.g. Build dark mode toggle" class="rice-name" required>
-            <input type="number" value="1000" min="1" class="rice-reach" required>
-            <select class="rice-impact">
-              <option value="3">Massive</option>
-              <option value="2">High</option>
-              <option value="1" selected>Medium</option>
-              <option value="0.5">Low</option>
-              <option value="0.25">Minimal</option>
-            </select>
-            <input type="number" value="90" min="10" max="100" class="rice-confidence" required>
-            <input type="number" value="2" min="0.5" step="0.5" class="rice-effort" required>
-            <span class="rice-live-score" style="font-family: var(--font-mono); font-weight: 700; color: var(--accent); text-align: center;">450.0</span>
+          <div style="margin-bottom: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.8fr; gap: 0.75rem; font-weight: bold; font-size: 0.9rem;">
+            <div>Item Name / Goal</div>
+            <div>Reach <span>(users)</span></div>
+            <div>Impact</div>
+            <div>Confidence <span>(%)</span></div>
+            <div>Effort <span>(weeks)</span></div>
+            <div style="text-align: center;">Live Score</div>
           </div>
-          
-          <div class="rice-row">
-            <input type="text" placeholder="e.g. Setup automated backup emails" class="rice-name">
-            <input type="number" value="200" min="1" class="rice-reach">
-            <select class="rice-impact">
-              <option value="3">Massive</option>
-              <option value="2" selected>High</option>
-              <option value="1">Medium</option>
-              <option value="0.5">Low</option>
-              <option value="0.25">Minimal</option>
-            </select>
-            <input type="number" value="50" min="10" max="100" class="rice-confidence">
-            <input type="number" value="4" min="0.5" step="0.5" class="rice-effort">
-            <span class="rice-live-score" style="font-family: var(--font-mono); font-weight: 700; color: var(--accent); text-align: center;">50.0</span>
-          </div>
-        </div>
 
-        <button type="button" class="btn" id="btn-add-rice" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Item Row</button>
-        <br>
+          <div id="rice-rows-container">
+            <div class="rice-row">
+              <input type="text" placeholder="e.g. Build dark mode toggle" class="rice-name" required>
+              <input type="number" value="1000" min="1" class="rice-reach" required>
+              <select class="rice-impact">
+                <option value="3">Massive</option>
+                <option value="2">High</option>
+                <option value="1" selected>Medium</option>
+                <option value="0.5">Low</option>
+                <option value="0.25">Minimal</option>
+              </select>
+              <input type="number" value="90" min="10" max="100" class="rice-confidence" required>
+              <input type="number" value="2" min="0.5" step="0.5" class="rice-effort" required>
+              <span class="rice-live-score" style="font-family: var(--font-mono); font-weight: 700; color: var(--accent); text-align: center;">450.0</span>
+            </div>
+            
+            <div class="rice-row">
+              <input type="text" placeholder="e.g. Setup automated backup emails" class="rice-name">
+              <input type="number" value="200" min="1" class="rice-reach">
+              <select class="rice-impact">
+                <option value="3">Massive</option>
+                <option value="2" selected>High</option>
+                <option value="1">Medium</option>
+                <option value="0.5">Low</option>
+                <option value="0.25">Minimal</option>
+              </select>
+              <input type="number" value="50" min="10" max="100" class="rice-confidence">
+              <input type="number" value="4" min="0.5" step="0.5" class="rice-effort">
+              <span class="rice-live-score" style="font-family: var(--font-mono); font-weight: 700; color: var(--accent); text-align: center;">50.0</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn" id="btn-add-rice" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Item Row</button>
+          <br>
+        </details>
         <button type="submit" class="btn btn-primary">Score and Rank Items →</button>
       </form>
     </section>
@@ -142,7 +146,7 @@
       
       <div class="howto-section">
         <h3>What it is</h3>
-        <p>RICE is an objective scoring model developed by product messaging company Intercom to help teams prioritize features, ideas, or projects. Rather than relying on gut feelings or the opinions of the loudest person in the room, RICE calculates a single score for each item using four criteria: <strong>Reach</strong>, <strong>Impact</strong>, <strong>Confidence</strong>, and <strong>Effort</strong>. The resulting table lets you compare vastly different ideas on an objective, numbers-based playing field.</p>
+        <p>RICE is an objective scoring model developed by product messaging company Intercom to help teams prioritize features, ideas, or projects. Rather than relying on gut feelings or the opinions of the loudest person in the room, RICE calculates a single score for each item using four criteria: Reach, Impact, Confidence, and Effort. The resulting table lets you compare vastly different ideas on an objective, numbers-based playing field.</p>
       </div>
 
       <div class="howto-section">
@@ -150,16 +154,16 @@
         <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
           <li><strong>Reach (R)</strong>: The number of users or transactions this project will affect in a given timeframe (e.g., "500 customers per quarter").</li>
           <li><strong>Impact (I)</strong>: How much this project contributes to your goal for each individual it reaches. Intercom uses a standard multiplier scale:<br>
-            • <strong>3</strong> = Massive Impact<br>
-            • <strong>2</strong> = High Impact<br>
-            • <strong>1</strong> = Medium Impact<br>
-            • <strong>0.5</strong> = Low Impact<br>
-            • <strong>0.25</strong> = Minimal Impact
+            • 3 = Massive Impact<br>
+            • 2 = High Impact<br>
+            • 1 = Medium Impact<br>
+            • 0.5 = Low Impact<br>
+            • 0.25 = Minimal Impact
           </li>
           <li><strong>Confidence (C)</strong>: How sure are you about your Reach, Impact, and Effort numbers? Rated as a percentage:<br>
-            • <strong>100%</strong> = High Confidence (backed by customer data or direct metrics).<br>
-            • <strong>80%</strong> = Medium Confidence (backed by secondary research or sibling projects).<br>
-            • <strong>50%</strong> = Low Confidence (speculative, guess, or placeholder). Avoid starting projects with less than 50% confidence.
+            • 100% = High Confidence (backed by customer data or direct metrics).<br>
+            • 80% = Medium Confidence (backed by secondary research or sibling projects).<br>
+            • 50% = Low Confidence (speculative, guess, or placeholder). Avoid starting projects with less than 50% confidence.
           </li>
           <li><strong>Effort (E)</strong>: The total work required from all team members (developers, designers, marketers) calculated in person-weeks or hours (e.g., 2 person-weeks).</li>
         </ul>
@@ -177,23 +181,22 @@
         <h3>Real-world Examples</h3>
         <blockquote>
           <strong>Example A (Self-Serve Invoice Downloads)</strong>:<br>
-          • <em>Reach</em>: 10,000 customers per month who request invoices manually.<br>
-          • <em>Impact</em>: 2 (High - saves customer friction and support load).<br>
-          • <em>Confidence</em>: 100% (based on support tickets logs).<br>
-          • <em>Effort</em>: 2 person-weeks of dev work.<br>
-          • <em>RICE Score</em>: (10,000 × 2 × 1.0) / 2 = <strong>10,000</strong>.
+          • Reach: 10,000 customers per month who request invoices manually.<br>
+          • Impact: 2 (High - saves customer friction and support load).<br>
+          • Confidence: 100% (based on support tickets logs).<br>
+          • Effort: 2 person-weeks of dev work.<br>
+          • RICE Score: (10,000 × 2 × 1.0) / 2 = 10,000.
         </blockquote>
         <blockquote>
           <strong>Example B (Complete Database System Migration)</strong>:<br>
-          • <em>Reach</em>: 15,000 total customers (affects everyone, but invisibly).<br>
-          • <em>Impact</em>: 0.5 (Low - checkout load speed increases by only 3%).<br>
-          • <em>Confidence</em>: 50% (untested performance metrics).<br>
-          • <em>Effort</em>: 8 person-weeks of DevOps work.<br>
-          • <em>RICE Score</em>: (15,000 × 0.5 × 0.5) / 8 = <strong>468.75</strong>.
+          • Reach: 15,000 total customers (affects everyone, but invisibly).<br>
+          • Impact: 0.5 (Low - checkout load speed increases by only 3%).<br>
+          • Confidence: 50% (untested performance metrics).<br>
+          • Effort: 8 person-weeks of DevOps work.<br>
+          • RICE Score: (15,000 × 0.5 × 0.5) / 8 = 468.75.
         </blockquote>
       </div>
     </div>
-  </div>
   </div>
 
   <!-- Floating Bulb Trigger -->
@@ -271,19 +274,29 @@
 
       const rows = container.querySelectorAll('.rice-row');
       const items = [];
+      let lowConfWarning = false;
 
       rows.forEach(row => {
-        const name = row.querySelector('.rice-name').value.trim();
+        const nameInput = row.querySelector('.rice-name');
+        const name = nameInput ? nameInput.value.trim() : '';
         const reach = parseFloat(row.querySelector('.rice-reach').value) || 0;
         const impact = parseFloat(row.querySelector('.rice-impact').value) || 0;
         const confidence = parseFloat(row.querySelector('.rice-confidence').value) || 0;
-        const effort = parseFloat(row.querySelector('.rice-effort').value) || 1;
+        const effort = parseFloat(row.querySelector('.rice-effort').value) || 0.0001;
 
         if (name) {
-          const score = (reach * impact * (confidence / 100)) / effort;
+          if (confidence < 50) {
+            lowConfWarning = true;
+          }
+          // Correct RICE formula
+          const score = parseFloat(((reach * impact * (confidence / 100)) / effort).toFixed(1));
           items.push({ name, reach, impact, confidence, effort, score });
         }
       });
+
+      if (lowConfWarning) {
+        alert("Warning: One or more items have confidence below 50%. It is generally recommended to avoid starting projects with less than 50% confidence.");
+      }
 
       // Sort items by score descending
       items.sort((a, b) => b.score - a.score);
@@ -298,10 +311,22 @@
           tr.style.outline = '2px solid var(--accent)';
         }
 
+        const priorityBadge = index === 0 ? `
+          <span class="tag tag-goals" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; margin-left: 0.5rem; background-color: var(--accent); color: #000; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+            <svg style="width: 12px; height: 12px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            #1 Priority
+          </span>
+        ` : '';
+
+        const confWarningBadge = item.confidence < 50 ? `
+          <span class="tag" style="background-color: #ef4444; color: #ffffff; font-size: 0.7rem; padding: 0.1rem 0.35rem; margin-left: 0.4rem; border-radius: 4px;">Low Conf</span>
+        ` : '';
+
         tr.innerHTML = `
           <td class="left-align" style="${index === 0 ? 'font-weight: 700;' : ''}">
             ${item.name} 
-            ${index === 0 ? '<span class="tag tag-goals" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; margin-left: 0.5rem; background-color: var(--accent); color: #000; font-weight: 700;">Top Priority</span>' : ''}
+            ${priorityBadge}
+            ${confWarningBadge}
           </td>
           <td>${item.reach}</td>
           <td>${item.impact}</td>
@@ -325,12 +350,19 @@
         }
 
         document.getElementById('rice-winner-card').innerHTML = `
-          <p style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
-            Prioritize "${topItem.name}" first. ${ratioText}
-          </p>
-          <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0;">
-            High RICE score means high return for low effort at high confidence. Double down on this activity to maximize leverage.
-          </p>
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <div style="background: rgba(226, 192, 146, 0.2); padding: 0.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0; border: 1px solid var(--accent);">
+              <svg style="width: 24px; height: 24px; fill: var(--accent);" viewBox="0 0 24 24"><path d="M18 2H6v2H2v6c0 2.21 1.79 4 4 4h2.15c.78 1.41 2.06 2.45 3.6 2.81V19H8v2h8v-2h-3.75v-2.19c1.54-.36 2.82-1.4 3.6-2.81H18c2.21 0 4-1.79 4-4V4h-4V2zM6 12c-1.1 0-2-.9-2-2V6h2v6zm14-2c0 1.1-.9 2-2 2v-6h2v6z"/></svg>
+            </div>
+            <div>
+              <p style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem 0;">
+                Prioritize "${topItem.name}" first. ${ratioText}
+              </p>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0;">
+                High RICE score means high return for low effort at high confidence. Double down on this activity to maximize leverage.
+              </p>
+            </div>
+          </div>
         `;
       }
 
@@ -340,6 +372,10 @@
 
       const resSec = document.getElementById('rice-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

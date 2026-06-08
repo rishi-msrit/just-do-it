@@ -39,6 +39,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="inventory-form">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
           
           <!-- Skills -->
@@ -97,6 +100,7 @@
           </div>
 
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary">Build my Personal Inventory →</button>
       </form>
@@ -432,6 +436,10 @@
 
       const resSec = document.getElementById('inventory-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

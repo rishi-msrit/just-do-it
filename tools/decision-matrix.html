@@ -99,6 +99,9 @@
 
       <!-- Step 2: Input Scores Grid -->
       <form id="matrix-scores-form" style="display: none; border-top: 1px dashed var(--border); padding-top: 2rem;">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         <h3>3. Score each Option (1 to 5)</h3>
         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Score how well each option meets each criterion (1 = poor, 5 = excellent).</p>
         
@@ -110,6 +113,7 @@
             <tbody id="scores-table-body"></tbody>
           </table>
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary">Build my Decision Matrix →</button>
       </form>
@@ -393,6 +397,10 @@
 
       const resSec = document.getElementById('matrix-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

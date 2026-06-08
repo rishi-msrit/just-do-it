@@ -39,35 +39,39 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="eisenhower-form">
-        <p style="margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.95rem;">Enter your tasks (one per line) in their respective quadrants below:</p>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <details id="inputs-details" open>
+          <summary>Your inputs (click to edit)</summary>
+
+          <p style="margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.95rem;">Enter your tasks (one per line) in their respective quadrants below:</p>
           
-          <!-- Q1: Urgent & Important -->
-          <div class="input-group">
-            <label for="q1-input">Q1: Urgent & Important <span>(Do First)</span></label>
-            <textarea id="q1-input" placeholder="e.g. Turn in thesis draft by tonight&#10;Call plumber for leaky pipes"></textarea>
-          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+            
+            <!-- Q1: Urgent & Important -->
+            <div class="input-group">
+              <label for="q1-input">Q1: Urgent & Important <span>(Do First)</span></label>
+              <textarea id="q1-input" placeholder="e.g. Turn in thesis draft by tonight&#10;Call plumber for leaky pipes"></textarea>
+            </div>
 
-          <!-- Q2: Not Urgent but Important -->
-          <div class="input-group">
-            <label for="q2-input">Q2: Important, Not Urgent <span>(Schedule/Plan)</span></label>
-            <textarea id="q2-input" placeholder="e.g. Exercise 45 mins&#10;Outline chapter 3 of book draft&#10;Weekly review"></textarea>
-          </div>
+            <!-- Q2: Not Urgent but Important -->
+            <div class="input-group">
+              <label for="q2-input">Q2: Important, Not Urgent <span>(Schedule/Plan)</span></label>
+              <textarea id="q2-input" placeholder="e.g. Exercise 45 mins&#10;Outline chapter 3 of book draft&#10;Weekly review"></textarea>
+            </div>
 
-          <!-- Q3: Urgent, Not Important -->
-          <div class="input-group">
-            <label for="q3-input">Q3: Urgent, Not Important <span>(Delegate)</span></label>
-            <textarea id="q3-input" placeholder="e.g. Reposting social updates&#10;Booking flights for holiday trip"></textarea>
-          </div>
+            <!-- Q3: Urgent, Not Important -->
+            <div class="input-group">
+              <label for="q3-input">Q3: Urgent, Not Important <span>(Delegate)</span></label>
+              <textarea id="q3-input" placeholder="e.g. Reposting social updates&#10;Booking flights for holiday trip"></textarea>
+            </div>
 
-          <!-- Q4: Not Urgent & Not Important -->
-          <div class="input-group">
-            <label for="q4-input">Q4: Not Urgent & Not Important <span>(Eliminate)</span></label>
-            <textarea id="q4-input" placeholder="e.g. Scrolling social media feed&#10;Organizing folder structure for the 4th time"></textarea>
-          </div>
+            <!-- Q4: Not Urgent & Not Important -->
+            <div class="input-group">
+              <label for="q4-input">Q4: Not Urgent & Not Important <span>(Eliminate)</span></label>
+              <textarea id="q4-input" placeholder="e.g. Scrolling social media feed&#10;Organizing folder structure for the 4th time"></textarea>
+            </div>
 
-        </div>
+          </div>
+        </details>
 
         <button type="submit" class="btn btn-primary">Build my Eisenhower Matrix →</button>
       </form>
@@ -117,7 +121,11 @@
         <div class="reflection-box" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
           <p id="eisenhower-count-summary" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;"></p>
           <div id="eisenhower-insights" style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.75rem;"></div>
-          <p class="nudge-text" style="font-size: 0.95rem; font-style: italic; color: var(--text-secondary); margin: 0; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+          
+          <!-- Checklist container -->
+          <div id="weekly-focus-container" style="margin-top: 1.5rem; border-top: 1px dashed var(--border); padding-top: 1.25rem; display: none;"></div>
+
+          <p class="nudge-text" style="font-size: 0.95rem; font-style: italic; color: var(--text-secondary); margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
             Nudge: If Q1 is overloaded, your Q2 habits are likely broken. Focus on proactive Q2 planning to reduce future Q1 crises.
           </p>
         </div>
@@ -158,14 +166,13 @@
         <h3>Real-world Examples</h3>
         <blockquote>
           <strong>Example (Software Engineer's Tasks)</strong>:<br>
-          • <em>Q1 (Do)</em>: Fix database connection leak crashed the checkout page.<br>
-          • <em>Q2 (Schedule)</em>: Write integration tests for the authentication module due next month.<br>
-          • <em>Q3 (Delegate)</em>: RSVP to 3 team meetings; set up automated build logs reports.<br>
-          • <em>Q4 (Eliminate)</em>: Re-organize my desktop wallpaper collection.
+          • Q1 (Do): Fix database connection leak crashed the checkout page.<br>
+          • Q2 (Schedule): Write integration tests for the authentication module due next month.<br>
+          • Q3 (Delegate): RSVP to 3 team meetings; set up automated build logs reports.<br>
+          • Q4 (Eliminate): Re-organize my desktop wallpaper collection.
         </blockquote>
       </div>
     </div>
-  </div>
   </div>
 
   <!-- Floating Bulb Trigger -->
@@ -186,11 +193,13 @@
       e.preventDefault();
       
       const counts = { q1: 0, q2: 0, q3: 0, q4: 0 };
+      const tasksByQ = { q1: [], q2: [], q3: [], q4: [] };
       
       const fillQuadrant = (inputId, resId, key) => {
         const text = document.getElementById(inputId).value;
         const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         counts[key] = lines.length;
+        tasksByQ[key] = lines;
         const ul = document.getElementById(resId);
         ul.innerHTML = '';
         if (lines.length === 0) {
@@ -212,39 +221,118 @@
       document.getElementById('eisenhower-count-summary').innerHTML = 
         `You have <strong style="color: #B07E7A;">${counts.q1} tasks</strong> demanding immediate action and <strong style="color: #78856F;">${counts.q2} tasks</strong> worth scheduling for long-term growth.`;
 
-      // Overload Warning
-      let warningHtml = "";
-      if (counts.q1 > 3) {
-        warningHtml = `<p style="margin: 0; color: #B07E7A;">⚠️ <strong>Warning:</strong> ${counts.q1} urgent+important tasks suggests a reactive pattern. Investing in Q2 (Schedule) prevents Q1 overload.</p>`;
-      } else {
-        warningHtml = `<p style="margin: 0; color: var(--text-secondary);">✓ Q1 (Do First) is in a manageable state (${counts.q1} tasks).</p>`;
-      }
+      // Distribution percents
+      const total = counts.q1 + counts.q2 + counts.q3 + counts.q4;
+      const q1Pct = total > 0 ? Math.round((counts.q1 / total) * 100) : 25;
+      const q2Pct = total > 0 ? Math.round((counts.q2 / total) * 100) : 25;
+      const q3Pct = total > 0 ? Math.round((counts.q3 / total) * 100) : 25;
+      const q4Pct = total > 0 ? 100 - (q1Pct + q2Pct + q3Pct) : 25;
 
-      // Elimination count
-      const eliminationText = `<p style="margin: 0; color: var(--text-secondary);">✓ You can potentially eliminate <strong>${counts.q4} tasks</strong> entirely from Q4 (Eliminate).</p>`;
-
-      // Time recommendation
-      const qNames = { q1: "Q1 (Do First)", q2: "Q2 (Schedule)", q3: "Q3 (Delegate)", q4: "Q4 (Eliminate)" };
+      // Heavy Quadrant Diagnosis
       let heaviest = 'q1';
       let maxCount = counts.q1;
       if (counts.q2 > maxCount) { heaviest = 'q2'; maxCount = counts.q2; }
       if (counts.q3 > maxCount) { heaviest = 'q3'; maxCount = counts.q3; }
       if (counts.q4 > maxCount) { heaviest = 'q4'; maxCount = counts.q4; }
-      const skewText = (counts.q1 === 0 && counts.q2 === 0 && counts.q3 === 0 && counts.q4 === 0)
-        ? "none (balanced)"
-        : qNames[heaviest];
 
-      const recommendationText = `<p style="margin: 0; color: var(--text-secondary);">⏱ <strong>Recommendation:</strong> Ideal time split: 20% Q1, 60-70% Q2, minimize Q3 and Q4. Your current distribution skews toward <strong>${skewText}</strong>.</p>`;
+      let diagnosisTitle = "Balanced Focus";
+      let diagnosisDesc = "Your task distribution is relatively spread. Focus on protecting Q2 time to prevent future reactive tasks.";
+      let diagnosisColor = "var(--accent)";
 
+      if (total > 0) {
+        if (heaviest === 'q1') {
+          diagnosisTitle = "Firefighting Mode";
+          diagnosisDesc = "You are reacting to crises rather than preventing them. An overloaded Q1 implies broken Q2 planning habits. Schedule Q2 preventions to reclaim calm.";
+          diagnosisColor = "#B07E7A";
+        } else if (heaviest === 'q3') {
+          diagnosisTitle = "Distraction Trap";
+          diagnosisDesc = "You are prioritizing other people's emergencies. Practice delegation and saying 'no' to reclaim control of your own focus.";
+          diagnosisColor = "#6F8085";
+        } else if (heaviest === 'q4') {
+          diagnosisTitle = "Avoidance Mode";
+          diagnosisDesc = "You are spending too much time on low-value tasks. Eliminate these distractions to free up leverage for high-value strategic planning.";
+          diagnosisColor = "var(--text-secondary)";
+        } else if (heaviest === 'q2') {
+          diagnosisTitle = "Strategic Harmony";
+          diagnosisDesc = "Excellent work! You are spending high-leverage time on proactive growth and planning. This reduces future crises and builds long-term values.";
+          diagnosisColor = "#78856F";
+        }
+      }
+
+      // Overload Warning
+      let warningHtml = "";
+      if (counts.q1 > 3) {
+        warningHtml = `
+          <div style="display: flex; align-items: flex-start; gap: 8px; color: #B07E7A; margin-bottom: 0.5rem;">
+            <svg style="width: 18px; height: 18px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+            <span><strong>Urgency Warning:</strong> Having ${counts.q1} tasks in Q1 suggests a highly reactive pattern. Move tasks to Q2 and schedule them to break the firefighting cycle.</span>
+          </div>
+        `;
+      }
+
+      // Proportional bar display
       const insightsEl = document.getElementById('eisenhower-insights');
       insightsEl.innerHTML = `
-        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
-          <p style="margin: 0; color: var(--text-primary);"><strong>Quadrant Counts:</strong> Q1: ${counts.q1} | Q2: ${counts.q2} | Q3: ${counts.q3} | Q4: ${counts.q4}</p>
+        <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem; text-align: left;">
+          
+          <!-- Diagnosis Card -->
+          <div style="border: 1px solid var(--border); padding: 1rem; border-radius: var(--border-radius); background: var(--bg-card); border-left: 4px solid ${diagnosisColor};">
+            <h4 style="font-family: var(--font-body); font-weight: 700; font-size: 1rem; color: ${diagnosisColor}; margin-bottom: 0.25rem;">${diagnosisTitle}</h4>
+            <p style="margin: 0; font-size: 0.9rem; color: var(--text-primary);">${diagnosisDesc}</p>
+          </div>
+
+          <!-- distribution bar -->
+          <div style="display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0;">
+            <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-secondary); text-transform: uppercase;">Task Distribution Breakdown</div>
+            <div style="display: flex; height: 16px; border-radius: var(--border-radius); overflow: hidden; width: 100%;">
+              <div style="width: ${q1Pct}%; background-color: #B07E7A;" title="Q1: ${q1Pct}%"></div>
+              <div style="width: ${q2Pct}%; background-color: #78856F;" title="Q2: ${q2Pct}%"></div>
+              <div style="width: ${q3Pct}%; background-color: #6F8085;" title="Q3: ${q3Pct}%"></div>
+              <div style="width: ${q4Pct}%; background-color: #9CA3AF;" title="Q4: ${q4Pct}%"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-secondary);">
+              <span>Q1 (Do): ${q1Pct}%</span>
+              <span>Q2 (Schedule): ${q2Pct}%</span>
+              <span>Q3 (Delegate): ${q3Pct}%</span>
+              <span>Q4 (Eliminate): ${q4Pct}%</span>
+            </div>
+          </div>
+
           ${warningHtml}
-          ${eliminationText}
-          ${recommendationText}
         </div>
       `;
+
+      // Weekly Focus Checklist (Extract Q1 & Q2 Actions)
+      const weeklyFocusEl = document.getElementById('weekly-focus-container');
+      const focusTasks = [
+        ...tasksByQ.q1.map(t => ({ task: t, type: 'Q1 (Do)', color: '#B07E7A' })),
+        ...tasksByQ.q2.map(t => ({ task: t, type: 'Q2 (Plan)', color: '#78856F' }))
+      ];
+
+      if (focusTasks.length > 0) {
+        const checkboxHTML = focusTasks.map((item, idx) => `
+          <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.5;">
+            <input type="checkbox" id="chk-focus-${idx}" style="margin-top: 3px; cursor: pointer;">
+            <label for="chk-focus-${idx}" style="cursor: pointer; color: var(--text-primary);">
+              <span style="color: ${item.color}; font-weight: 700; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; margin-right: 0.35rem;">[${item.type}]</span>
+              ${item.task}
+            </label>
+          </div>
+        `).join('');
+
+        weeklyFocusEl.innerHTML = `
+          <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+            <svg style="width: 20px; height: 20px; fill: var(--accent);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Weekly Focus Checklist
+          </h3>
+          <div style="display: flex; flex-direction: column;">
+            ${checkboxHTML}
+          </div>
+        `;
+        weeklyFocusEl.style.display = 'block';
+      } else {
+        weeklyFocusEl.style.display = 'none';
+      }
 
       document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
         year: 'numeric', month: 'long', day: 'numeric'
@@ -252,6 +340,10 @@
 
       const resSec = document.getElementById('eisenhower-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

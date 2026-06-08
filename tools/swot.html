@@ -39,6 +39,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="swot-form">
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
           
           <!-- Strengths -->
@@ -98,6 +101,7 @@
           </div>
 
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary btn-large">Build my SWOT Analysis →</button>
       </form>
@@ -290,6 +294,10 @@
       // Show result section
       const resSec = document.getElementById('swot-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

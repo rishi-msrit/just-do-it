@@ -53,7 +53,9 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="pros-cons-form">
-        
+      <details id="inputs-details" open>
+        <summary>Your inputs (click to edit)</summary>
+
         <!-- Decision statement -->
         <div class="input-group" style="margin-bottom: 2rem;">
           <label for="decision-input">The Decision under evaluation</label>
@@ -111,6 +113,7 @@
           </div>
 
         </div>
+      </details>
 
         <button type="submit" class="btn btn-primary">Compare Pros & Cons →</button>
       </form>
@@ -222,7 +225,6 @@
       </div>
     </div>
   </div>
-  </div>
 
   <!-- Floating Bulb Trigger -->
   <button class="howto-trigger" title="Show How-To Guide">
@@ -283,26 +285,22 @@
       // Parse pros
       const proRows = prosContainer.querySelectorAll('.proscons-entry-row');
       const pros = [];
-      let totalProsWeight = 0;
       proRows.forEach(row => {
         const text = row.querySelector('.pro-text').value.trim();
         const weight = parseInt(row.querySelector('.pro-weight').value) || 1;
         if (text) {
           pros.push({ text, weight });
-          totalProsWeight += weight;
         }
       });
 
       // Parse cons
       const conRows = consContainer.querySelectorAll('.proscons-entry-row');
       const cons = [];
-      let totalConsWeight = 0;
       conRows.forEach(row => {
         const text = row.querySelector('.con-text').value.trim();
         const weight = parseInt(row.querySelector('.con-weight').value) || 1;
         if (text) {
           cons.push({ text, weight });
-          totalConsWeight += weight;
         }
       });
 
@@ -327,29 +325,30 @@
       fillResList('res-pros-list', pros);
       fillResList('res-cons-list', cons);
 
-      document.getElementById('res-pros-total').textContent = `Total Weight: ${totalProsWeight}`;
-      document.getElementById('res-cons-total').textContent = `Total Weight: ${totalConsWeight}`;
+      const proTotal = pros.reduce((sum, p) => sum + (parseInt(p.weight) || 1), 0);
+      const conTotal = cons.reduce((sum, c) => sum + (parseInt(c.weight) || 1), 0);
+      const total = proTotal + conTotal;
+
+      document.getElementById('res-pros-total').textContent = `Total Weight: ${proTotal}`;
+      document.getElementById('res-cons-total').textContent = `Total Weight: ${conTotal}`;
 
       // Update balance scale visual
-      const totalWeight = totalProsWeight + totalConsWeight;
       const leftFill = document.getElementById('scale-left-fill');
       const rightFill = document.getElementById('scale-right-fill');
       const beam = document.getElementById('scale-beam-wrapper');
       
-      document.getElementById('scale-left-label').textContent = `Pros Weight: ${totalProsWeight}`;
-      document.getElementById('scale-right-label').textContent = `Cons Weight: ${totalConsWeight}`;
+      document.getElementById('scale-left-label').textContent = `Pros Weight: ${proTotal}`;
+      document.getElementById('scale-right-label').textContent = `Cons Weight: ${conTotal}`;
 
-      if (totalWeight > 0) {
-        leftFill.style.width = `${(totalProsWeight / totalWeight) * 100}%`;
-        rightFill.style.width = `${(totalConsWeight / totalWeight) * 100}%`;
-      } else {
-        leftFill.style.width = '0%';
-        rightFill.style.width = '0%';
-      }
+      const proWidth = total > 0 ? Math.round((proTotal / total) * 100) : 50;
+      const conWidth = total > 0 ? 100 - proWidth : 50;
 
-      if (totalProsWeight > totalConsWeight) {
+      leftFill.style.width = proWidth + '%';
+      rightFill.style.width = conWidth + '%';
+
+      if (proTotal > conTotal) {
         beam.style.transform = 'rotate(-5deg)';
-      } else if (totalConsWeight > totalProsWeight) {
+      } else if (conTotal > proTotal) {
         beam.style.transform = 'rotate(5deg)';
       } else {
         beam.style.transform = 'rotate(0deg)';
@@ -357,24 +356,25 @@
 
       // Winner summary text
       const winnerDiv = document.getElementById('res-comparison-winner');
-      const verdict = totalProsWeight > totalConsWeight ? 'leans toward YES' : totalProsWeight < totalConsWeight ? 'leans toward NO' : 'is evenly balanced';
-      const scoreMsg = `Weighted score: Pros ${totalProsWeight} vs Cons ${totalConsWeight}. The decision ${verdict}.`;
       
-      if (totalProsWeight > totalConsWeight) {
-        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: PROS win. The arguments for taking action carry more weighted significance.`;
-        winnerDiv.style.backgroundColor = 'rgba(120, 133, 111, 0.15)';
-        winnerDiv.style.color = '#4E6041';
-        winnerDiv.style.borderColor = '#78856F';
-      } else if (totalConsWeight > totalProsWeight) {
-        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: CONS win. The obstacles and concerns outweigh the positive drivers. Proceed with caution.`;
-        winnerDiv.style.backgroundColor = 'rgba(176, 126, 122, 0.15)';
-        winnerDiv.style.color = '#60414E';
-        winnerDiv.style.borderColor = '#B07E7A';
-      } else {
-        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: TIE. The arguments are balanced. Consider collecting more information or weighing the items again.`;
+      if (proTotal === conTotal) {
+        const scoreMsg = `Weighted score: Pros ${proTotal} vs Cons ${conTotal}. The decision is evenly balanced.`;
+        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: Evenly balanced. When scores tie, default to the option that is reversible — you can always course correct.<br><br><em>If this result surprises you, that reaction is data.</em>`;
         winnerDiv.style.backgroundColor = 'var(--bg-card)';
         winnerDiv.style.color = 'var(--text-primary)';
         winnerDiv.style.borderColor = 'var(--border)';
+      } else if (proTotal > conTotal) {
+        const scoreMsg = `Weighted score: Pros ${proTotal} vs Cons ${conTotal}. The decision Leans YES — Pros outweigh Cons [${proTotal}] to [${conTotal}].`;
+        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: PROS win. The arguments for taking action carry more weighted significance.<br><br><em>If this result surprises you, that reaction is data.</em>`;
+        winnerDiv.style.backgroundColor = 'rgba(120, 133, 111, 0.15)';
+        winnerDiv.style.color = '#4E6041';
+        winnerDiv.style.borderColor = '#78856F';
+      } else {
+        const scoreMsg = `Weighted score: Pros ${proTotal} vs Cons ${conTotal}. The decision Leans NO — Cons outweigh Pros [${conTotal}] to [${proTotal}].`;
+        winnerDiv.innerHTML = `<strong>${scoreMsg}</strong><br>Analysis: CONS win. The obstacles and concerns outweigh the positive drivers. Proceed with caution.<br><br><em>If this result surprises you, that reaction is data.</em>`;
+        winnerDiv.style.backgroundColor = 'rgba(176, 126, 122, 0.15)';
+        winnerDiv.style.color = '#60414E';
+        winnerDiv.style.borderColor = '#B07E7A';
       }
 
       document.getElementById('generate-date').textContent = new Date().toLocaleDateString(undefined, {
@@ -383,6 +383,10 @@
 
       const resSec = document.getElementById('pros-cons-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

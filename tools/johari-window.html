@@ -39,33 +39,37 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="johari-form">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-          
-          <!-- Open Arena -->
-          <div class="input-group">
-            <label for="open-input">Open / Arena <span>(Known to self & known to others)</span></label>
-            <textarea id="open-input" placeholder="e.g. Talkative, organized, impatient, punctual, passionate about tech..." required></textarea>
-          </div>
+        <details id="inputs-details" open>
+          <summary>Your inputs (click to edit)</summary>
 
-          <!-- Blind Spot -->
-          <div class="input-group">
-            <label for="blind-input">Blind Spot <span>(Unknown to self, known to others. Ask a trusted friend or mentor what they observe about you that you might not see, and write it here)</span></label>
-            <textarea id="blind-input" placeholder="e.g. Interrupting others when excited, micromanaging small details..." required></textarea>
-          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+            
+            <!-- Open Arena -->
+            <div class="input-group">
+              <label for="open-input">Open / Arena <span>(Traits known to both you and others — your public self)</span></label>
+              <textarea id="open-input" placeholder="e.g. Talkative, organized, impatient, punctual, passionate about tech..." required></textarea>
+            </div>
 
-          <!-- Hidden Facade -->
-          <div class="input-group">
-            <label for="hidden-input">Hidden / Facade <span>(Known to self, unknown to others)</span></label>
-            <textarea id="hidden-input" placeholder="e.g. Impostor syndrome, social anxiety in large meetings, wishing to switch careers..." required></textarea>
-          </div>
+            <!-- Blind Spot -->
+            <div class="input-group">
+              <label for="blind-input">Blind Spot <span>(Traits others observe in you but you don't see in yourself — ask a friend to share these)</span></label>
+              <textarea id="blind-input" placeholder="e.g. Interrupting others when excited, micromanaging small details..." required></textarea>
+            </div>
 
-          <!-- Unknown -->
-          <div class="input-group">
-            <label for="unknown-input">Unknown <span>(Unknown to self & unknown to others - hidden potential)</span></label>
-            <textarea id="unknown-input" placeholder="e.g. Ability to lead under pressure (untested), artistic capabilities..." required></textarea>
-          </div>
+            <!-- Hidden Facade -->
+            <div class="input-group">
+              <label for="hidden-input">Hidden / Facade <span>(Traits you know about yourself but keep hidden from others — your private self)</span></label>
+              <textarea id="hidden-input" placeholder="e.g. Impostor syndrome, social anxiety in large meetings, wishing to switch careers..." required></textarea>
+            </div>
 
-        </div>
+            <!-- Unknown -->
+            <div class="input-group">
+              <label for="unknown-input">Unknown <span>(Latent talents or behaviors untested and unknown to both you and others — your potential)</span></label>
+              <textarea id="unknown-input" placeholder="e.g. Ability to lead under pressure (untested), artistic capabilities..." required></textarea>
+            </div>
+
+          </div>
+        </details>
 
         <button type="submit" class="btn btn-primary">Build my Johari Window →</button>
       </form>
@@ -112,22 +116,22 @@
           
           <div class="johari-quadrant" style="border-top: 4px solid #78856F;">
             <h3>Open Arena <span>Known to Self & Others</span></h3>
-            <p id="res-open" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+            <div id="res-open" style="font-size: 0.95rem;"></div>
           </div>
 
           <div class="johari-quadrant" style="border-top: 4px solid #B07E7A;">
             <h3>Blind Spot <span>Known to Others, Unknown to Self</span></h3>
-            <p id="res-blind" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+            <div id="res-blind" style="font-size: 0.95rem;"></div>
           </div>
 
           <div class="johari-quadrant" style="border-top: 4px solid #6F8085;">
             <h3>Hidden / Facade <span>Known to Self, Unknown to Others</span></h3>
-            <p id="res-hidden" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+            <div id="res-hidden" style="font-size: 0.95rem;"></div>
           </div>
 
           <div class="johari-quadrant" style="border-top: 4px solid var(--text-secondary);">
             <h3>Unknown <span>Unknown to Self & Others</span></h3>
-            <p id="res-unknown" style="white-space: pre-wrap; font-size: 0.95rem;"></p>
+            <div id="res-unknown" style="font-size: 0.95rem;"></div>
           </div>
 
         </div>
@@ -164,23 +168,22 @@
 
       <div class="howto-section">
         <h3>How to Grow Self-Awareness</h3>
-        <p>Self-improvement is defined by <strong>expanding your Open Area</strong>. You accomplish this in two ways:</p>
-        <p>1. <strong>Invite Feedback</strong>: Ask peers or mentors what they observe about you. This shifts items from your Blind Spot into the Open Area.</p>
-        <p>2. <strong>Practice Self-Disclosure</strong>: Share your fears, hopes, or background stories. This shifts items from the Hidden Area into the Open Area.</p>
+        <p>Self-improvement is defined by expanding your Open Area. You accomplish this in two ways:</p>
+        <p>1. Invite Feedback: Ask peers or mentors what they observe about you. This shifts items from your Blind Spot into the Open Area.</p>
+        <p>2. Practice Self-Disclosure: Share your fears, hopes, or background stories. This shifts items from the Hidden Area into the Open Area.</p>
       </div>
 
       <div class="howto-section">
         <h3>Real-world Example</h3>
         <blockquote>
           <strong>Example (Software Team Lead)</strong>:<br>
-          • <em>Open</em>: Everyone knows you are an expert in architecture design and love coffee.<br>
-          • <em>Blind Spot</em>: Mentors point out that you sound defensive when juniors challenge your code during pull reviews.<br>
-          • <em>Hidden</em>: You feel immense imposter syndrome about managing budget sheets.<br>
-          • <em>Unknown</em>: You have never managed an active crisis—discovering you are calm under fire when the production database fails.
+          • Open: Everyone knows you are an expert in architecture design and love coffee.<br>
+          • Blind Spot: Mentors point out that you sound defensive when juniors challenge your code during pull reviews.<br>
+          • Hidden: You feel immense imposter syndrome about managing budget sheets.<br>
+          • Unknown: You have never managed an active crisis—discovering you are calm under fire when the production database fails.
         </blockquote>
       </div>
     </div>
-  </div>
   </div>
 
   <!-- Floating Bulb Trigger -->
@@ -227,11 +230,6 @@
       const hiddenVal = document.getElementById('hidden-input').value;
       const unknownVal = document.getElementById('unknown-input').value;
 
-      document.getElementById('res-open').textContent = openVal;
-      document.getElementById('res-blind').textContent = blindVal;
-      document.getElementById('res-hidden').textContent = hiddenVal;
-      document.getElementById('res-unknown').textContent = unknownVal;
-
       // Logic calculations
       function parseList(str) {
         if (!str) return [];
@@ -259,6 +257,18 @@
       const hiddenItems = parseList(hiddenVal);
       const unknownItems = parseList(unknownVal);
 
+      function renderList(items) {
+        if (items.length === 0) return '<em style="color: var(--text-secondary);">None entered</em>';
+        return '<ul style="margin: 0; padding-left: 1.25rem;">' + 
+          items.map(item => `<li>${item}</li>`).join('') + 
+          '</ul>';
+      }
+
+      document.getElementById('res-open').innerHTML = renderList(openItems);
+      document.getElementById('res-blind').innerHTML = renderList(blindItems);
+      document.getElementById('res-hidden').innerHTML = renderList(hiddenItems);
+      document.getElementById('res-unknown').innerHTML = renderList(unknownItems);
+
       const total = openItems.length + blindItems.length + hiddenItems.length + unknownItems.length;
       let openPct = 25, blindPct = 25, hiddenPct = 25, unknownPct = 25;
       if (total > 0) {
@@ -268,10 +278,59 @@
         unknownPct = 100 - (openPct + blindPct + hiddenPct);
       }
 
+      // Sizing grid cells proportionally by word count
+      function getWordCount(str) {
+        if (!str) return 0;
+        return str.trim().split(/\s+/).filter(Boolean).length;
+      }
+
+      const openWords = getWordCount(openVal);
+      const blindWords = getWordCount(blindVal);
+      const hiddenWords = getWordCount(hiddenVal);
+      const unknownWords = getWordCount(unknownVal);
+
+      const leftWords = openWords + hiddenWords;
+      const rightWords = blindWords + unknownWords;
+      let colPct = Math.round((leftWords / (leftWords + rightWords || 1)) * 100);
+
+      const topWords = openWords + blindWords;
+      const bottomWords = hiddenWords + unknownWords;
+      let rowPct = Math.round((topWords / (topWords + bottomWords || 1)) * 100);
+
+      // Clamp percentages between 20% and 80% to keep grid readable
+      colPct = Math.max(20, Math.min(80, colPct));
+      rowPct = Math.max(20, Math.min(80, rowPct));
+
+      sliderDisclosure.value = rowPct;
+      sliderFeedback.value = colPct;
+
+      // Self-Awareness Index & Custom advice
+      const selfAwarenessIndex = total > 0 ? (openItems.length / total) : 0;
+      let adviceText = "";
+      if (selfAwarenessIndex >= 0.50) {
+        adviceText = "<strong>High Self-Awareness:</strong> You have a healthy, expansive Open Arena. To expand further, focus on seeking structured feedback to reduce your Blind Spot.";
+      } else if (selfAwarenessIndex >= 0.25) {
+        adviceText = "<strong>Moderate Self-Awareness:</strong> You have a balanced personal window. Work on self-disclosure (sharing facade items) and soliciting feedback to expand your Arena.";
+      } else {
+        adviceText = "<strong>Developing Self-Awareness:</strong> Your Open Arena is relatively small. Consider gradual self-disclosure to build trust and proactive questions to reduce unknown traits.";
+      }
+
+      // Custom Growth Prompts
+      let growthPromptsHTML = "";
+      if (blindItems.length > 0) {
+        growthPromptsHTML += `<li style="margin-bottom: 0.5rem;"><strong>To shrink your Blind Spot:</strong> Ask a trusted teammate, "What triggers my tendency to <em>${blindItems[0].toLowerCase()}</em>, and how can I manage it?"</li>`;
+      }
+      if (hiddenItems.length > 0) {
+        growthPromptsHTML += `<li style="margin-bottom: 0.5rem;"><strong>To shrink your Hidden Facade:</strong> Practice disclosing your thoughts about <em>${hiddenItems[0].toLowerCase()}</em> in a safe 1-on-1 setting.</li>`;
+      }
+      if (unknownItems.length > 0) {
+        growthPromptsHTML += `<li style="margin-bottom: 0.5rem;"><strong>To explore your Unknown:</strong> Seek a low-risk opportunity or project to test your potential in: <em>${unknownItems[0]}</em>.</li>`;
+      }
+
       const insightsBox = document.getElementById('johari-insights-box');
       insightsBox.innerHTML = `
         <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.5rem;">Self-Awareness Insights</h3>
-        <p style="font-size: 1rem; font-weight: 600; margin: 0;">Self-Awareness Score (Open Area %): <span style="color: var(--accent);">${total > 0 ? Math.round((openItems.length / total) * 100) : 0}%</span></p>
+        <p style="font-size: 1.05rem; font-weight: 600; margin: 0;">Self-Awareness Score (Open Area %): <span style="color: var(--accent);">${Math.round(selfAwarenessIndex * 100)}%</span></p>
         
         <div style="display: flex; height: 28px; border-radius: var(--border-radius); overflow: hidden; margin: 1.25rem 0; font-size: 0.8rem; font-family: var(--font-mono); font-weight: 700; color: #fff;">
           <div style="width: ${openPct}%; background-color: #78856F; display: flex; align-items: center; justify-content: center; min-width: ${openPct > 0 ? '40px' : '0'};">Open (${openPct}%)</div>
@@ -280,9 +339,16 @@
           <div style="width: ${unknownPct}%; background-color: #9CA3AF; display: flex; align-items: center; justify-content: center; min-width: ${unknownPct > 0 ? '40px' : '0'};">Unknown (${unknownPct}%)</div>
         </div>
 
-        <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
-          Your Open Area is <strong>${total > 0 ? Math.round((openItems.length / total) * 100) : 0}%</strong> of your total window. High performers typically have a large Open Area and small Blind Spot. Your Blind Spot has <strong>${blindItems.length}</strong> items — consider asking trusted people to help reduce this.
+        <p style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.5; margin-bottom: 1rem;">
+          ${adviceText}
         </p>
+        
+        ${growthPromptsHTML ? `
+          <h4 style="font-family: var(--font-body); font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Recommended Growth Actions:</h4>
+          <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+            ${growthPromptsHTML}
+          </ul>
+        ` : ''}
       `;
       insightsBox.style.display = 'block';
 
@@ -296,6 +362,10 @@
       // Initialize layout on submit
       updateJohariGrid();
       
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

@@ -39,36 +39,39 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="regret-form">
-        
-        <!-- Decision statement -->
-        <div class="input-group" style="margin-bottom: 2rem;">
-          <label for="decision-input">What decision are you facing?</label>
-          <input type="text" id="decision-input" placeholder="e.g. Quitting a stable corporate job to start an indie software startup" required>
-        </div>
+        <details id="inputs-details" open>
+          <summary>Your inputs (click to edit)</summary>
 
-        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
-          
-          <div class="input-group">
-            <label for="q1-input">1. If you choose YES, and it works — how do you feel in 10 years?</label>
-            <textarea id="q1-input" placeholder="e.g. Incredibly proud, financially free, having built something of my own..." required></textarea>
+          <!-- Decision statement -->
+          <div class="input-group" style="margin-bottom: 2rem;">
+            <label for="decision-input">What decision are you facing?</label>
+            <input type="text" id="decision-input" placeholder="e.g. Quitting a stable corporate job to start an indie software startup" required>
           </div>
 
-          <div class="input-group">
-            <label for="q2-input">2. If you choose YES, and it fails — how do you feel in 10 years?</label>
-            <textarea id="q2-input" placeholder="e.g. Disappointed about the failed effort, but glad I tried. I will have learned skills and can always get another engineering job..." required></textarea>
-          </div>
+          <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+            
+            <div class="input-group">
+              <label for="q1-input">1. If you choose YES, and it works — how do you feel in 10 years?</label>
+              <textarea id="q1-input" placeholder="e.g. Incredibly proud, financially free, having built something of my own..." required></textarea>
+            </div>
 
-          <div class="input-group">
-            <label for="q3-input">3. If you choose NO — how do you feel in 10 years?</label>
-            <textarea id="q3-input" placeholder="e.g. Safe, but with a lingering, nagging regret. Wondering 'what if' every single day..." required></textarea>
-          </div>
+            <div class="input-group">
+              <label for="q2-input">2. If you choose YES, and it fails — how do you feel in 10 years?</label>
+              <textarea id="q2-input" placeholder="e.g. Disappointed about the failed effort, but glad I tried. I will have learned skills and can always get another engineering job..." required></textarea>
+            </div>
 
-          <div class="input-group">
-            <label for="reflection-input">Final Reflection: Which path will you regret NOT taking?</label>
-            <textarea id="reflection-input" placeholder="e.g. I would deeply regret not taking the risk to start the startup. Even if it fails, I will not regret trying." required></textarea>
-          </div>
+            <div class="input-group">
+              <label for="q3-input">3. If you choose NO — how do you feel in 10 years?</label>
+              <textarea id="q3-input" placeholder="e.g. Safe, but with a lingering, nagging regret. Wondering 'what if' every single day..." required></textarea>
+            </div>
 
-        </div>
+            <div class="input-group">
+              <label for="reflection-input">Final Reflection: Which path will you regret NOT taking?</label>
+              <textarea id="reflection-input" placeholder="e.g. I would deeply regret not taking the risk to start the startup. Even if it fails, I will not regret trying." required></textarea>
+            </div>
+
+          </div>
+        </details>
 
         <button type="submit" class="btn btn-primary">Build my Regret Minimization Card →</button>
       </form>
@@ -136,10 +139,13 @@
         </div>
 
         <!-- Prominent Conclusion Box -->
-        <div class="regret-conclusion" style="margin-top: 2.5rem; border: 1px solid var(--border); border-radius: var(--border-radius); padding: 1.5rem; background-color: var(--bg-card); border-left: 5px solid var(--accent);">
+        <div class="regret-conclusion" style="margin-top: 2.5rem; border: 1px solid var(--border); border-radius: var(--border-radius); padding: 1.5rem; background-color: var(--bg-card); border-left: 5px solid var(--accent); margin-bottom: 1.5rem;">
           <strong style="display: block; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.5rem;">Your 80-year-old self says:</strong>
           <p id="res-reflection" style="font-family: var(--font-display); font-size: 1.35rem; font-weight: bold; color: var(--text-primary); margin: 0; line-height: 1.5;"></p>
         </div>
+
+        <!-- prominent Bezos 80-year-old verdict card -->
+        <div id="verdict-card-container" style="margin-top: 1.5rem; margin-bottom: 1.5rem;"></div>
 
         <!-- Regret Vector Insights Box -->
         <div id="regret-insights-box" class="reflection-box" style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
@@ -158,15 +164,15 @@
       
       <div class="howto-section">
         <h3>What it is</h3>
-        <p>The Regret Minimization Framework is a cognitive model popularized by Amazon founder Jeff Bezos to make high-stakes, long-term decisions. When faced with a difficult choice, project yourself forward to age 80, looking back on your life. From this perspective, the temporary noise, fears, and embarrassments of the present fade away, exposing the only thing that truly lasts: minimizing the regrets of omission (what you <em>didn't</em> do).</p>
+        <p>The Regret Minimization Framework is a cognitive model popularized by Amazon founder Jeff Bezos to make high-stakes, long-term decisions. When faced with a difficult choice, project yourself forward to age 80, looking back on your life. From this perspective, the temporary noise, fears, and embarrassments of the present fade away, exposing the only thing that truly lasts: minimizing the regrets of omission (what you did not do).</p>
       </div>
 
       <div class="howto-section">
         <h3>Type 1 vs. Type 2 Decisions</h3>
         <p>Before applying this framework, assess the nature of your decision:</p>
         <ul style="padding-left: 1.25rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-          <li><strong>Type 1 (Irreversible)</strong>: One-way doors. Once you step through, you cannot easily return (e.g., quitting a lifelong career path, selling a company, relocating family abroad). These decisions require deep, long-horizon reflection like Regret Minimization.</li>
-          <li><strong>Type 2 (Reversible)</strong>: Two-way doors. If the choice doesn't work out, you can easily walk back and try something else (e.g., launching a minor feature, changing code styles, pricing tests). Decide on these quickly; do not get bogged down in over-analysis.</li>
+          <li><strong>Type 1 (Irreversible)</strong>: One-way doors. Once you step through, you cannot easily return. These decisions require deep, long-horizon reflection like Regret Minimization.</li>
+          <li><strong>Type 2 (Reversible)</strong>: Two-way doors. If the choice does not work out, you can easily walk back and try something else. Decide on these quickly; do not get bogged down in over-analysis.</li>
         </ul>
       </div>
 
@@ -181,7 +187,7 @@
       <div class="howto-section">
         <h3>Real-world Examples</h3>
         <blockquote>
-          <strong>Example A (Bezos's Amazon Decision)</strong>:<br>
+          <strong>Example A (Bezos' Amazon Decision)</strong>:<br>
           "I knew that when I was 80, I would never regret trying this thing called the internet that I thought was going to be a huge deal. I knew that if I failed, I wouldn't regret that, but I knew the one thing I might regret is not ever having tried."
         </blockquote>
         <blockquote>
@@ -209,34 +215,91 @@
     document.getElementById('regret-form').addEventListener('submit', function(e) {
       e.preventDefault();
       
+      const q1Val = document.getElementById('q1-input').value;
+      const q2Val = document.getElementById('q2-input').value;
+      const q3Val = document.getElementById('q3-input').value;
+      const reflectionVal = document.getElementById('reflection-input').value;
+
       document.getElementById('res-decision').textContent = document.getElementById('decision-input').value.trim();
-      document.getElementById('res-q1').textContent = document.getElementById('q1-input').value;
-      document.getElementById('res-q2').textContent = document.getElementById('q2-input').value;
-      document.getElementById('res-q3').textContent = document.getElementById('q3-input').value;
-      document.getElementById('res-reflection').textContent = document.getElementById('reflection-input').value;
+      document.getElementById('res-q1').textContent = q1Val;
+      document.getElementById('res-q2').textContent = q2Val;
+      document.getElementById('res-q3').textContent = q3Val;
+      document.getElementById('res-reflection').textContent = reflectionVal;
 
       // Regret Vector analysis
-      const q3Val = document.getElementById('q3-input').value.toLowerCase();
-      const regretWords = ['regret', 'wish', 'should have', 'missed', 'never tried', 'what if'];
-      const matchedRegret = regretWords.filter(word => q3Val.includes(word));
+      const q3Lower = q3Val.toLowerCase();
+      const refLower = reflectionVal.toLowerCase();
+      const regretWords = ['regret', 'wish', 'should have', 'missed', 'never tried', 'what if', 'never', 'nagging'];
+      const matchedRegret = regretWords.filter(word => q3Lower.includes(word) || refLower.includes(word));
 
-      const insightsBox = document.getElementById('regret-insights-box');
+      // Asymmetry check
+      const yesWorksLength = q1Val.trim().length;
+      const yesFailsLength = q2Val.trim().length;
+      let asymmetryHtml = "";
+      
+      if (yesWorksLength > yesFailsLength * 1.8 && yesWorksLength > 40) {
+        asymmetryHtml = `
+          <div style="display: flex; align-items: flex-start; gap: 8px; color: #B07E7A; margin-top: 0.75rem;">
+            <svg style="width: 18px; height: 18px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+            <span><strong>Asymmetry Audit:</strong> You described the success scenario in significantly more detail (${yesWorksLength} chars) than the potential failure scenario (${yesFailsLength} chars). Ensure you are not underplaying the challenges or recovery path of failing.</span>
+          </div>
+        `;
+      } else if (yesFailsLength > yesWorksLength * 1.8 && yesFailsLength > 40) {
+        asymmetryHtml = `
+          <div style="display: flex; align-items: flex-start; gap: 8px; color: #B07E7A; margin-top: 0.75rem;">
+            <svg style="width: 18px; height: 18px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+            <span><strong>Asymmetry Audit:</strong> You described the failure scenario in significantly more detail (${yesFailsLength} chars) than the success scenario (${yesWorksLength} chars). Make sure short-term risk aversion isn't clouding your long-term goal clarity.</span>
+          </div>
+        `;
+      }
+
+      // Verdict logic
+      let verdict = "YES (Take Action)";
+      let verdictReason = "Based on your reflection, the path of least regret is to proceed. At age 80, your regret of omission (not trying) will outweigh the regret of commission (trying and failing).";
+      
+      if (matchedRegret.length === 0 && !refLower.includes("regret not") && !refLower.includes("deeply regret")) {
+        // If they don't mention regret words in reflection or Q3, check if they explicitly leaning NO
+        if (refLower.includes("not do it") || refLower.includes("stay") || refLower.includes("regret taking")) {
+          verdict = "NO (Avoid Risk)";
+          verdictReason = "Your responses suggest you have high comfort with the default safety path, and attempting this action might cause high commission regret.";
+        } else {
+          verdict = "UNCLEAR / REFLECT MORE";
+          verdictReason = "The regret signals are balanced or low. Spend more time outlining your core values before making this high-stakes decision.";
+        }
+      }
+
+      // Render prominent Bezos card
+      const verdictCard = document.getElementById('verdict-card-container');
+      verdictCard.innerHTML = `
+        <div style="background: rgba(226, 192, 146, 0.15); border: 2px solid var(--accent); border-radius: var(--border-radius); padding: 1.5rem; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.5rem; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <svg style="width: 16px; height: 16px; fill: var(--accent);" viewBox="0 0 24 24"><path d="M9 18h6m-3-15a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3.5 5.5l-.5.5V18H10v-2l-.5-.5C7.5 14.5 6 12.5 6 10a7 7 0 0 1 7-7z"/></svg>
+            Minimum Regret Path Verdict
+          </div>
+          <div style="font-size: 1.8rem; font-family: var(--font-display); font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">${verdict}</div>
+          <p style="font-size: 0.95rem; color: var(--text-primary); margin: 0; line-height: 1.5;">${verdictReason}</p>
+        </div>
+      `;
+
       let warningHtml = "";
       if (matchedRegret.length > 0) {
         const matchedStr = matchedRegret.map(w => `"${w}"`).join(', ');
         warningHtml = `
-          <p style="margin: 0; color: #B07E7A;">
-            ⚠️ <strong>Regret Vector Signal:</strong> Your NO scenario answer contains regret-indicative language (${matchedStr}). This suggests the cost of inaction may be higher than the cost of failure.
-          </p>
+          <div style="display: flex; align-items: flex-start; gap: 8px; color: #B07E7A; margin-bottom: 0.5rem;">
+            <svg style="width: 18px; height: 18px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+            <span><strong>Regret Vector Signal:</strong> Your 'NO' scenario response contains strong regret markers (${matchedStr}). In long-term decision making, failures of omission are usually much harder to recover from than failures of action.</span>
+          </div>
         `;
       }
 
+      const insightsBox = document.getElementById('regret-insights-box');
       insightsBox.innerHTML = `
-        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.5rem; text-align: left;">Regret Vector Analysis</h3>
+        <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.75rem; text-align: left;">Regret Vector Analysis</h3>
         <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem; text-align: left;">
           ${warningHtml}
-          <p style="margin: 0; color: var(--text-secondary); ${warningHtml ? 'border-top: 1px dashed var(--border); padding-top: 0.75rem;' : ''}">
-            Regret Minimization is designed for big, irreversible decisions — career pivots, moving cities, starting something. If this is a small reversible decision, the answer is almost always: try it.
+          ${asymmetryHtml}
+          <p style="margin: 0; color: var(--text-secondary); border-top: 1px dashed var(--border); padding-top: 0.75rem;">
+            Regret Minimization is designed for big, irreversible (Type 1) decisions — career pivots, starting companies, moving locations. For small, reversible (Type 2) decisions, favor action and iteration.
           </p>
         </div>
       `;
@@ -248,6 +311,10 @@
 
       const resSec = document.getElementById('regret-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>

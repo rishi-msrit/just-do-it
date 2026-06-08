@@ -9,10 +9,23 @@
   <style>
     .item-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr 1fr auto;
       gap: 1rem;
       margin-bottom: 0.75rem;
       align-items: center;
+    }
+    .btn-remove-row {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.5rem;
+      line-height: 1;
+      padding: 0 0.5rem;
+      transition: var(--transition);
+    }
+    .btn-remove-row:hover {
+      color: #B07E7A;
     }
   </style>
 </head>
@@ -48,50 +61,58 @@
     <!-- Input Section -->
     <section class="input-section">
       <form id="impact-effort-form">
-        <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; font-weight: bold;">
-          <div>Item Name / Task</div>
-          <div>Impact</div>
-          <div>Effort</div>
-        </div>
+        <details id="inputs-details" open>
+          <summary>Your inputs (click to edit)</summary>
 
-        <div id="items-container">
-          <div class="item-row">
-            <input type="text" placeholder="e.g. Build prototype landing page" class="task-name-input" required>
-            <select class="task-impact-select">
-              <option value="High" selected>High</option>
-              <option value="Low">Low</option>
-            </select>
-            <select class="task-effort-select">
-              <option value="High">High</option>
-              <option value="Low" selected>Low</option>
-            </select>
+          <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 1rem; font-weight: bold;">
+            <div>Item Name / Task</div>
+            <div>Impact</div>
+            <div>Effort</div>
+            <div></div>
           </div>
-          <div class="item-row">
-            <input type="text" placeholder="e.g. Set up database cluster replication" class="task-name-input">
-            <select class="task-impact-select">
-              <option value="High" selected>High</option>
-              <option value="Low">Low</option>
-            </select>
-            <select class="task-effort-select">
-              <option value="High" selected>High</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-          <div class="item-row">
-            <input type="text" placeholder="e.g. Fix minor padding issues in footer" class="task-name-input">
-            <select class="task-impact-select">
-              <option value="High">High</option>
-              <option value="Low" selected>Low</option>
-            </select>
-            <select class="task-effort-select">
-              <option value="High">High</option>
-              <option value="Low" selected>Low</option>
-            </select>
-          </div>
-        </div>
 
-        <button type="button" class="btn" id="btn-add-item" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Task Row</button>
-        <br>
+          <div id="items-container">
+            <div class="item-row">
+              <input type="text" placeholder="e.g. Build prototype landing page" class="task-name-input" required>
+              <select class="task-impact-select">
+                <option value="High" selected>High</option>
+                <option value="Low">Low</option>
+              </select>
+              <select class="task-effort-select">
+                <option value="High">High</option>
+                <option value="Low" selected>Low</option>
+              </select>
+              <button type="button" class="btn-remove-row" style="visibility: hidden;">&times;</button>
+            </div>
+            <div class="item-row">
+              <input type="text" placeholder="e.g. Set up database cluster replication" class="task-name-input">
+              <select class="task-impact-select">
+                <option value="High" selected>High</option>
+                <option value="Low">Low</option>
+              </select>
+              <select class="task-effort-select">
+                <option value="High" selected>High</option>
+                <option value="Low">Low</option>
+              </select>
+              <button type="button" class="btn-remove-row" style="visibility: hidden;">&times;</button>
+            </div>
+            <div class="item-row">
+              <input type="text" placeholder="e.g. Fix minor padding issues in footer" class="task-name-input">
+              <select class="task-impact-select">
+                <option value="High">High</option>
+                <option value="Low" selected>Low</option>
+              </select>
+              <select class="task-effort-select">
+                <option value="High">High</option>
+                <option value="Low" selected>Low</option>
+              </select>
+              <button type="button" class="btn-remove-row" style="visibility: hidden;">&times;</button>
+            </div>
+          </div>
+
+          <button type="button" class="btn" id="btn-add-item" style="margin-top: 0.5rem; margin-bottom: 2rem;">+ Add Task Row</button>
+          <br>
+        </details>
         <button type="submit" class="btn btn-primary">Build my Impact vs Effort Matrix →</button>
       </form>
     </section>
@@ -136,7 +157,6 @@
 
         </div>
 
-        <!-- Impact vs Effort Nudge -->
         <!-- Impact-Effort Insights Box -->
         <div id="ie-insights-box" class="reflection-box" style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; display: none;"></div>
       </div>
@@ -171,14 +191,13 @@
         <h3>Real-world Examples</h3>
         <blockquote>
           <strong>Example (SaaS Product Backlog)</strong>:<br>
-          • <em>Quick Win</em>: Adding a "Remember Me" checkbox to the login page (saves user frustration, takes 1 hour of dev time).<br>
-          • <em>Big Bet</em>: Re-writing the main payment billing system to support multi-currency subscriptions (massive market expansion, takes 2 months of dev time).<br>
-          • <em>Fill-in</em>: Changing the hover animation style of a footer social link (minimal value, takes 10 minutes of CSS tuning).<br>
-          • <em>Thankless Task</em>: Migrating the legacy database hosting platform to a new cloud provider for no performance gain (high risk of data loss, takes 3 weeks of DevOps work, zero customer benefit).
+          • Quick Win: Adding a "Remember Me" checkbox to the login page (saves user frustration, takes 1 hour of dev time).<br>
+          • Big Bet: Re-writing the main payment billing system to support multi-currency subscriptions (massive market expansion, takes 2 months of dev time).<br>
+          • Fill-in: Changing the hover animation style of a footer social link (minimal value, takes 10 minutes of CSS tuning).<br>
+          • Thankless Task: Migrating the legacy database hosting platform to a new cloud provider for no performance gain (high risk of data loss, takes 3 weeks of DevOps work, zero customer benefit).
         </blockquote>
       </div>
     </div>
-  </div>
   </div>
 
   <!-- Floating Bulb Trigger -->
@@ -200,8 +219,8 @@
 
     btnAddItem.addEventListener('click', () => {
       const rows = itemsContainer.querySelectorAll('.item-row');
-      if (rows.length >= 8) {
-        alert('You have reached the maximum number of items (8) for clean layout and PDF rendering.');
+      if (rows.length >= 12) {
+        alert('You have reached the maximum number of items (12) for clean layout and PDF rendering.');
         return;
       }
 
@@ -217,9 +236,28 @@
           <option value="High">High</option>
           <option value="Low" selected>Low</option>
         </select>
+        <button type="button" class="btn-remove-row" title="Remove">&times;</button>
       `;
       itemsContainer.appendChild(row);
     });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-remove-row')) {
+        e.target.parentNode.remove();
+      }
+    });
+
+    // Font scaling logic based on quadrant item count
+    const setQuadrantFontSize = (quadrantEl, count) => {
+      let size = "9px";
+      if (count <= 2) size = "15px";
+      else if (count <= 4) size = "13px";
+      else if (count <= 6) size = "11px";
+      
+      quadrantEl.querySelectorAll('.scatter-chip').forEach(chip => {
+        chip.style.fontSize = size;
+      });
+    };
 
     document.getElementById('impact-effort-form').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -231,7 +269,8 @@
       const thankless = [];
 
       rows.forEach(row => {
-        const name = row.querySelector('.task-name-input').value.trim();
+        const nameInput = row.querySelector('.task-name-input');
+        const name = nameInput ? nameInput.value.trim() : '';
         const impact = row.querySelector('.task-impact-select').value;
         const effort = row.querySelector('.task-effort-select').value;
 
@@ -249,14 +288,18 @@
       });
 
       const positions = [
-        { top: '20%', left: '15%' },
-        { top: '50%', left: '50%' },
-        { top: '65%', left: '20%' },
-        { top: '30%', left: '60%' },
-        { top: '75%', left: '45%' },
-        { top: '45%', left: '10%' },
-        { top: '15%', left: '40%' },
-        { top: '60%', left: '70%' }
+        { top: '15%', left: '10%' },
+        { top: '45%', left: '45%' },
+        { top: '65%', left: '15%' },
+        { top: '25%', left: '55%' },
+        { top: '75%', left: '40%' },
+        { top: '40%', left: '5%' },
+        { top: '10%', left: '35%' },
+        { top: '60%', left: '65%' },
+        { top: '20%', left: '25%' },
+        { top: '55%', left: '30%' },
+        { top: '70%', left: '55%' },
+        { top: '30%', left: '75%' }
       ];
 
       const fillScatter = (id, list) => {
@@ -274,6 +317,7 @@
             chip.style.left = pos.left;
             area.appendChild(chip);
           });
+          setQuadrantFontSize(area, list.length);
         }
       };
 
@@ -307,8 +351,11 @@
       }`;
 
       const thanklessText = thankless.length > 0
-        ? `<p style="margin: 0; color: #B07E7A;">⚠️ <strong>Consider dropping:</strong> ${thankless.map(t => `"${t}"`).join(', ')}. High effort, low return.</p>`
-        : '<p style="margin: 0; color: var(--text-secondary);">✓ Nice job! You have no Thankless Tasks on your list.</p>';
+        ? `<div style="display: flex; align-items: flex-start; gap: 8px; color: #B07E7A; margin: 0;">
+             <svg style="width: 18px; height: 18px; fill: #B07E7A; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+             <span><strong>Consider dropping:</strong> ${thankless.map(t => `"${t}"`).join(', ')}. These are high effort, low return tasks.</span>
+           </div>`
+        : '<div style="display: flex; align-items: flex-start; gap: 8px; color: #78856F; margin: 0;"><svg style="width: 18px; height: 18px; fill: #78856F; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span>Nice job! You have no Thankless Tasks on your list.</span></div>';
 
       const insightsBox = document.getElementById('ie-insights-box');
       insightsBox.innerHTML = `
@@ -328,6 +375,10 @@
 
       const resSec = document.getElementById('impact-effort-result-section');
       resSec.classList.add('show');
+      const inputsDetails = document.getElementById('inputs-details');
+      if (inputsDetails) {
+        inputsDetails.open = false;
+      }
       resSec.scrollIntoView({ behavior: 'smooth' });
     });
   </script>
